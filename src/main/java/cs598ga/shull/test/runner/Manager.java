@@ -6,6 +6,7 @@ import cs598ga.shull.test.ast.AntlrRepresentation;
 import cs598ga.shull.test.ast.NodeRepresentation;
 import cs598ga.shull.test.parser.*;
 import cs598ga.shull.test.execution.*;
+import cs598ga.shull.test.execution.repl.ReplEngine;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
@@ -45,6 +46,11 @@ public class Manager
     public void executeQueries(){
     	ExecutionEngine.ENGINE.run();
     }
+    
+    public void startREPL(){
+    	ReplEngine repl = new ReplEngine();
+    	repl.begin();
+    }
 
 
     public void run(File file) throws IOException {
@@ -53,5 +59,6 @@ public class Manager
         parser = createAntlrRepresentation(parse(file));
         generateNodeRepresentation(parser);
         executeQueries();
+        startREPL();
     }
 }
