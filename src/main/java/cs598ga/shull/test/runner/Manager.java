@@ -59,6 +59,6 @@ public class Manager
         parser = createAntlrRepresentation(parse(file));
         generateNodeRepresentation(parser);
         executeQueries();
-        startREPL();
+        //startREPL();
     }
 }
