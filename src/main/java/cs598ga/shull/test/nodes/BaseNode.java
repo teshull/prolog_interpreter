@@ -1,5 +1,8 @@
 package cs598ga.shull.test.nodes;
 
+import cs598ga.shull.test.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.test.runtime.PrologRuntime;
+
 public class BaseNode {
 
 	public enum NodeType{
@@ -23,6 +26,12 @@ public class BaseNode {
 
 	public boolean shouldAttemptMatch(){
 		return false;
+	}
+	
+	public BaseExecutionState generateExecutionState(){
+		//PrologRuntime.programError("shouldn't be able to invoke the base class");
+		return null;
+		
 	}
 
 }

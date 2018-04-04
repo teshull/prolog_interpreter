@@ -6,6 +6,7 @@ import cs598ga.shull.test.nodes.*;
 
 public class MatchObject {
 
+	/*
 	public int currPredicate = 0;
 	public PredicateNode nodeToMatch;
 	public ArrayList<ClauseNode> matchOptions;
@@ -47,4 +48,5 @@ public class MatchObject {
 		}
 		return false;
 	}
+	*/
 }

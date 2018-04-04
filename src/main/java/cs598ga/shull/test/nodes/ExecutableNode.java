@@ -1,10 +1,8 @@
 package cs598ga.shull.test.nodes;
 
+import cs598ga.shull.test.execution.ExecutionEnvironment;
+
 public interface ExecutableNode {
-	public void execute();
-	
-	public ExecutableNode next();
-	public ExecutableNode backtrack();
-	
-	public boolean canMatch(BaseNode node);
+	public ExecutableNode next(ExecutionEnvironment env);
+	public ExecutableNode backtrack(ExecutionEnvironment env);
 }

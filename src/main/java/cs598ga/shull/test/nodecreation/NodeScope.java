@@ -8,7 +8,7 @@ public class NodeScope {
 	NodeScope parent;
 	ArrayList<BaseNode> children;
 	ArrayList<BaseNode> current;
-	final public static NodeScope EMPTY = new NodeScope(null, SpecialNodes.NONODES);
+	final public static NodeScope EMPTY = new NodeScope(null, SpecialNode.NONODES);
 	
 	public ArrayList<BaseNode> getChildren(){
 		return children;
@@ -27,7 +27,7 @@ public class NodeScope {
 	
 	public void addNode(BaseNode node){
 		//need to initialize the children if empty
-		if(current == SpecialNodes.NONODES){
+		if(current == SpecialNode.NONODES){
 			current = new ArrayList<BaseNode>();
 		}
 		current.add(node);
@@ -35,14 +35,14 @@ public class NodeScope {
 	
 	private NodeScope(){
 		this.parent = EMPTY;
-		this.children = SpecialNodes.NONODES;
-		current = SpecialNodes.NONODES;
+		this.children = SpecialNode.NONODES;
+		current = SpecialNode.NONODES;
 	}
 
 	private NodeScope(NodeScope parent, ArrayList<BaseNode> children){
 		this.parent = parent;
 		this.children = children;
-		current = SpecialNodes.NONODES;
+		current = SpecialNode.NONODES;
 	}
 	
 	public NodeScope transferToChildScope(){
@@ -61,11 +61,11 @@ public class NodeScope {
 	
 	public void addNodesToChild(ArrayList<BaseNode> nodes){
 		//no nodes to add
-		if(nodes == SpecialNodes.NONODES){
+		if(nodes == SpecialNode.NONODES){
 			return;
 		}
 
-		if(children == SpecialNodes.NONODES){
+		if(children == SpecialNode.NONODES){
 			children = new ArrayList<>();
 		}
 		children.addAll(nodes);
@@ -76,7 +76,7 @@ public class NodeScope {
 		if(this == EMPTY || parent == EMPTY){
 			return;
 		}
-		if(current == SpecialNodes.NONODES){
+		if(current == SpecialNode.NONODES){
 			parent.addNodesToChild(children);
 		} else {
 			parent.addNodesToChild(current);
@@ -85,30 +85,30 @@ public class NodeScope {
 	}
 
 	public void releaseCurrent(){
-		current = SpecialNodes.NONODES;
+		current = SpecialNode.NONODES;
 
 	}
 
 	public void releaseChildren(){
-		children = SpecialNodes.NONODES;
+		children = SpecialNode.NONODES;
 	}
 
 	public NodeScope(NodeScope parent){
 		this.parent = parent;
-		this.children = SpecialNodes.NONODES;
-		current = SpecialNodes.NONODES;
+		this.children = SpecialNode.NONODES;
+		current = SpecialNode.NONODES;
 	}
 	
 	public void printTree(){
 		System.out.println("Current");
-		if(current != SpecialNodes.NONODES){
+		if(current != SpecialNode.NONODES){
 			for(BaseNode node : current){
 				System.out.println(node);
 			}
 		}
 
 		System.out.println("Children");
-		if(children != SpecialNodes.NONODES){
+		if(children != SpecialNode.NONODES){
 			for(BaseNode node : children){
 				System.out.println(node);
 			}

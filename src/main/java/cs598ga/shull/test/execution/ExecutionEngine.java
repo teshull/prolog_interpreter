@@ -3,7 +3,7 @@ package cs598ga.shull.test.execution;
 import java.util.ArrayList;
 
 import cs598ga.shull.test.nodes.*;
-import cs598ga.shull.test.runtime.RuntimeChecks;
+import cs598ga.shull.test.runtime.PrologRuntime;
 
 //TODO think that I want to make this all static, but it doesn't really matter much...
 //should make static methods because then they can be turned into nodes
@@ -19,6 +19,7 @@ public class ExecutionEngine {
 	private ExecutionEngine(){
 		
 	}
+	/*
 			
 	//temp because I don't want to fix this right now
 	private PredicateNode convertToPredicate(ClauseNode node){
@@ -29,7 +30,6 @@ public class ExecutionEngine {
 	 * 
 	 * @param node the node to execute on
 	 * @return whether the node was successfully able to complete or not
-	 */
 	public boolean handleNode(BaseNode node){
 		boolean result = false;
 		switch(node.getNodeType()){
@@ -83,13 +83,34 @@ public class ExecutionEngine {
 		BaseNode condition = rule.getCondition();
 		return handleNode(condition);
 	}
+	*/
 	
 	
 	public void satisfyQuery(QueryNode query){
 		System.out.println("start satisfying query " + query);
-
-		for(BaseNode node : query.queries){
-			handleNode(node);
+		ExecutionEnvironment env = new ExecutionEnvironment(globalEnv);
+		
+		ExecutableNode node = query;
+		env.addLocalEnv(env.createChildLocalEnv());
+		while(node != SpecialNode.FINISHED){
+			System.out.println("node type: " + node.getClass());
+			env.addStateFrame((BaseNode) node);
+			node = node.next(env);
+			System.out.println("result node type: " + node.getClass());
+			if(node == SpecialNode.DEADEND){
+				node = node.backtrack(env);
+				if(node == SpecialNode.NOBACKTRACK){
+					break;
+				}
+			}
+		}
+		//now print result
+		if(node == SpecialNode.NOBACKTRACK){
+			System.out.println("unable to find a match");
+		} else if(node == SpecialNode.FINISHED){
+			System.out.println("found a match");
+		} else {
+			PrologRuntime.programError("shouldn't be able to get here");
 		}
 
 		System.out.println("end satisfying query " + query);

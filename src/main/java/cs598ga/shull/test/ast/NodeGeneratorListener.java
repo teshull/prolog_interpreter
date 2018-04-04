@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import cs598ga.shull.test.execution.*;
 import cs598ga.shull.test.parser.*;
 import cs598ga.shull.test.parser.PrologParser.*;
-import cs598ga.shull.test.runtime.RuntimeChecks;
+import cs598ga.shull.test.runtime.PrologRuntime;
 import cs598ga.shull.test.nodes.*;
 import cs598ga.shull.test.nodecreation.*;
 
@@ -62,7 +62,7 @@ public class NodeGeneratorListener extends PrologBaseListener{
 			env.addQueryNode(rule);
 			
 		} else {
-			RuntimeChecks.programError("unexpected item passed to clause");
+			PrologRuntime.programError("unexpected item passed to clause");
 		}
 		// is finished with this node
 		currentScope.releaseChildren();
@@ -72,13 +72,14 @@ public class NodeGeneratorListener extends PrologBaseListener{
 	public void exitSupported_unary_operator(PrologParser.Supported_unary_operatorContext ctx) { 
 		System.out.println("exit supported unary operator term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
-		assert children.size() > 1 : "todo";
+		assert children.size() == 2 : "will need to handle more cases soon";
 		BaseNode operator = children.get(0);
 		if(operator instanceof QueryNode){
 			QueryNode query = (QueryNode) operator;
-			ArrayList<BaseNode> queries = new ArrayList<>();
-			queries.addAll(children.subList(1, children.size()));
-			query.addQueries(queries);
+			BaseNode temp = children.get(1);
+			System.out.println("temp " + temp + " class " + temp.getClass());
+			ExecutableNode node = (ExecutableNode) children.get(1);
+			query.setChild(node);
 			currentScope.addNode(query);
 		} else if (operator instanceof RuleNode){
 			assert false : "rule node is coming soon";
@@ -97,7 +98,7 @@ public class NodeGeneratorListener extends PrologBaseListener{
 	public void exitQuerey_operator(PrologParser.Querey_operatorContext ctx) { 
 		System.out.println("exit querey term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
-		assert children == SpecialNodes.NONODES : "well, I am confused";
+		assert children == SpecialNode.NONODES : "well, I am confused";
 		QueryNode query = new QueryNode();
 		currentScope.addNode(query);
 	}
@@ -117,8 +118,10 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		BaseNode base = children.get(0);
 		assert base instanceof AtomNode : "didn't expect this";
 		assert children.size() > 1 : "well, crap";
-		ArrayList<BaseNode> terms = new ArrayList<>();
-		terms.addAll(children.subList(1, children.size()));
+		ArrayList<PredicateNode> terms = new ArrayList<>();
+		for(int i = 1; i < children.size(); i++){
+			terms.add((PredicateNode) children.get(i));
+		}
 		BaseNode node = NodeFactory.createCompound((AtomNode) base, terms);
 		currentScope.addNode(node);
 	}

@@ -1,9 +1,11 @@
 package cs598ga.shull.test.nodes;
 
+import cs598ga.shull.test.execution.LocalEnvironment;
+
+import java.util.ArrayList;
+
 public abstract class FactNode extends PredicateNode {
 	
-
-
 	@Override
 	public boolean isFact(){
 		return true;
