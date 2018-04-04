@@ -8,7 +8,17 @@ import cs598ga.shull.test.execution.LocalEnvironment;
 
 public class RuleNode extends PredicateNode {
 	public BaseNode condition = null;
+	public PredicateNode predicate = null;
 	
+	
+	public void addPredicate(PredicateNode pred){
+		predicate = pred;
+	}
+
+	public void addCondition(BaseNode cond){
+		condition = cond;
+	}
+
 	public BaseNode getCondition(){
 		return condition;
 	}
@@ -33,8 +43,8 @@ public class RuleNode extends PredicateNode {
 	
 	@Override
 	public String getName(){
-		assert false : "need to implement this";
-		return "need to do";
+		String message = predicate.getName();
+		return message;
 	}
 
 	@Override
@@ -60,6 +70,12 @@ public class RuleNode extends PredicateNode {
 	public ExecutableNode backtrack(ExecutionEnvironment env) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public String toString(){
+		String message = "rule node (" + predicate + ") <- " + condition;
+		return message;
 	}
 
 }

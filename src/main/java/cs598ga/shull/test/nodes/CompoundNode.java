@@ -124,4 +124,19 @@ public class CompoundNode extends FactNode implements ExecutableNode {
 	public ArrayList<String> match(PredicateNode node, LocalEnvironment env) {
 		return null;
 	}
+	
+	@Override
+	public String toString(){
+		String message = "compound node (" + atom + ") [";
+		boolean first = true;
+		for(PredicateNode child : children){
+			if(!first){
+				message += ", ";
+			}
+			message += child;
+			first = false;
+		}
+		message += "]";
+		return message;
+	}
 }

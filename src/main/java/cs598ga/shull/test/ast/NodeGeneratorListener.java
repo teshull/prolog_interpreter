@@ -89,9 +89,27 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		
 	}
 
+	@Override public void exitSupported_binary_operator(PrologParser.Supported_binary_operatorContext ctx) { 
+		System.out.println("exit supported binary operator term " + ctx.getText());
+		ArrayList<BaseNode> children = currentScope.getChildren();
+		if(children.size() == 3){
+			if(children.get(1) instanceof RuleNode){
+				RuleNode rule = (RuleNode) children.get(1);
+				rule.addPredicate((PredicateNode) children.get(0));
+				rule.addCondition(children.get(2));
+				currentScope.addNode(rule);
+			}
+		}
+		
+	}
+
 	@Override 
 	public void exitRule_operator(PrologParser.Rule_operatorContext ctx) { 
 		System.out.println("exit rule operator " + ctx.getText());
+		ArrayList<BaseNode> children = currentScope.getChildren();
+		assert children == SpecialNode.NONODES : "well, I am confused";
+		RuleNode rule = new RuleNode();
+		currentScope.addNode(rule);
 	}
 
 	@Override 
