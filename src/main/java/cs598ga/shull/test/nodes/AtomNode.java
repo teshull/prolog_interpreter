@@ -50,6 +50,7 @@ public class AtomNode extends FactNode implements ExecutableNode {
 		return new AtomState();
 	}
 
+	/*
 	@Override
 	public ExecutableNode next(ExecutionEnvironment env) {
 		// TODO Auto-generated method stub
@@ -79,6 +80,7 @@ public class AtomNode extends FactNode implements ExecutableNode {
 		}
 		return SpecialNode.FINISHED;
 	}
+	*/
 
 	@Override
 	public ExecutableNode backtrack(ExecutionEnvironment env) {

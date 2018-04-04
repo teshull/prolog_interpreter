@@ -21,6 +21,7 @@ public abstract class PredicateNode extends ClauseNode implements MatchableNode,
 		
 	}
 
+	//TODO this actually should probably be moved to FactNode smh
 	@Override
 	public ExecutableNode next(ExecutionEnvironment env) {
 		// TODO Auto-generated method stub
@@ -46,6 +47,8 @@ public abstract class PredicateNode extends ClauseNode implements MatchableNode,
 		} else {
 			//don't really care about the others
 			if(result instanceof RuleNode){
+				System.out.println("did get here...");
+				env.addLocalEnv(env.createChildLocalEnv());
 				return result;
 			}
 		}

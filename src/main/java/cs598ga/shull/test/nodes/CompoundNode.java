@@ -49,6 +49,7 @@ public class CompoundNode extends FactNode implements ExecutableNode {
 		return new CompoundState();
 	}
 	
+	/*
 	@Override
 	public ExecutableNode next(ExecutionEnvironment env) {
 		// TODO Auto-generated method stub
@@ -79,6 +80,7 @@ public class CompoundNode extends FactNode implements ExecutableNode {
 		}
 		return SpecialNode.FINISHED;
 	}
+	*/
 
 	@Override
 	public ExecutableNode backtrack(ExecutionEnvironment env) {

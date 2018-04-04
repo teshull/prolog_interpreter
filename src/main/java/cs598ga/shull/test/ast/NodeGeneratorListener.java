@@ -93,12 +93,21 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		System.out.println("exit supported binary operator term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		if(children.size() == 3){
-			if(children.get(1) instanceof RuleNode){
-				RuleNode rule = (RuleNode) children.get(1);
-				rule.addPredicate((PredicateNode) children.get(0));
-				rule.addCondition(children.get(2));
+			BaseNode operator = children.get(1);
+			BaseNode left = children.get(0);
+			BaseNode right = children.get(2);
+			if(operator instanceof RuleNode){
+				RuleNode rule = (RuleNode) operator;
+				rule.addPredicate((PredicateNode) left);
+				rule.addCondition((ExecutableNode) right);
 				currentScope.addNode(rule);
+			} else if(operator instanceof AndNode){
+				AndNode and = (AndNode) operator;
+				and.setLeft((ExecutableNode) left);
+				and.setRight((ExecutableNode) right);
 			}
+		} else {
+			PrologRuntime.programError("shouldn't be able have binary without two now i think");
 		}
 		
 	}
@@ -110,6 +119,15 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		assert children == SpecialNode.NONODES : "well, I am confused";
 		RuleNode rule = new RuleNode();
 		currentScope.addNode(rule);
+	}
+
+	@Override 
+	public void exitAnd_operator(PrologParser.And_operatorContext ctx) { 
+		System.out.println("exit rule operator " + ctx.getText());
+		ArrayList<BaseNode> children = currentScope.getChildren();
+		assert children == SpecialNode.NONODES : "well, I am confused";
+		AndNode and = new AndNode();
+		currentScope.addNode(and);
 	}
 
 	@Override 
@@ -138,7 +156,15 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		assert children.size() > 1 : "well, crap";
 		ArrayList<PredicateNode> terms = new ArrayList<>();
 		for(int i = 1; i < children.size(); i++){
-			terms.add((PredicateNode) children.get(i));
+			BaseNode child = children.get(i);
+			if(child instanceof PredicateNode){
+				terms.add((PredicateNode) child);
+			} else if(child instanceof LogicalNode){
+				LogicalNode node = (LogicalNode) child;
+				ArrayList<PredicateNode> nodes = node.getPredicates();
+			} else {
+				PrologRuntime.programError("there is a problem");
+			}
 		}
 		BaseNode node = NodeFactory.createCompound((AtomNode) base, terms);
 		currentScope.addNode(node);

@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
 import cs598ga.shull.test.execution.LocalEnvironment;
+import cs598ga.shull.test.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.test.nodes.executionState.RuleState;
 
 
 public class RuleNode extends PredicateNode {
-	public BaseNode condition = null;
+	public ExecutableNode condition = null;
 	public PredicateNode predicate = null;
 	
 	
@@ -15,11 +17,11 @@ public class RuleNode extends PredicateNode {
 		predicate = pred;
 	}
 
-	public void addCondition(BaseNode cond){
+	public void addCondition(ExecutableNode cond){
 		condition = cond;
 	}
 
-	public BaseNode getCondition(){
+	public ExecutableNode getCondition(){
 		return condition;
 	}
 
@@ -50,20 +52,26 @@ public class RuleNode extends PredicateNode {
 	@Override
 	public boolean canMatch(PredicateNode node, LocalEnvironment env) {
 		// TODO Auto-generated method stub
-		return false;
+		return predicate.canMatch(node, env);
 	}
 
 	@Override
 	public ArrayList<String> match(PredicateNode node, LocalEnvironment env) {
 		// TODO Auto-generated method stub
-		return null;
+		return predicate.match(node, env);
 		
+	}
+
+	@Override
+	public BaseExecutionState generateExecutionState(){
+		return new RuleState();
 	}
 
 	@Override
 	public ExecutableNode next(ExecutionEnvironment env) {
 		// TODO Auto-generated method stub
-		return null;
+		env.addLocalEnv(env.createChildLocalEnv());
+		return condition;
 	}
 
 	@Override

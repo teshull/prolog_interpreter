@@ -12,6 +12,7 @@ something :- got_it.
 
 
 %order in which i want to get things to work (I think)
-?- tom.
-?- fruit(plums).
+%?- tom.
+%?- fruit(plums).
 %?- fruit(X).
+?- something.

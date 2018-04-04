@@ -4,7 +4,5 @@ import java.util.ArrayList;
 
 import cs598ga.shull.test.nodes.*;
 
-public class AtomState extends BaseExecutionState {
-	public int matchNum = -1;
-	public ArrayList<PredicateNode> matches = null;
+public class AtomState extends PredicateState {
 }
