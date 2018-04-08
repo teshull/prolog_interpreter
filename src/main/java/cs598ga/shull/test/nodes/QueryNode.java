@@ -61,8 +61,8 @@ public class QueryNode extends ClauseNode implements ExecutableNode {
 		env.addLocalEnv(env.createChildLocalEnv());
 		BaseNode result = temp.initializeAndEnter(env);
 		if(result == SpecialNode.FINISHED){
-			//System.out.println("environment:\n" + env.getCurrentLocalEnv());
-			env.getCurrentLocalEnv().printSourceMatchesIfPresent();
+			System.out.println("environment:\n" + env.getCurrentLocalEnv());
+			//env.getCurrentLocalEnv().printSourceMatchesIfPresent();
 		}
 		return result;
 	}

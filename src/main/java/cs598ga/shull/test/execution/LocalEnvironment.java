@@ -120,6 +120,11 @@ public class LocalEnvironment {
 		message += getMapInfo(sourceMatches);
 		message += "targets\n";
 		message += getMapInfo(targetMatches);
+		message += "sourceToTargets\n";
+		for(String key : sourceToTargetLink.keySet()){
+			String value = sourceToTargetLink.get(key);
+			message += key + " -> " + value + "\n";
+		}
 		return message;
 	}
 }

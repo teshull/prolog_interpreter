@@ -24,3 +24,4 @@ weirdRule(X).
 %?- fruit(X).
 
 ?- weirdRule(Tom).
+?- weirdRule(tom).
