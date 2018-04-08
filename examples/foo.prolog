@@ -31,11 +31,11 @@ ruleExample(X) :- anotherRule(X).
 
 %?- ruleExample(Tom).
 
-%factOne.
+factOne.
 factTwo :- falseFact.
 factTwo.
-%compoundRule :- factOne, factTwo.
+compoundRule :- factOne, factTwo.
 
-%?- compoundRule.
+?- compoundRule.
 %?- factTwo.
-?- easyRule.
+%?- easyRule.

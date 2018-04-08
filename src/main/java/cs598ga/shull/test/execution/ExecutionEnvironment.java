@@ -111,4 +111,15 @@ public class ExecutionEnvironment {
 		
 	}
 
+	public BaseExecutionState getStateIndex(int stateIndex){
+		if(stateIndex >= stateDepth){
+			PrologRuntime.programError("can't get from there");
+		}
+		return executionStates.get(stateIndex);
+	}
+	
+	public int getStateDepth(){
+		return stateDepth;
+	}
+
 }

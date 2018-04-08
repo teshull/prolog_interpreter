@@ -50,12 +50,12 @@ public abstract class BaseNode {
 	}
 	
 	
-	public BaseNode nextStep(ExecutionEnvironment env){
+	public BaseNode nextStep(ExecutionEnvironment env, int stateIndex){
 		PrologRuntime.programError("need to implement this in " + this.getClass());
 		return null;
 	}
 	
-	public BaseNode performBacktrack(ExecutionEnvironment env){
+	public BaseNode performBacktrack(ExecutionEnvironment env, int stateIndex){
 		PrologRuntime.programError("need to implement this in " + this.getClass());
 		return null;
 	}

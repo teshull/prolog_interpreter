@@ -29,7 +29,7 @@ public abstract class FactNode extends PredicateNode {
 	public abstract boolean isVariable();
 	
 	
-	private BaseNode findValidResult(BaseNode result, ExecutionEnvironment env){
+	private BaseNode findValidResult(BaseNode result, ExecutionEnvironment env, int stateIndex){
 		while(true) {
 			result = result.initializeAndEnter(env);
 			if( result == SpecialNode.FINISHED){
@@ -37,9 +37,9 @@ public abstract class FactNode extends PredicateNode {
 			}
 			assert result == SpecialNode.DEADEND : "should be only one of these two";
 			rollbackEnvChanges(env);
-			FactState state = (FactState) env.getCurrentState();
+			FactState state = (FactState) env.getStateIndex(stateIndex);
 			state.matchNum++;
-			result = nextStep(env);
+			result = nextStep(env, stateIndex);
 			if(result == SpecialNode.DEADEND || result == SpecialNode.FINISHED){
 				return result;
 			} 		
@@ -58,17 +58,17 @@ public abstract class FactNode extends PredicateNode {
 		state.matches = env.globalEnv.getPredicates(base.getName());
 		state.matchNum = 0;
 		state.originalEnv = env.getCurrentLocalEnv().getDeepCopy();
-		BaseNode result = nextStep(env);
+		BaseNode result = nextStep(env, state.stateIndex);
 		if(result == SpecialNode.DEADEND || result == SpecialNode.FINISHED){
 			return result;
 		} 		
-		result = findValidResult(result, env);
+		result = findValidResult(result, env, state.stateIndex);
 		return result;
 	}
 
 	@Override
-	public BaseNode nextStep(ExecutionEnvironment env){
-		FactState state = (FactState) env.getCurrentState();
+	public BaseNode nextStep(ExecutionEnvironment env, int stateIndex){
+		FactState state = (FactState) env.getStateIndex(stateIndex);
 		int matchNum = state.matchNum;
 		boolean foundMatch = false;
 		BaseNode result = null;
@@ -96,15 +96,16 @@ public abstract class FactNode extends PredicateNode {
 		return SpecialNode.FINISHED;
 	}
 
-	public BaseNode performBacktrack(ExecutionEnvironment env){
+	@Override
+	public BaseNode performBacktrack(ExecutionEnvironment env, int stateIndex){
 		rollbackEnvChanges(env);
-		FactState state = (FactState) env.getCurrentState();
+		FactState state = (FactState) env.getStateIndex(stateIndex);
 		state.matchNum++;
-		BaseNode result = nextStep(env);
+		BaseNode result = nextStep(env, stateIndex);
 		if(result == SpecialNode.DEADEND || result == SpecialNode.FINISHED){
 			return result;
 		} 		
-		result = findValidResult(result, env);
+		result = findValidResult(result, env, stateIndex);
 		return result;
 	}
 }

@@ -3,6 +3,8 @@ package cs598ga.shull.test.nodes;
 import java.util.ArrayList;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
+import cs598ga.shull.test.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.test.nodes.executionState.LogicalNodeState;
 import cs598ga.shull.test.runtime.PrologRuntime;
 
 public abstract class LogicalNode extends BaseNode implements ExecutableNode {
@@ -15,6 +17,13 @@ public abstract class LogicalNode extends BaseNode implements ExecutableNode {
 	
 	public void setRight(ExecutableNode right){
 		this.right = (BaseNode) right;
+	}
+
+	@Override
+	public BaseExecutionState generateExecutionState(){
+		//PrologRuntime.programError("shouldn't be able to invoke the base class");
+		return new LogicalNodeState();
+		
 	}
 	
 	//TODO I think that these should be moved to the and node
