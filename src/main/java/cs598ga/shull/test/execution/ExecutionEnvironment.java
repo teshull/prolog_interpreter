@@ -32,6 +32,20 @@ public class ExecutionEnvironment {
 		localEnvs.add(env);
 		envDepth++;
 	}
+	
+	public void pushLocalEnvironment(){
+		LocalEnvironment env = new LocalEnvironment(localEnvs.get(envDepth-1));
+		addLocalEnv(env);
+	}
+
+	public void popLocalEnvironment(){
+		if(envDepth == 1){
+			PrologRuntime.programError("trying to pop from local env stack of depth 1");
+		}
+		envDepth--;
+		localEnvs.get(envDepth - 1).mergeChildLocalEnvironment(localEnvs.get(envDepth));
+		localEnvs.remove(envDepth);
+	}
 
 	public LocalEnvironment getCurrentLocalEnv(){
 		if(envDepth == 0){
@@ -53,9 +67,32 @@ public class ExecutionEnvironment {
 		stateDepth++;
 	}
 
-	public void addState(BaseExecutionState state){
+	public int addState(BaseExecutionState state){
+		int stateIndex = stateDepth;
 		executionStates.add(state);
 		stateDepth++;
+		return stateIndex;
+	}
+	
+	//can obvious be optimized
+	public void removeStateFromIndex(int index){
+		if(stateDepth == 0){
+			PrologRuntime.programError("trying to pop from empty execution state");
+		}
+		assert index >= 0 : "invalid index";
+
+		while(stateDepth > index){
+			popState();
+		}
+		
+	}
+
+	public void popState(){
+		if(stateDepth == 0){
+			PrologRuntime.programError("trying to pop from empty execution state");
+		}
+		stateDepth--;
+		executionStates.remove(stateDepth);
 	}
 	
 	public void addNewFrame(BaseNode node){

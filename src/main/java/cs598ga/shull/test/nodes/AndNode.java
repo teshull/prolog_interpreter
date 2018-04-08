@@ -17,4 +17,51 @@ public class AndNode extends LogicalNode{
 		return null;
 	}
 	
+	@Override
+	public BaseNode firstStep(ExecutionEnvironment env){
+		// TODO Auto-generated method stub
+		BaseNode leftResult = left.initializeAndEnter(env);
+		if(leftResult == SpecialNode.DEADEND){
+			return leftResult;
+		}
+		assert leftResult == SpecialNode.FINISHED;
+		while(true){
+			BaseNode rightResult = right.initializeAndEnter(env);
+			if(rightResult == SpecialNode.FINISHED){
+				return rightResult;
+			}
+
+			assert rightResult == SpecialNode.DEADEND;
+			leftResult = left.performBacktrack(env);
+			if(leftResult == SpecialNode.DEADEND){
+				return leftResult;
+			}
+		}
+	}
+
+	@Override
+	public BaseNode performBacktrack(ExecutionEnvironment env){
+		BaseNode rightResult = right.performBacktrack(env);
+		if(rightResult == SpecialNode.FINISHED){
+			return rightResult;
+		}
+		// TODO Auto-generated method stub
+		BaseNode leftResult = left.performBacktrack(env);
+		if(leftResult == SpecialNode.DEADEND){
+			return leftResult;
+		}
+		assert leftResult == SpecialNode.FINISHED;
+		while(true){
+			rightResult = right.initializeAndEnter(env);
+			if(rightResult == SpecialNode.FINISHED){
+				return rightResult;
+			}
+
+			assert rightResult == SpecialNode.DEADEND;
+			leftResult = left.performBacktrack(env);
+			if(leftResult == SpecialNode.DEADEND){
+				return leftResult;
+			}
+		}
+	}
 }

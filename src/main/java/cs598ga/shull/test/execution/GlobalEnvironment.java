@@ -10,6 +10,7 @@ public class GlobalEnvironment {
 	Map<String, ArrayList<PredicateNode>> predicates;
 	ArrayList<QueryNode> queries;
 	final public static GlobalEnvironment globalEnv = new GlobalEnvironment();
+	static final ArrayList<PredicateNode> NORESULT = new ArrayList<>();
 	
 	private GlobalEnvironment(){
 		predicates = new HashMap<>();
@@ -30,7 +31,11 @@ public class GlobalEnvironment {
 	}
 	
 	public ArrayList<PredicateNode> getPredicates(String s){
-		return predicates.get(s);
+		ArrayList<PredicateNode> result = predicates.get(s);
+		if(result == null){
+			return NORESULT;
+		}
+		return result;
 	}
 	
 

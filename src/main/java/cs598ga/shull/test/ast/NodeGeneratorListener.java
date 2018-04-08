@@ -105,8 +105,14 @@ public class NodeGeneratorListener extends PrologBaseListener{
 				AndNode and = (AndNode) operator;
 				and.setLeft((ExecutableNode) left);
 				and.setRight((ExecutableNode) right);
+				currentScope.addNode(and);
 			}
 		} else {
+			System.out.println("size: " + children.size());
+			System.out.println("children:");
+			for(int i = 0; i < children.size(); i++){
+				System.out.println(children.get(i));
+			}
 			PrologRuntime.programError("shouldn't be able have binary without two now i think");
 		}
 		
@@ -123,7 +129,7 @@ public class NodeGeneratorListener extends PrologBaseListener{
 
 	@Override 
 	public void exitAnd_operator(PrologParser.And_operatorContext ctx) { 
-		System.out.println("exit rule operator " + ctx.getText());
+		System.out.println("exit and operator " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		assert children == SpecialNode.NONODES : "well, I am confused";
 		AndNode and = new AndNode();

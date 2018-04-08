@@ -8,11 +8,14 @@ fruit(plums).
 compoundAtom(anotherRule(awesome)).
 
 %TODO rules...
-%got_it.
-%something :- got_it.
+easyFact.
+easyRule :- easyFact.
 
-weirdRule(X).
+weirdFact(X).
 
+thing1.
+anotherRule(potatoes) :- thing1.
+ruleExample(X) :- anotherRule(X).
 
 %order in which i want to get things to work (I think)
 %?- tom.
@@ -23,5 +26,16 @@ weirdRule(X).
 %?- compoundAtom(X).
 %?- fruit(X).
 
-?- weirdRule(Tom).
-?- weirdRule(tom).
+%?- weirdFact(Tom).
+%?- weirdFact(tom).
+
+%?- ruleExample(Tom).
+
+%factOne.
+factTwo :- falseFact.
+factTwo.
+%compoundRule :- factOne, factTwo.
+
+%?- compoundRule.
+%?- factTwo.
+?- easyRule.

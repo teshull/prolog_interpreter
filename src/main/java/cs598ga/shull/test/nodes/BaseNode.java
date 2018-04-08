@@ -32,14 +32,15 @@ public abstract class BaseNode {
 	
 	public BaseExecutionState generateExecutionState(){
 		//PrologRuntime.programError("shouldn't be able to invoke the base class");
-		return null;
+		return new BaseExecutionState();
 		
 	}
 	
 	public BaseNode initializeAndEnter(ExecutionEnvironment env){
 		BaseExecutionState state = generateExecutionState();
-		env.addState(state);
-		return firstStep(env);
+		state.stateIndex = env.addState(state);
+		BaseNode result =  firstStep(env);
+		return result;
 	}
 	
 

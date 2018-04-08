@@ -37,6 +37,8 @@ public abstract class FactNode extends PredicateNode {
 			}
 			assert result == SpecialNode.DEADEND : "should be only one of these two";
 			rollbackEnvChanges(env);
+			FactState state = (FactState) env.getCurrentState();
+			state.matchNum++;
 			result = nextStep(env);
 			if(result == SpecialNode.DEADEND || result == SpecialNode.FINISHED){
 				return result;
@@ -96,6 +98,8 @@ public abstract class FactNode extends PredicateNode {
 
 	public BaseNode performBacktrack(ExecutionEnvironment env){
 		rollbackEnvChanges(env);
+		FactState state = (FactState) env.getCurrentState();
+		state.matchNum++;
 		BaseNode result = nextStep(env);
 		if(result == SpecialNode.DEADEND || result == SpecialNode.FINISHED){
 			return result;

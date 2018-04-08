@@ -86,4 +86,21 @@ public class RuleNode extends PredicateNode {
 		return message;
 	}
 
+	@Override
+	public boolean matchNode(BaseNode source, LocalEnvironment env) {
+		return predicate.matchNode(source, env);
+	}
+
+	public BaseNode firstStep(ExecutionEnvironment env){
+		//need to add a new environmental level
+		//add environment here
+		BaseExecutionState state = env.getCurrentState();
+		env.pushLocalEnvironment();
+		BaseNode result = ((BaseNode) condition).initializeAndEnter(env);
+		//remove state and environment here
+		env.removeStateFromIndex(state.stateIndex);
+		env.popLocalEnvironment();
+		return result;
+	}
+
 }

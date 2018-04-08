@@ -6,22 +6,22 @@ import cs598ga.shull.test.execution.ExecutionEnvironment;
 import cs598ga.shull.test.runtime.PrologRuntime;
 
 public abstract class LogicalNode extends BaseNode implements ExecutableNode {
-	public ExecutableNode left;
-	public ExecutableNode right;
+	public BaseNode left;
+	public BaseNode right;
 	
 	public void setLeft(ExecutableNode left){
-		this.left = left;
+		this.left = (BaseNode) left;
 	}
 	
 	public void setRight(ExecutableNode right){
-		this.right = right;
+		this.right = (BaseNode) right;
 	}
 	
 	//TODO I think that these should be moved to the and node
 	public ArrayList<PredicateNode> getPredicates(){
 		ArrayList<PredicateNode> result = new ArrayList<>();
-		result.addAll(addPredicatesForTerm(left));
-		result.addAll(addPredicatesForTerm(right));
+		result.addAll(addPredicatesForTerm((ExecutableNode) left));
+		result.addAll(addPredicatesForTerm((ExecutableNode) right));
 		return result;
 	}
 	

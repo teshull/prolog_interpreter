@@ -1,6 +1,8 @@
 package cs598ga.shull.test.nodes;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
+import cs598ga.shull.test.nodes.executionState.BaseExecutionState;
+
 import java.util.ArrayList;
 
 public class QueryNode extends ClauseNode implements ExecutableNode {
@@ -57,9 +59,12 @@ public class QueryNode extends ClauseNode implements ExecutableNode {
 	public BaseNode firstStep(ExecutionEnvironment env){
 		
 		BaseNode temp = (BaseNode) child;
+		BaseExecutionState state = env.getCurrentState();
 		//the query must create the first environment
 		env.addLocalEnv(env.createChildLocalEnv());
 		BaseNode result = temp.initializeAndEnter(env);
+		//removing state
+		env.removeStateFromIndex(state.stateIndex);
 		if(result == SpecialNode.FINISHED){
 			System.out.println("environment:\n" + env.getCurrentLocalEnv());
 			//env.getCurrentLocalEnv().printSourceMatchesIfPresent();

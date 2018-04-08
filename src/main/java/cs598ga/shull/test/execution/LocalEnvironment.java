@@ -1,5 +1,6 @@
 package cs598ga.shull.test.execution;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +42,33 @@ public class LocalEnvironment {
 	//don't think this is necessary
 	public Map<String, String> sourceToTargetLink;
 	//mapping to child variable name
+	
+	public LocalEnvironment(LocalEnvironment env){
+		//the source is the predecessors targets
+		sourceMatches  = new HashMap<>(env.targetMatches);
+		targetMatches  = new HashMap<>();
+		sourceToTargetLink = new HashMap<>();
+	}
+	
+	public void mergeChildLocalEnvironment(LocalEnvironment env){
+		//setting the updates matches for the target
+		targetMatches = new HashMap<>(env.sourceMatches);
+		//now going through the source to target links to see if any have been resolved
+		ArrayList<String> keysToRemove = new ArrayList<>();
+		for(String source : sourceToTargetLink.keySet()){
+			String target = sourceToTargetLink.get(source);
+			if(targetMatches.containsKey(target)){
+				PredicateNode node = targetMatches.get(target);
+				setSourceMatch(source, node);
+				keysToRemove.add(source);
+			}
+		}
+		
+		//now removing the keys for the sourceToTargetLink Map
+		for(String key : keysToRemove){
+			sourceToTargetLink.remove(key);
+		}
+	}
 
 	public LocalEnvironment(){
 		sourceMatches  = new HashMap<>();
