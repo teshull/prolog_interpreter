@@ -77,11 +77,11 @@ MULTILINE_COMMENT=66
 '}'=11
 '-->'=12
 '?-'=13
-'dynamic'=14
-'multifile'=15
-'discontiguous'=16
-'public'=17
-';'=18
+';'=14
+'dynamic'=15
+'multifile'=16
+'discontiguous'=17
+'public'=18
 '->'=19
 '\\+'=20
 '='=21

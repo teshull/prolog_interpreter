@@ -36,6 +36,13 @@ factTwo :- falseFact.
 factTwo.
 compoundRule :- factOne, factTwo.
 
-?- compoundRule.
+trueFact.
+orRule :- trueFact ; falseFact.
+orRule2 :- falseFact; trueFact.
+
+%?- compoundRule.
 %?- factTwo.
 %?- easyRule.
+
+?- orRule.
+?- orRule2.

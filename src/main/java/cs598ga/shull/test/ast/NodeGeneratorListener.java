@@ -106,6 +106,11 @@ public class NodeGeneratorListener extends PrologBaseListener{
 				and.setLeft((ExecutableNode) left);
 				and.setRight((ExecutableNode) right);
 				currentScope.addNode(and);
+			} else if(operator instanceof OrNode){
+				OrNode or = (OrNode) operator;
+				or.setLeft((ExecutableNode) left);
+				or.setRight((ExecutableNode) right);
+				currentScope.addNode(or);
 			}
 		} else {
 			System.out.println("size: " + children.size());
@@ -134,6 +139,14 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		assert children == SpecialNode.NONODES : "well, I am confused";
 		AndNode and = new AndNode();
 		currentScope.addNode(and);
+	}
+
+	@Override public void exitOr_operator(PrologParser.Or_operatorContext ctx) { 
+		System.out.println("exit or operator " + ctx.getText());
+		ArrayList<BaseNode> children = currentScope.getChildren();
+		assert children == SpecialNode.NONODES : "well, I am confused";
+		OrNode or = new OrNode();
+		currentScope.addNode(or);
 	}
 
 	@Override 

@@ -80,11 +80,11 @@ supportedOperator
     | '-->' # arrow_operator
     | '?-' # querey_operator
     | ',' # and_operator
+    | ';' # or_operator
     ;
 
 unsupportedOperator
     : 'dynamic' | 'multifile' | 'discontiguous' | 'public' //TODO: move operators used in directives to "built-in" definition of dialect
-    | ';'
     | '->'
     | '\\+'
     | '=' | '\\='

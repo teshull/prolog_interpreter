@@ -40,11 +40,11 @@ public class PrologParser extends Parser {
 
 	private static final String[] _LITERAL_NAMES = {
 		null, "':-'", "'.'", "','", "'('", "')'", "'-'", "'['", "'|'", "']'", 
-		"'{'", "'}'", "'-->'", "'?-'", "'dynamic'", "'multifile'", "'discontiguous'", 
-		"'public'", "';'", "'->'", "'\\+'", "'='", "'\\='", "'=='", "'\\=='", 
-		"'@<'", "'@=<'", "'@>'", "'@>='", "'=..'", "'is'", "'=:='", "'=\\='", 
-		"'<'", "'=<'", "'>'", "'>='", "':'", "'+'", "'/\\'", "'\\/'", "'*'", "'/'", 
-		"'//'", "'rem'", "'mod'", "'<<'", "'>>'", "'**'", "'^'", "'\\'", "'!'"
+		"'{'", "'}'", "'-->'", "'?-'", "';'", "'dynamic'", "'multifile'", "'discontiguous'", 
+		"'public'", "'->'", "'\\+'", "'='", "'\\='", "'=='", "'\\=='", "'@<'", 
+		"'@=<'", "'@>'", "'@>='", "'=..'", "'is'", "'=:='", "'=\\='", "'<'", "'=<'", 
+		"'>'", "'>='", "':'", "'+'", "'/\\'", "'\\/'", "'*'", "'/'", "'//'", "'rem'", 
+		"'mod'", "'<<'", "'>>'", "'**'", "'^'", "'\\'", "'!'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -844,12 +844,23 @@ public class PrologParser extends Parser {
 			if ( listener instanceof PrologListener ) ((PrologListener)listener).exitQuerey_operator(this);
 		}
 	}
+	public static class Or_operatorContext extends SupportedOperatorContext {
+		public Or_operatorContext(SupportedOperatorContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PrologListener ) ((PrologListener)listener).enterOr_operator(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PrologListener ) ((PrologListener)listener).exitOr_operator(this);
+		}
+	}
 
 	public final SupportedOperatorContext supportedOperator() throws RecognitionException {
 		SupportedOperatorContext _localctx = new SupportedOperatorContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_supportedOperator);
 		try {
-			setState(103);
+			setState(104);
 			switch (_input.LA(1)) {
 			case T__0:
 				_localctx = new Rule_operatorContext(_localctx);
@@ -881,6 +892,14 @@ public class PrologParser extends Parser {
 				{
 				setState(102);
 				match(T__2);
+				}
+				break;
+			case T__13:
+				_localctx = new Or_operatorContext(_localctx);
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(103);
+				match(T__13);
 				}
 				break;
 			default:
@@ -920,9 +939,9 @@ public class PrologParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(105);
+			setState(106);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26) | (1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31) | (1L << T__32) | (1L << T__33) | (1L << T__34) | (1L << T__35) | (1L << T__36) | (1L << T__37) | (1L << T__38) | (1L << T__39) | (1L << T__40) | (1L << T__41) | (1L << T__42) | (1L << T__43) | (1L << T__44) | (1L << T__45) | (1L << T__46) | (1L << T__47) | (1L << T__48) | (1L << T__49))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26) | (1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31) | (1L << T__32) | (1L << T__33) | (1L << T__34) | (1L << T__35) | (1L << T__36) | (1L << T__37) | (1L << T__38) | (1L << T__39) | (1L << T__40) | (1L << T__41) | (1L << T__42) | (1L << T__43) | (1L << T__44) | (1L << T__45) | (1L << T__46) | (1L << T__47) | (1L << T__48) | (1L << T__49))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
@@ -1060,15 +1079,15 @@ public class PrologParser extends Parser {
 		AtomContext _localctx = new AtomContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_atom);
 		try {
-			setState(118);
+			setState(119);
 			switch (_input.LA(1)) {
 			case T__6:
 				_localctx = new Empty_listContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(107);
-				match(T__6);
 				setState(108);
+				match(T__6);
+				setState(109);
 				match(T__8);
 				}
 				break;
@@ -1076,9 +1095,9 @@ public class PrologParser extends Parser {
 				_localctx = new Empty_bracesContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(109);
-				match(T__9);
 				setState(110);
+				match(T__9);
+				setState(111);
 				match(T__10);
 				}
 				break;
@@ -1086,7 +1105,7 @@ public class PrologParser extends Parser {
 				_localctx = new NameContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(111);
+				setState(112);
 				match(LETTER_DIGIT);
 				}
 				break;
@@ -1094,7 +1113,7 @@ public class PrologParser extends Parser {
 				_localctx = new GraphicContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(112);
+				setState(113);
 				match(GRAPHIC_TOKEN);
 				}
 				break;
@@ -1102,7 +1121,7 @@ public class PrologParser extends Parser {
 				_localctx = new Quoted_stringContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(113);
+				setState(114);
 				match(QUOTED);
 				}
 				break;
@@ -1110,7 +1129,7 @@ public class PrologParser extends Parser {
 				_localctx = new Dq_stringContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(114);
+				setState(115);
 				match(DOUBLE_QUOTED_LIST);
 				}
 				break;
@@ -1118,23 +1137,23 @@ public class PrologParser extends Parser {
 				_localctx = new Backq_stringContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(115);
+				setState(116);
 				match(BACK_QUOTED_STRING);
 				}
 				break;
-			case T__17:
+			case T__13:
 				_localctx = new SemicolonContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(116);
-				match(T__17);
+				setState(117);
+				match(T__13);
 				}
 				break;
 			case T__50:
 				_localctx = new CutContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(117);
+				setState(118);
 				match(T__50);
 				}
 				break;
@@ -1180,7 +1199,7 @@ public class PrologParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(120);
+			setState(121);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DECIMAL) | (1L << BINARY) | (1L << OCTAL) | (1L << HEX) | (1L << CHARACTER_CODE_CONSTANT))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1218,38 +1237,38 @@ public class PrologParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3D}\4\2\t\2\4\3\t\3"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3D~\4\2\t\2\4\3\t\3"+
 		"\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\3\2"+
 		"\3\2\7\2\31\n\2\f\2\16\2\34\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3"+
 		"\5\3\5\3\5\7\5*\n\5\f\5\16\5-\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6\66"+
 		"\n\6\3\6\3\6\5\6:\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6"+
 		"\3\6\3\6\3\6\3\6\5\6L\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6U\n\6\3\6\3\6"+
 		"\3\6\3\6\3\6\3\6\3\6\3\6\7\6_\n\6\f\6\16\6b\13\6\3\7\3\7\3\b\3\b\3\b\3"+
-		"\b\5\bj\n\b\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\5\ny\n"+
-		"\n\3\13\3\13\3\13\2\3\n\f\2\4\6\b\n\f\16\20\22\24\2\4\4\2\b\b\20\64\3"+
-		"\28<\u008e\2\32\3\2\2\2\4\37\3\2\2\2\6#\3\2\2\2\b&\3\2\2\2\nT\3\2\2\2"+
-		"\fc\3\2\2\2\16i\3\2\2\2\20k\3\2\2\2\22x\3\2\2\2\24z\3\2\2\2\26\31\5\4"+
-		"\3\2\27\31\5\6\4\2\30\26\3\2\2\2\30\27\3\2\2\2\31\34\3\2\2\2\32\30\3\2"+
-		"\2\2\32\33\3\2\2\2\33\35\3\2\2\2\34\32\3\2\2\2\35\36\7\2\2\3\36\3\3\2"+
-		"\2\2\37 \7\3\2\2 !\5\n\6\2!\"\7\4\2\2\"\5\3\2\2\2#$\5\n\6\2$%\7\4\2\2"+
-		"%\7\3\2\2\2&+\5\n\6\2\'(\7\5\2\2(*\5\n\6\2)\'\3\2\2\2*-\3\2\2\2+)\3\2"+
-		"\2\2+,\3\2\2\2,\t\3\2\2\2-+\3\2\2\2./\b\6\1\2/U\7\67\2\2\60\61\7\6\2\2"+
-		"\61\62\5\n\6\2\62\63\7\7\2\2\63U\3\2\2\2\64\66\7\b\2\2\65\64\3\2\2\2\65"+
-		"\66\3\2\2\2\66\67\3\2\2\2\67U\5\24\13\28:\7\b\2\298\3\2\2\29:\3\2\2\2"+
-		":;\3\2\2\2;U\7=\2\2<=\5\f\7\2=>\7\6\2\2>?\5\b\5\2?@\7\7\2\2@U\3\2\2\2"+
-		"AB\5\16\b\2BC\5\n\6\7CU\3\2\2\2DE\5\20\t\2EF\5\n\6\6FU\3\2\2\2GH\7\t\2"+
-		"\2HK\5\b\5\2IJ\7\n\2\2JL\5\n\6\2KI\3\2\2\2KL\3\2\2\2LM\3\2\2\2MN\7\13"+
-		"\2\2NU\3\2\2\2OP\7\f\2\2PQ\5\b\5\2QR\7\r\2\2RU\3\2\2\2SU\5\f\7\2T.\3\2"+
-		"\2\2T\60\3\2\2\2T\65\3\2\2\2T9\3\2\2\2T<\3\2\2\2TA\3\2\2\2TD\3\2\2\2T"+
-		"G\3\2\2\2TO\3\2\2\2TS\3\2\2\2U`\3\2\2\2VW\f\t\2\2WX\5\16\b\2XY\5\n\6\t"+
-		"Y_\3\2\2\2Z[\f\b\2\2[\\\5\20\t\2\\]\5\n\6\b]_\3\2\2\2^V\3\2\2\2^Z\3\2"+
-		"\2\2_b\3\2\2\2`^\3\2\2\2`a\3\2\2\2a\13\3\2\2\2b`\3\2\2\2cd\5\22\n\2d\r"+
-		"\3\2\2\2ej\7\3\2\2fj\7\16\2\2gj\7\17\2\2hj\7\5\2\2ie\3\2\2\2if\3\2\2\2"+
-		"ig\3\2\2\2ih\3\2\2\2j\17\3\2\2\2kl\t\2\2\2l\21\3\2\2\2mn\7\t\2\2ny\7\13"+
-		"\2\2op\7\f\2\2py\7\r\2\2qy\7\66\2\2ry\7>\2\2sy\7?\2\2ty\7@\2\2uy\7A\2"+
-		"\2vy\7\24\2\2wy\7\65\2\2xm\3\2\2\2xo\3\2\2\2xq\3\2\2\2xr\3\2\2\2xs\3\2"+
-		"\2\2xt\3\2\2\2xu\3\2\2\2xv\3\2\2\2xw\3\2\2\2y\23\3\2\2\2z{\t\3\2\2{\25"+
-		"\3\2\2\2\r\30\32+\659KT^`ix";
+		"\b\3\b\5\bk\n\b\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\5"+
+		"\nz\n\n\3\13\3\13\3\13\2\3\n\f\2\4\6\b\n\f\16\20\22\24\2\4\4\2\b\b\21"+
+		"\64\3\28<\u0090\2\32\3\2\2\2\4\37\3\2\2\2\6#\3\2\2\2\b&\3\2\2\2\nT\3\2"+
+		"\2\2\fc\3\2\2\2\16j\3\2\2\2\20l\3\2\2\2\22y\3\2\2\2\24{\3\2\2\2\26\31"+
+		"\5\4\3\2\27\31\5\6\4\2\30\26\3\2\2\2\30\27\3\2\2\2\31\34\3\2\2\2\32\30"+
+		"\3\2\2\2\32\33\3\2\2\2\33\35\3\2\2\2\34\32\3\2\2\2\35\36\7\2\2\3\36\3"+
+		"\3\2\2\2\37 \7\3\2\2 !\5\n\6\2!\"\7\4\2\2\"\5\3\2\2\2#$\5\n\6\2$%\7\4"+
+		"\2\2%\7\3\2\2\2&+\5\n\6\2\'(\7\5\2\2(*\5\n\6\2)\'\3\2\2\2*-\3\2\2\2+)"+
+		"\3\2\2\2+,\3\2\2\2,\t\3\2\2\2-+\3\2\2\2./\b\6\1\2/U\7\67\2\2\60\61\7\6"+
+		"\2\2\61\62\5\n\6\2\62\63\7\7\2\2\63U\3\2\2\2\64\66\7\b\2\2\65\64\3\2\2"+
+		"\2\65\66\3\2\2\2\66\67\3\2\2\2\67U\5\24\13\28:\7\b\2\298\3\2\2\29:\3\2"+
+		"\2\2:;\3\2\2\2;U\7=\2\2<=\5\f\7\2=>\7\6\2\2>?\5\b\5\2?@\7\7\2\2@U\3\2"+
+		"\2\2AB\5\16\b\2BC\5\n\6\7CU\3\2\2\2DE\5\20\t\2EF\5\n\6\6FU\3\2\2\2GH\7"+
+		"\t\2\2HK\5\b\5\2IJ\7\n\2\2JL\5\n\6\2KI\3\2\2\2KL\3\2\2\2LM\3\2\2\2MN\7"+
+		"\13\2\2NU\3\2\2\2OP\7\f\2\2PQ\5\b\5\2QR\7\r\2\2RU\3\2\2\2SU\5\f\7\2T."+
+		"\3\2\2\2T\60\3\2\2\2T\65\3\2\2\2T9\3\2\2\2T<\3\2\2\2TA\3\2\2\2TD\3\2\2"+
+		"\2TG\3\2\2\2TO\3\2\2\2TS\3\2\2\2U`\3\2\2\2VW\f\t\2\2WX\5\16\b\2XY\5\n"+
+		"\6\tY_\3\2\2\2Z[\f\b\2\2[\\\5\20\t\2\\]\5\n\6\b]_\3\2\2\2^V\3\2\2\2^Z"+
+		"\3\2\2\2_b\3\2\2\2`^\3\2\2\2`a\3\2\2\2a\13\3\2\2\2b`\3\2\2\2cd\5\22\n"+
+		"\2d\r\3\2\2\2ek\7\3\2\2fk\7\16\2\2gk\7\17\2\2hk\7\5\2\2ik\7\20\2\2je\3"+
+		"\2\2\2jf\3\2\2\2jg\3\2\2\2jh\3\2\2\2ji\3\2\2\2k\17\3\2\2\2lm\t\2\2\2m"+
+		"\21\3\2\2\2no\7\t\2\2oz\7\13\2\2pq\7\f\2\2qz\7\r\2\2rz\7\66\2\2sz\7>\2"+
+		"\2tz\7?\2\2uz\7@\2\2vz\7A\2\2wz\7\20\2\2xz\7\65\2\2yn\3\2\2\2yp\3\2\2"+
+		"\2yr\3\2\2\2ys\3\2\2\2yt\3\2\2\2yu\3\2\2\2yv\3\2\2\2yw\3\2\2\2yx\3\2\2"+
+		"\2z\23\3\2\2\2{|\t\3\2\2|\25\3\2\2\2\r\30\32+\659KT^`jy";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

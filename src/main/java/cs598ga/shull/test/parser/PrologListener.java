@@ -254,6 +254,18 @@ public interface PrologListener extends ParseTreeListener {
 	 */
 	void exitAnd_operator(PrologParser.And_operatorContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code or_operator}
+	 * labeled alternative in {@link PrologParser#supportedOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterOr_operator(PrologParser.Or_operatorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code or_operator}
+	 * labeled alternative in {@link PrologParser#supportedOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitOr_operator(PrologParser.Or_operatorContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PrologParser#unsupportedOperator}.
 	 * @param ctx the parse tree
 	 */

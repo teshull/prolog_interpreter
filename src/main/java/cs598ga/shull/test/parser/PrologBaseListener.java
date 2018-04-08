@@ -270,6 +270,18 @@ public class PrologBaseListener implements PrologListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterOr_operator(PrologParser.Or_operatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOr_operator(PrologParser.Or_operatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUnsupportedOperator(PrologParser.UnsupportedOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
