@@ -12,13 +12,15 @@ public class ExecutionEnvironment {
 	
 	public ArrayList<LocalEnvironment> localEnvs;
 	public ArrayList<BaseExecutionState> executionStates;
-	public int stackDepth;
+	public int envDepth;
+	public int stateDepth;
 
 	public ExecutionEnvironment(GlobalEnvironment globalEnv){
 		this.globalEnv = globalEnv;
 		localEnvs = new ArrayList<>();
 		executionStates = new ArrayList<>();
-		stackDepth = 0;
+		envDepth = 0;
+		stateDepth = 0;
 	}
 	
 	public LocalEnvironment createChildLocalEnv(){
@@ -28,19 +30,32 @@ public class ExecutionEnvironment {
 
 	public void addLocalEnv(LocalEnvironment env){
 		localEnvs.add(env);
+		envDepth++;
 	}
 
 	public LocalEnvironment getCurrentLocalEnv(){
-		if(stackDepth == 0){
+		if(envDepth == 0){
 			PrologRuntime.programError("trying to pull from empty local env stack");
 		}
-		return localEnvs.get(stackDepth - 1);
+		return localEnvs.get(envDepth - 1);
+	}
+
+	public void setCurrentLocalEnv(LocalEnvironment env){
+		if(envDepth == 0){
+			PrologRuntime.programError("trying to pull from empty local env stack");
+		}
+		localEnvs.set(envDepth - 1, env);
 	}
 
 	public void addStateFrame(BaseNode node){
 		BaseExecutionState state = node.generateExecutionState();
 		executionStates.add(state);
-		stackDepth++;
+		stateDepth++;
+	}
+
+	public void addState(BaseExecutionState state){
+		executionStates.add(state);
+		stateDepth++;
 	}
 	
 	public void addNewFrame(BaseNode node){
@@ -48,14 +63,14 @@ public class ExecutionEnvironment {
 		localEnvs.add(env);
 		BaseExecutionState state = node.generateExecutionState();
 		executionStates.add(state);
-		stackDepth++;
+		stateDepth++;
 	}
 	
 	public BaseExecutionState getCurrentState(){
-		if(stackDepth == 0){
+		if(stateDepth == 0){
 			PrologRuntime.programError("trying to pull from empty execution state stack");
 		}
-		return executionStates.get(stackDepth - 1);
+		return executionStates.get(stateDepth - 1);
 		
 	}
 

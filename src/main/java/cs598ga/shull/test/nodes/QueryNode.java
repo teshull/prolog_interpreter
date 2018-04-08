@@ -52,5 +52,19 @@ public class QueryNode extends ClauseNode implements ExecutableNode {
 	public ExecutableNode backtrack(ExecutionEnvironment env) {
 		return SpecialNode.NOBACKTRACK;
 	}
+	
+	@Override
+	public BaseNode firstStep(ExecutionEnvironment env){
+		
+		BaseNode temp = (BaseNode) child;
+		//the query must create the first environment
+		env.addLocalEnv(env.createChildLocalEnv());
+		BaseNode result = temp.initializeAndEnter(env);
+		if(result == SpecialNode.FINISHED){
+			//System.out.println("environment:\n" + env.getCurrentLocalEnv());
+			env.getCurrentLocalEnv().printSourceMatchesIfPresent();
+		}
+		return result;
+	}
 
 }

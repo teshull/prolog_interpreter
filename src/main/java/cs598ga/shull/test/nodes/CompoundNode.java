@@ -122,6 +122,48 @@ public class CompoundNode extends FactNode implements ExecutableNode {
 		return false;
 	}
 
+
+	/**
+	 * the FactNode parameter is the source
+	 * "this" is the target
+	 */
+	@Override
+	public boolean matchNode(BaseNode source, LocalEnvironment env) {
+		if(!(source instanceof PredicateNode)){
+			return false;
+		}
+		PredicateNode node = (PredicateNode) source;
+		if(node.base.isSourceCurrentlyVariable(env)){
+			if(base.isTargetCurrentlyVariable(env)){
+				//source variable, target variable
+				//this can happen
+				PrologRuntime.programError("didn't think that this can happen...");
+			} else {
+				//source variable, target not variable
+				env.setSourceMatch(node.base.getName(), this);
+			}
+			return true;
+		}
+		//source not variable
+		node = node.base.getSourceCurrentNode(node, env);
+		if(base.nameMatches(node.base.getName())){
+			//now making sure all children match
+			//FIXME this is wrong, 
+			if(node.children.size() != children.size()){
+				return false;
+			}
+			for(int i = 0; i < children.size(); i++){
+				if(!(children.get(i)).matchNode(node.children.get(i), env)){
+					return false;
+				}
+			}
+			//met all requirements
+			return true;
+		}
+		return false;
+
+	}
+
 	@Override
 	public ArrayList<String> match(PredicateNode node, LocalEnvironment env) {
 		return null;

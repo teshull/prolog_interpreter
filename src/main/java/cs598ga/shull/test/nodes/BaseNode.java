@@ -1,9 +1,11 @@
 package cs598ga.shull.test.nodes;
 
+import cs598ga.shull.test.execution.ExecutionEnvironment;
+import cs598ga.shull.test.execution.LocalEnvironment;
 import cs598ga.shull.test.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.test.runtime.PrologRuntime;
 
-public class BaseNode {
+public abstract class BaseNode {
 
 	public enum NodeType{
 		Undefined,
@@ -33,5 +35,32 @@ public class BaseNode {
 		return null;
 		
 	}
+	
+	public BaseNode initializeAndEnter(ExecutionEnvironment env){
+		BaseExecutionState state = generateExecutionState();
+		env.addState(state);
+		return firstStep(env);
+	}
+	
 
+	public BaseNode firstStep(ExecutionEnvironment env){
+		PrologRuntime.programError("need to implement this in " + this.getClass());
+		return null;
+	}
+	
+	
+	public BaseNode nextStep(ExecutionEnvironment env){
+		PrologRuntime.programError("need to implement this in " + this.getClass());
+		return null;
+	}
+	
+	public BaseNode performBacktrack(ExecutionEnvironment env){
+		PrologRuntime.programError("need to implement this in " + this.getClass());
+		return null;
+	}
+
+	public boolean matchNode(BaseNode source, LocalEnvironment env){
+		PrologRuntime.programError("need to implement this in " + this.getClass());
+		return false;
+	}
 }

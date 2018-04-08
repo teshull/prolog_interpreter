@@ -7,5 +7,4 @@ import cs598ga.shull.test.nodes.*;
 public class PredicateState extends BaseExecutionState {
 	public int matchNum = -1;
 	public ArrayList<PredicateNode> matches = null;
-
 }

@@ -90,6 +90,15 @@ public class ExecutionEngine {
 		System.out.println("start satisfying query " + query);
 		ExecutionEnvironment env = new ExecutionEnvironment(globalEnv);
 		
+		BaseNode result = query.initializeAndEnter(env);
+		if(result == SpecialNode.FINISHED){
+			System.out.println("yes");
+		} else if(result == SpecialNode.DEADEND){
+			System.out.println("no");
+		} else {
+			assert false:  "discovered a problem";
+		}
+		/*
 		ExecutableNode node = query;
 		env.addLocalEnv(env.createChildLocalEnv());
 		while(node != SpecialNode.FINISHED){
@@ -113,6 +122,7 @@ public class ExecutionEngine {
 			PrologRuntime.programError("shouldn't be able to get here");
 		}
 
+		*/
 		System.out.println("end satisfying query " + query);
 		
 	}

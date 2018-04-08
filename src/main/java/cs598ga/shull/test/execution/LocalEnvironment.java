@@ -72,7 +72,7 @@ public class LocalEnvironment {
 	}
 
 	public void removeSourceMatch(String s){
-		targetMatches.remove(s);
+		sourceMatches.remove(s);
 	}
 	public void removeTargetMatch(String s){
 		targetMatches.remove(s);
@@ -83,5 +83,43 @@ public class LocalEnvironment {
 			PrologRuntime.programError("trying to match twice");
 		}
 		sourceToTargetLink.put(source, target);
+	}
+	
+	public LocalEnvironment getDeepCopy(){
+		LocalEnvironment copy = new LocalEnvironment();
+		copy.sourceMatches = new HashMap<>(sourceMatches);
+		copy.targetMatches = new HashMap<>(targetMatches);
+		copy.sourceToTargetLink = new HashMap<>(sourceToTargetLink);
+		return copy;
+	}
+	
+	private String getMapInfo(Map<String, PredicateNode> map){
+		String message = "";
+		if(map.size() == 0){
+			message = "<empty>\n";
+		} else {
+			for(String key : map.keySet()){
+				PredicateNode value = map.get(key);
+				message += key + " -> " + value + "\n";
+			}
+		}
+		return message;
+	}
+	
+	public void printSourceMatchesIfPresent(){
+		if(sourceMatches.size() != 0){
+			System.out.println("variable matches:\n" + getMapInfo(sourceMatches));
+		}
+		
+	}
+
+	@Override
+	public String toString(){
+		String message = "";
+		message += "sources\n";
+		message += getMapInfo(sourceMatches);
+		message += "targets\n";
+		message += getMapInfo(targetMatches);
+		return message;
 	}
 }

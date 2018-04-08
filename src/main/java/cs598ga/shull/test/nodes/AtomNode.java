@@ -113,6 +113,30 @@ public class AtomNode extends FactNode implements ExecutableNode {
 	}
 
 	@Override
+	public boolean matchNode(BaseNode source, LocalEnvironment env) {
+		if(!(source instanceof PredicateNode)){
+			return false;
+		}
+		PredicateNode node = (PredicateNode) source;
+
+		//cannot match
+		if(node.children != null){
+			return false;
+		}
+		if(node.base.isSourceCurrentlyVariable(env)){
+			//need to set the environment here...
+			env.setSourceMatch(node.base.getName(), this);
+			return true;
+		}
+
+		node = node.base.getSourceCurrentNode(node, env);
+		if(node.base.nameMatches(base)){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
 	public ArrayList<String> match(PredicateNode node, LocalEnvironment env) {
 		// TODO Auto-generated method stub
 
@@ -124,6 +148,5 @@ public class AtomNode extends FactNode implements ExecutableNode {
 		if(node.base.nameMatches(base)){
 		}
 		return null;
-		
 	}
 }
