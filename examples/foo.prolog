@@ -58,4 +58,5 @@ cutFact.
 
 %?- cutFact.
 
-?- timer(fake).
+%?- timer(fake).
+?- timer(cutFact).
