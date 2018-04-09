@@ -60,3 +60,4 @@ cutFact.
 
 %?- timer(fake).
 ?- timer(cutFact).
+%?- numberFact(10).

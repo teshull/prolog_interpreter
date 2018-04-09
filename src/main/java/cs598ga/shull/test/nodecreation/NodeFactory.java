@@ -22,13 +22,13 @@ public class NodeFactory {
 
 	public static IntegerNode createInteger(String s){
 		int value = Integer.parseInt(s);
-		NameNode name = new NameNode(s, true);
+		NameNode name = new NameNode(s, false);
 		IntegerNode node = new IntegerNode(name, value);
 		return node;
 	}
 
 	public static IntegerNode createInteger(int value){
-		NameNode name = new NameNode(Integer.toString(value), true);
+		NameNode name = new NameNode(Integer.toString(value), false);
 		IntegerNode node = new IntegerNode(name, value);
 		return node;
 	}
