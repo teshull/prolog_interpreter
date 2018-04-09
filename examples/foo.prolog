@@ -59,5 +59,5 @@ cutFact.
 %?- cutFact.
 
 %?- timer(fake).
-?- timer(cutFact).
-%?- numberFact(10).
+%?- timer(cutFact).
+?- numberFact(10).

@@ -34,3 +34,4 @@ target/*
 .DS_Store
 */.ropeproject/*
 
+/target/
