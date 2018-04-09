@@ -31,20 +31,20 @@ public class PrologParser extends Parser {
 		WS=64, COMMENT=65, MULTILINE_COMMENT=66;
 	public static final int
 		RULE_p_text = 0, RULE_directive = 1, RULE_clause = 2, RULE_termlist = 3, 
-		RULE_term = 4, RULE_atomTerm = 5, RULE_supportedOperator = 6, RULE_unsupportedOperator = 7, 
-		RULE_atom = 8, RULE_integer = 9;
+		RULE_term = 4, RULE_atomTerm = 5, RULE_supportedOperator = 6, RULE_arithmeticOperator = 7, 
+		RULE_unsupportedOperator = 8, RULE_atom = 9, RULE_integer = 10;
 	public static final String[] ruleNames = {
 		"p_text", "directive", "clause", "termlist", "term", "atomTerm", "supportedOperator", 
-		"unsupportedOperator", "atom", "integer"
+		"arithmeticOperator", "unsupportedOperator", "atom", "integer"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
 		null, "':-'", "'.'", "','", "'('", "')'", "'-'", "'['", "'|'", "']'", 
-		"'{'", "'}'", "'-->'", "'?-'", "';'", "'dynamic'", "'multifile'", "'discontiguous'", 
-		"'public'", "'->'", "'\\+'", "'='", "'\\='", "'=='", "'\\=='", "'@<'", 
-		"'@=<'", "'@>'", "'@>='", "'=..'", "'is'", "'=:='", "'=\\='", "'<'", "'=<'", 
-		"'>'", "'>='", "':'", "'+'", "'/\\'", "'\\/'", "'*'", "'/'", "'//'", "'rem'", 
-		"'mod'", "'<<'", "'>>'", "'**'", "'^'", "'\\'", "'!'"
+		"'{'", "'}'", "'-->'", "'?-'", "';'", "'is'", "'='", "'+'", "'*'", "'/'", 
+		"'dynamic'", "'multifile'", "'discontiguous'", "'public'", "'->'", "'\\='", 
+		"'\\+'", "'=='", "'\\=='", "'@<'", "'@=<'", "'@>'", "'@>='", "'=..'", 
+		"'=:='", "'=\\='", "'<'", "'=<'", "'>'", "'>='", "':'", "'/\\'", "'\\/'", 
+		"'//'", "'rem'", "'mod'", "'<<'", "'>>'", "'**'", "'^'", "'\\'", "'!'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -139,33 +139,33 @@ public class PrologParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(24);
+			setState(26);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__2) | (1L << T__3) | (1L << T__5) | (1L << T__6) | (1L << T__9) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26) | (1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31) | (1L << T__32) | (1L << T__33) | (1L << T__34) | (1L << T__35) | (1L << T__36) | (1L << T__37) | (1L << T__38) | (1L << T__39) | (1L << T__40) | (1L << T__41) | (1L << T__42) | (1L << T__43) | (1L << T__44) | (1L << T__45) | (1L << T__46) | (1L << T__47) | (1L << T__48) | (1L << T__49) | (1L << T__50) | (1L << LETTER_DIGIT) | (1L << VARIABLE) | (1L << DECIMAL) | (1L << BINARY) | (1L << OCTAL) | (1L << HEX) | (1L << CHARACTER_CODE_CONSTANT) | (1L << FLOAT) | (1L << GRAPHIC_TOKEN) | (1L << QUOTED) | (1L << DOUBLE_QUOTED_LIST) | (1L << BACK_QUOTED_STRING))) != 0)) {
 				{
-				setState(22);
+				setState(24);
 				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 				case 1:
 					{
-					setState(20);
+					setState(22);
 					directive();
 					}
 					break;
 				case 2:
 					{
-					setState(21);
+					setState(23);
 					clause();
 					}
 					break;
 				}
 				}
-				setState(26);
+				setState(28);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(27);
+			setState(29);
 			match(EOF);
 			}
 		}
@@ -204,11 +204,11 @@ public class PrologParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(29);
-			match(T__0);
-			setState(30);
-			term(0);
 			setState(31);
+			match(T__0);
+			setState(32);
+			term(0);
+			setState(33);
 			match(T__1);
 			}
 		}
@@ -247,9 +247,9 @@ public class PrologParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(33);
+			setState(35);
 			term(0);
-			setState(34);
+			setState(36);
 			match(T__1);
 			}
 		}
@@ -292,21 +292,21 @@ public class PrologParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(36);
+			setState(38);
 			term(0);
-			setState(41);
+			setState(43);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__2) {
 				{
 				{
-				setState(37);
+				setState(39);
 				match(T__2);
-				setState(38);
+				setState(40);
 				term(0);
 				}
 				}
-				setState(43);
+				setState(45);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -539,7 +539,7 @@ public class PrologParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(82);
+			setState(84);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
@@ -548,7 +548,7 @@ public class PrologParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(45);
+				setState(47);
 				match(VARIABLE);
 				}
 				break;
@@ -557,11 +557,11 @@ public class PrologParser extends Parser {
 				_localctx = new Braced_termContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(46);
-				match(T__3);
-				setState(47);
-				term(0);
 				setState(48);
+				match(T__3);
+				setState(49);
+				term(0);
+				setState(50);
 				match(T__4);
 				}
 				break;
@@ -570,16 +570,16 @@ public class PrologParser extends Parser {
 				_localctx = new Integer_termContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(51);
+				setState(53);
 				_la = _input.LA(1);
 				if (_la==T__5) {
 					{
-					setState(50);
+					setState(52);
 					match(T__5);
 					}
 				}
 
-				setState(53);
+				setState(55);
 				integer();
 				}
 				break;
@@ -588,16 +588,16 @@ public class PrologParser extends Parser {
 				_localctx = new FloatContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(55);
+				setState(57);
 				_la = _input.LA(1);
 				if (_la==T__5) {
 					{
-					setState(54);
+					setState(56);
 					match(T__5);
 					}
 				}
 
-				setState(57);
+				setState(59);
 				match(FLOAT);
 				}
 				break;
@@ -606,13 +606,13 @@ public class PrologParser extends Parser {
 				_localctx = new Compound_termContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(58);
-				atomTerm();
-				setState(59);
-				match(T__3);
 				setState(60);
-				termlist();
+				atomTerm();
 				setState(61);
+				match(T__3);
+				setState(62);
+				termlist();
+				setState(63);
 				match(T__4);
 				}
 				break;
@@ -621,9 +621,9 @@ public class PrologParser extends Parser {
 				_localctx = new Supported_unary_operatorContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(63);
+				setState(65);
 				supportedOperator();
-				setState(64);
+				setState(66);
 				term(5);
 				}
 				break;
@@ -632,9 +632,9 @@ public class PrologParser extends Parser {
 				_localctx = new Unsupported_unary_operatorContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(66);
+				setState(68);
 				unsupportedOperator();
-				setState(67);
+				setState(69);
 				term(4);
 				}
 				break;
@@ -643,22 +643,22 @@ public class PrologParser extends Parser {
 				_localctx = new List_termContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(69);
+				setState(71);
 				match(T__6);
-				setState(70);
+				setState(72);
 				termlist();
-				setState(73);
+				setState(75);
 				_la = _input.LA(1);
 				if (_la==T__7) {
 					{
-					setState(71);
+					setState(73);
 					match(T__7);
-					setState(72);
+					setState(74);
 					term(0);
 					}
 				}
 
-				setState(75);
+				setState(77);
 				match(T__8);
 				}
 				break;
@@ -667,11 +667,11 @@ public class PrologParser extends Parser {
 				_localctx = new Curly_bracketed_termContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(77);
-				match(T__9);
-				setState(78);
-				termlist();
 				setState(79);
+				match(T__9);
+				setState(80);
+				termlist();
+				setState(81);
 				match(T__10);
 				}
 				break;
@@ -680,13 +680,13 @@ public class PrologParser extends Parser {
 				_localctx = new AtomValContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(81);
+				setState(83);
 				atomTerm();
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(94);
+			setState(96);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -694,18 +694,18 @@ public class PrologParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(92);
+					setState(94);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 					case 1:
 						{
 						_localctx = new Supported_binary_operatorContext(new TermContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_term);
-						setState(84);
-						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(85);
-						supportedOperator();
 						setState(86);
+						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
+						setState(87);
+						supportedOperator();
+						setState(88);
 						term(7);
 						}
 						break;
@@ -713,18 +713,18 @@ public class PrologParser extends Parser {
 						{
 						_localctx = new Unsupported_binary_operatorContext(new TermContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_term);
-						setState(88);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(89);
-						unsupportedOperator();
 						setState(90);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						setState(91);
+						unsupportedOperator();
+						setState(92);
 						term(6);
 						}
 						break;
 					}
 					} 
 				}
-				setState(96);
+				setState(98);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 			}
@@ -774,7 +774,7 @@ public class PrologParser extends Parser {
 			_localctx = new Atom_termContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(97);
+			setState(99);
 			atom();
 			}
 		}
@@ -809,6 +809,31 @@ public class PrologParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PrologListener ) ((PrologListener)listener).exitArrow_operator(this);
+		}
+	}
+	public static class Arith_operatorContext extends SupportedOperatorContext {
+		public ArithmeticOperatorContext arithmeticOperator() {
+			return getRuleContext(ArithmeticOperatorContext.class,0);
+		}
+		public Arith_operatorContext(SupportedOperatorContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PrologListener ) ((PrologListener)listener).enterArith_operator(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PrologListener ) ((PrologListener)listener).exitArith_operator(this);
+		}
+	}
+	public static class Is_operatorContext extends SupportedOperatorContext {
+		public Is_operatorContext(SupportedOperatorContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PrologListener ) ((PrologListener)listener).enterIs_operator(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PrologListener ) ((PrologListener)listener).exitIs_operator(this);
 		}
 	}
 	public static class And_operatorContext extends SupportedOperatorContext {
@@ -860,13 +885,13 @@ public class PrologParser extends Parser {
 		SupportedOperatorContext _localctx = new SupportedOperatorContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_supportedOperator);
 		try {
-			setState(104);
+			setState(108);
 			switch (_input.LA(1)) {
 			case T__0:
 				_localctx = new Rule_operatorContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(99);
+				setState(101);
 				match(T__0);
 				}
 				break;
@@ -874,7 +899,7 @@ public class PrologParser extends Parser {
 				_localctx = new Arrow_operatorContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(100);
+				setState(102);
 				match(T__11);
 				}
 				break;
@@ -882,7 +907,7 @@ public class PrologParser extends Parser {
 				_localctx = new Querey_operatorContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(101);
+				setState(103);
 				match(T__12);
 				}
 				break;
@@ -890,7 +915,7 @@ public class PrologParser extends Parser {
 				_localctx = new And_operatorContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(102);
+				setState(104);
 				match(T__2);
 				}
 				break;
@@ -898,12 +923,74 @@ public class PrologParser extends Parser {
 				_localctx = new Or_operatorContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(103);
+				setState(105);
 				match(T__13);
+				}
+				break;
+			case T__14:
+				_localctx = new Is_operatorContext(_localctx);
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(106);
+				match(T__14);
+				}
+				break;
+			case T__5:
+			case T__15:
+			case T__16:
+			case T__17:
+			case T__18:
+				_localctx = new Arith_operatorContext(_localctx);
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(107);
+				arithmeticOperator();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ArithmeticOperatorContext extends ParserRuleContext {
+		public ArithmeticOperatorContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_arithmeticOperator; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PrologListener ) ((PrologListener)listener).enterArithmeticOperator(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PrologListener ) ((PrologListener)listener).exitArithmeticOperator(this);
+		}
+	}
+
+	public final ArithmeticOperatorContext arithmeticOperator() throws RecognitionException {
+		ArithmeticOperatorContext _localctx = new ArithmeticOperatorContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_arithmeticOperator);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(110);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18))) != 0)) ) {
+			_errHandler.recoverInline(this);
+			} else {
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -934,14 +1021,14 @@ public class PrologParser extends Parser {
 
 	public final UnsupportedOperatorContext unsupportedOperator() throws RecognitionException {
 		UnsupportedOperatorContext _localctx = new UnsupportedOperatorContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_unsupportedOperator);
+		enterRule(_localctx, 16, RULE_unsupportedOperator);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(106);
+			setState(112);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26) | (1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31) | (1L << T__32) | (1L << T__33) | (1L << T__34) | (1L << T__35) | (1L << T__36) | (1L << T__37) | (1L << T__38) | (1L << T__39) | (1L << T__40) | (1L << T__41) | (1L << T__42) | (1L << T__43) | (1L << T__44) | (1L << T__45) | (1L << T__46) | (1L << T__47) | (1L << T__48) | (1L << T__49))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26) | (1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__31) | (1L << T__32) | (1L << T__33) | (1L << T__34) | (1L << T__35) | (1L << T__36) | (1L << T__37) | (1L << T__38) | (1L << T__39) | (1L << T__40) | (1L << T__41) | (1L << T__42) | (1L << T__43) | (1L << T__44) | (1L << T__45) | (1L << T__46) | (1L << T__47) | (1L << T__48) | (1L << T__49))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
@@ -1077,17 +1164,17 @@ public class PrologParser extends Parser {
 
 	public final AtomContext atom() throws RecognitionException {
 		AtomContext _localctx = new AtomContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_atom);
+		enterRule(_localctx, 18, RULE_atom);
 		try {
-			setState(119);
+			setState(125);
 			switch (_input.LA(1)) {
 			case T__6:
 				_localctx = new Empty_listContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(108);
+				setState(114);
 				match(T__6);
-				setState(109);
+				setState(115);
 				match(T__8);
 				}
 				break;
@@ -1095,9 +1182,9 @@ public class PrologParser extends Parser {
 				_localctx = new Empty_bracesContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(110);
+				setState(116);
 				match(T__9);
-				setState(111);
+				setState(117);
 				match(T__10);
 				}
 				break;
@@ -1105,7 +1192,7 @@ public class PrologParser extends Parser {
 				_localctx = new NameContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(112);
+				setState(118);
 				match(LETTER_DIGIT);
 				}
 				break;
@@ -1113,7 +1200,7 @@ public class PrologParser extends Parser {
 				_localctx = new GraphicContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(113);
+				setState(119);
 				match(GRAPHIC_TOKEN);
 				}
 				break;
@@ -1121,7 +1208,7 @@ public class PrologParser extends Parser {
 				_localctx = new Quoted_stringContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(114);
+				setState(120);
 				match(QUOTED);
 				}
 				break;
@@ -1129,7 +1216,7 @@ public class PrologParser extends Parser {
 				_localctx = new Dq_stringContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(115);
+				setState(121);
 				match(DOUBLE_QUOTED_LIST);
 				}
 				break;
@@ -1137,7 +1224,7 @@ public class PrologParser extends Parser {
 				_localctx = new Backq_stringContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(116);
+				setState(122);
 				match(BACK_QUOTED_STRING);
 				}
 				break;
@@ -1145,7 +1232,7 @@ public class PrologParser extends Parser {
 				_localctx = new SemicolonContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(117);
+				setState(123);
 				match(T__13);
 				}
 				break;
@@ -1153,7 +1240,7 @@ public class PrologParser extends Parser {
 				_localctx = new CutContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(118);
+				setState(124);
 				match(T__50);
 				}
 				break;
@@ -1194,12 +1281,12 @@ public class PrologParser extends Parser {
 
 	public final IntegerContext integer() throws RecognitionException {
 		IntegerContext _localctx = new IntegerContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_integer);
+		enterRule(_localctx, 20, RULE_integer);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(121);
+			setState(127);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DECIMAL) | (1L << BINARY) | (1L << OCTAL) | (1L << HEX) | (1L << CHARACTER_CODE_CONSTANT))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1237,38 +1324,41 @@ public class PrologParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3D~\4\2\t\2\4\3\t\3"+
-		"\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\3\2"+
-		"\3\2\7\2\31\n\2\f\2\16\2\34\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3"+
-		"\5\3\5\3\5\7\5*\n\5\f\5\16\5-\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6\66"+
-		"\n\6\3\6\3\6\5\6:\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6"+
-		"\3\6\3\6\3\6\3\6\5\6L\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6U\n\6\3\6\3\6"+
-		"\3\6\3\6\3\6\3\6\3\6\3\6\7\6_\n\6\f\6\16\6b\13\6\3\7\3\7\3\b\3\b\3\b\3"+
-		"\b\3\b\5\bk\n\b\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\5"+
-		"\nz\n\n\3\13\3\13\3\13\2\3\n\f\2\4\6\b\n\f\16\20\22\24\2\4\4\2\b\b\21"+
-		"\64\3\28<\u0090\2\32\3\2\2\2\4\37\3\2\2\2\6#\3\2\2\2\b&\3\2\2\2\nT\3\2"+
-		"\2\2\fc\3\2\2\2\16j\3\2\2\2\20l\3\2\2\2\22y\3\2\2\2\24{\3\2\2\2\26\31"+
-		"\5\4\3\2\27\31\5\6\4\2\30\26\3\2\2\2\30\27\3\2\2\2\31\34\3\2\2\2\32\30"+
-		"\3\2\2\2\32\33\3\2\2\2\33\35\3\2\2\2\34\32\3\2\2\2\35\36\7\2\2\3\36\3"+
-		"\3\2\2\2\37 \7\3\2\2 !\5\n\6\2!\"\7\4\2\2\"\5\3\2\2\2#$\5\n\6\2$%\7\4"+
-		"\2\2%\7\3\2\2\2&+\5\n\6\2\'(\7\5\2\2(*\5\n\6\2)\'\3\2\2\2*-\3\2\2\2+)"+
-		"\3\2\2\2+,\3\2\2\2,\t\3\2\2\2-+\3\2\2\2./\b\6\1\2/U\7\67\2\2\60\61\7\6"+
-		"\2\2\61\62\5\n\6\2\62\63\7\7\2\2\63U\3\2\2\2\64\66\7\b\2\2\65\64\3\2\2"+
-		"\2\65\66\3\2\2\2\66\67\3\2\2\2\67U\5\24\13\28:\7\b\2\298\3\2\2\29:\3\2"+
-		"\2\2:;\3\2\2\2;U\7=\2\2<=\5\f\7\2=>\7\6\2\2>?\5\b\5\2?@\7\7\2\2@U\3\2"+
-		"\2\2AB\5\16\b\2BC\5\n\6\7CU\3\2\2\2DE\5\20\t\2EF\5\n\6\6FU\3\2\2\2GH\7"+
-		"\t\2\2HK\5\b\5\2IJ\7\n\2\2JL\5\n\6\2KI\3\2\2\2KL\3\2\2\2LM\3\2\2\2MN\7"+
-		"\13\2\2NU\3\2\2\2OP\7\f\2\2PQ\5\b\5\2QR\7\r\2\2RU\3\2\2\2SU\5\f\7\2T."+
-		"\3\2\2\2T\60\3\2\2\2T\65\3\2\2\2T9\3\2\2\2T<\3\2\2\2TA\3\2\2\2TD\3\2\2"+
-		"\2TG\3\2\2\2TO\3\2\2\2TS\3\2\2\2U`\3\2\2\2VW\f\t\2\2WX\5\16\b\2XY\5\n"+
-		"\6\tY_\3\2\2\2Z[\f\b\2\2[\\\5\20\t\2\\]\5\n\6\b]_\3\2\2\2^V\3\2\2\2^Z"+
-		"\3\2\2\2_b\3\2\2\2`^\3\2\2\2`a\3\2\2\2a\13\3\2\2\2b`\3\2\2\2cd\5\22\n"+
-		"\2d\r\3\2\2\2ek\7\3\2\2fk\7\16\2\2gk\7\17\2\2hk\7\5\2\2ik\7\20\2\2je\3"+
-		"\2\2\2jf\3\2\2\2jg\3\2\2\2jh\3\2\2\2ji\3\2\2\2k\17\3\2\2\2lm\t\2\2\2m"+
-		"\21\3\2\2\2no\7\t\2\2oz\7\13\2\2pq\7\f\2\2qz\7\r\2\2rz\7\66\2\2sz\7>\2"+
-		"\2tz\7?\2\2uz\7@\2\2vz\7A\2\2wz\7\20\2\2xz\7\65\2\2yn\3\2\2\2yp\3\2\2"+
-		"\2yr\3\2\2\2ys\3\2\2\2yt\3\2\2\2yu\3\2\2\2yv\3\2\2\2yw\3\2\2\2yx\3\2\2"+
-		"\2z\23\3\2\2\2{|\t\3\2\2|\25\3\2\2\2\r\30\32+\659KT^`jy";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3D\u0084\4\2\t\2\4"+
+		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
+		"\13\4\f\t\f\3\2\3\2\7\2\33\n\2\f\2\16\2\36\13\2\3\2\3\2\3\3\3\3\3\3\3"+
+		"\3\3\4\3\4\3\4\3\5\3\5\3\5\7\5,\n\5\f\5\16\5/\13\5\3\6\3\6\3\6\3\6\3\6"+
+		"\3\6\3\6\5\68\n\6\3\6\3\6\5\6<\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6"+
+		"\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6N\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6"+
+		"W\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\7\6a\n\6\f\6\16\6d\13\6\3\7\3\7"+
+		"\3\b\3\b\3\b\3\b\3\b\3\b\3\b\5\bo\n\b\3\t\3\t\3\n\3\n\3\13\3\13\3\13\3"+
+		"\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\5\13\u0080\n\13\3\f\3\f\3\f\2\3"+
+		"\n\r\2\4\6\b\n\f\16\20\22\24\26\2\5\4\2\b\b\22\25\3\2\26\64\3\28<\u0097"+
+		"\2\34\3\2\2\2\4!\3\2\2\2\6%\3\2\2\2\b(\3\2\2\2\nV\3\2\2\2\fe\3\2\2\2\16"+
+		"n\3\2\2\2\20p\3\2\2\2\22r\3\2\2\2\24\177\3\2\2\2\26\u0081\3\2\2\2\30\33"+
+		"\5\4\3\2\31\33\5\6\4\2\32\30\3\2\2\2\32\31\3\2\2\2\33\36\3\2\2\2\34\32"+
+		"\3\2\2\2\34\35\3\2\2\2\35\37\3\2\2\2\36\34\3\2\2\2\37 \7\2\2\3 \3\3\2"+
+		"\2\2!\"\7\3\2\2\"#\5\n\6\2#$\7\4\2\2$\5\3\2\2\2%&\5\n\6\2&\'\7\4\2\2\'"+
+		"\7\3\2\2\2(-\5\n\6\2)*\7\5\2\2*,\5\n\6\2+)\3\2\2\2,/\3\2\2\2-+\3\2\2\2"+
+		"-.\3\2\2\2.\t\3\2\2\2/-\3\2\2\2\60\61\b\6\1\2\61W\7\67\2\2\62\63\7\6\2"+
+		"\2\63\64\5\n\6\2\64\65\7\7\2\2\65W\3\2\2\2\668\7\b\2\2\67\66\3\2\2\2\67"+
+		"8\3\2\2\289\3\2\2\29W\5\26\f\2:<\7\b\2\2;:\3\2\2\2;<\3\2\2\2<=\3\2\2\2"+
+		"=W\7=\2\2>?\5\f\7\2?@\7\6\2\2@A\5\b\5\2AB\7\7\2\2BW\3\2\2\2CD\5\16\b\2"+
+		"DE\5\n\6\7EW\3\2\2\2FG\5\22\n\2GH\5\n\6\6HW\3\2\2\2IJ\7\t\2\2JM\5\b\5"+
+		"\2KL\7\n\2\2LN\5\n\6\2MK\3\2\2\2MN\3\2\2\2NO\3\2\2\2OP\7\13\2\2PW\3\2"+
+		"\2\2QR\7\f\2\2RS\5\b\5\2ST\7\r\2\2TW\3\2\2\2UW\5\f\7\2V\60\3\2\2\2V\62"+
+		"\3\2\2\2V\67\3\2\2\2V;\3\2\2\2V>\3\2\2\2VC\3\2\2\2VF\3\2\2\2VI\3\2\2\2"+
+		"VQ\3\2\2\2VU\3\2\2\2Wb\3\2\2\2XY\f\t\2\2YZ\5\16\b\2Z[\5\n\6\t[a\3\2\2"+
+		"\2\\]\f\b\2\2]^\5\22\n\2^_\5\n\6\b_a\3\2\2\2`X\3\2\2\2`\\\3\2\2\2ad\3"+
+		"\2\2\2b`\3\2\2\2bc\3\2\2\2c\13\3\2\2\2db\3\2\2\2ef\5\24\13\2f\r\3\2\2"+
+		"\2go\7\3\2\2ho\7\16\2\2io\7\17\2\2jo\7\5\2\2ko\7\20\2\2lo\7\21\2\2mo\5"+
+		"\20\t\2ng\3\2\2\2nh\3\2\2\2ni\3\2\2\2nj\3\2\2\2nk\3\2\2\2nl\3\2\2\2nm"+
+		"\3\2\2\2o\17\3\2\2\2pq\t\2\2\2q\21\3\2\2\2rs\t\3\2\2s\23\3\2\2\2tu\7\t"+
+		"\2\2u\u0080\7\13\2\2vw\7\f\2\2w\u0080\7\r\2\2x\u0080\7\66\2\2y\u0080\7"+
+		">\2\2z\u0080\7?\2\2{\u0080\7@\2\2|\u0080\7A\2\2}\u0080\7\20\2\2~\u0080"+
+		"\7\65\2\2\177t\3\2\2\2\177v\3\2\2\2\177x\3\2\2\2\177y\3\2\2\2\177z\3\2"+
+		"\2\2\177{\3\2\2\2\177|\3\2\2\2\177}\3\2\2\2\177~\3\2\2\2\u0080\25\3\2"+
+		"\2\2\u0081\u0082\t\4\2\2\u0082\27\3\2\2\2\r\32\34-\67;MV`bn\177";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

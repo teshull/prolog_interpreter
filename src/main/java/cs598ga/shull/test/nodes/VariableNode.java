@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import cs598ga.shull.test.execution.ExecutionEnvironment;
 import cs598ga.shull.test.execution.LocalEnvironment;
 
-public class VariableNode extends FactNode {
+public class VariableNode extends FactNode implements ComputeNode {
 	String name;
 	
 	public VariableNode(NameNode node){
@@ -118,6 +118,16 @@ public class VariableNode extends FactNode {
 			
 		}
 		return true;
+	}
+
+	@Override
+	public int computeValue(ExecutionEnvironment env) {
+		BaseNode result = env.getCurrentLocalEnv().findSourceMatch(base.getName());
+		if(result == null || result instanceof ComputeNode){
+			throw new Error("variable does not match a possible value");
+		}
+		ComputeNode compute = (ComputeNode) result;
+		return compute.computeValue(env);
 	}
 
 }

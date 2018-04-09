@@ -72,6 +72,12 @@ public class NodeGeneratorListener extends PrologBaseListener{
 	public void exitSupported_unary_operator(PrologParser.Supported_unary_operatorContext ctx) { 
 		System.out.println("exit supported unary operator term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
+		if(children.size() != 2){
+			System.out.println("children");
+			for(BaseNode child : children){
+				System.out.println(child);
+			}
+		}
 		assert children.size() == 2 : "will need to handle more cases soon";
 		BaseNode operator = children.get(0);
 		if(operator instanceof QueryNode){
@@ -101,16 +107,16 @@ public class NodeGeneratorListener extends PrologBaseListener{
 				rule.addPredicate((PredicateNode) left);
 				rule.addCondition((ExecutableNode) right);
 				currentScope.addNode(rule);
-			} else if(operator instanceof AndNode){
-				AndNode and = (AndNode) operator;
-				and.setLeft((ExecutableNode) left);
-				and.setRight((ExecutableNode) right);
-				currentScope.addNode(and);
-			} else if(operator instanceof OrNode){
-				OrNode or = (OrNode) operator;
-				or.setLeft((ExecutableNode) left);
-				or.setRight((ExecutableNode) right);
-				currentScope.addNode(or);
+			} else if(operator instanceof LogicalNode){
+				LogicalNode node = (LogicalNode) operator;
+				node.setLeft((ExecutableNode) left);
+				node.setRight((ExecutableNode) right);
+				currentScope.addNode(node);
+			} else if(operator instanceof ArithmeticNode){
+				AddNode add = (AddNode) operator;
+				add.setLeft((ComputeNode) left);
+				add.setRight((ComputeNode) right);
+				currentScope.addNode(add);
 			}
 		} else {
 			System.out.println("size: " + children.size());
@@ -196,5 +202,32 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		currentScope.addNode(node);
 	}
 
+	@Override 
+	public void exitIs_operator(PrologParser.Is_operatorContext ctx) { 
+		System.out.println("exit is node term " + ctx.getText());
+		IsNode node = new IsNode();
+		currentScope.addNode(node);
+	}
 
+	@Override 
+	public void exitInteger_term(PrologParser.Integer_termContext ctx) { 
+		System.out.println("exit integer term " + ctx.getText());
+		BaseNode node = NodeFactory.createInteger(ctx.getText());
+		currentScope.addNode(node);
+	}
+
+	@Override public void exitArith_operator(PrologParser.Arith_operatorContext ctx) { 
+		System.out.println("exit arith operator " + ctx.getText());
+		switch(ctx.getText()){
+			case "+":
+				AddNode add = new AddNode();
+				currentScope.addNode(add);
+				break;
+			default:
+				PrologRuntime.programError("unsupported arithmetic operator");
+				break;
+		
+		}
+		
+	}
 }

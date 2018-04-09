@@ -72,4 +72,10 @@ public class QueryNode extends ClauseNode implements ExecutableNode {
 		return result;
 	}
 
+	@Override
+	public String toString(){
+		String message = "Query: " + child;
+		return message;
+	}
+
 }

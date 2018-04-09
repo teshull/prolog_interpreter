@@ -44,5 +44,11 @@ orRule2 :- falseFact; trueFact.
 %?- factTwo.
 %?- easyRule.
 
-?- orRule.
-?- orRule2.
+%?- orRule.
+%?- orRule2.
+
+numberFact(10).
+
+%?- numberFact(10).
+
+?- 10 + 10.

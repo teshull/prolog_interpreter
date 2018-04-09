@@ -266,6 +266,40 @@ public interface PrologListener extends ParseTreeListener {
 	 */
 	void exitOr_operator(PrologParser.Or_operatorContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code is_operator}
+	 * labeled alternative in {@link PrologParser#supportedOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterIs_operator(PrologParser.Is_operatorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code is_operator}
+	 * labeled alternative in {@link PrologParser#supportedOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitIs_operator(PrologParser.Is_operatorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code arith_operator}
+	 * labeled alternative in {@link PrologParser#supportedOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterArith_operator(PrologParser.Arith_operatorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code arith_operator}
+	 * labeled alternative in {@link PrologParser#supportedOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitArith_operator(PrologParser.Arith_operatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PrologParser#arithmeticOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithmeticOperator(PrologParser.ArithmeticOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PrologParser#arithmeticOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithmeticOperator(PrologParser.ArithmeticOperatorContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PrologParser#unsupportedOperator}.
 	 * @param ctx the parse tree
 	 */

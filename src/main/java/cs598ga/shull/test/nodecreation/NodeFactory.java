@@ -20,4 +20,11 @@ public class NodeFactory {
 		return new VariableNode(node);
 	}
 
+	public static IntegerNode createInteger(String s){
+		int value = Integer.parseInt(s);
+		NameNode name = new NameNode(s, true);
+		IntegerNode node = new IntegerNode(name, value);
+		return node;
+	}
+
 }
