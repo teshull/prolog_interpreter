@@ -2,6 +2,7 @@ package cs598ga.shull.test.nodes;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
 import cs598ga.shull.test.execution.LocalEnvironment;
+import cs598ga.shull.test.nodes.builtin.BuiltinNode;
 import cs598ga.shull.test.nodes.executionState.FactState;
 import cs598ga.shull.test.runtime.PrologRuntime;
 
@@ -90,6 +91,9 @@ public abstract class FactNode extends PredicateNode {
 			//should make this a check for being possible to enter
 			if(result instanceof RuleNode){
 				System.out.println("found rule node to enter");
+				return result;
+			} else if(result instanceof BuiltinNode){
+				System.out.println("found a builtin node to enter");
 				return result;
 			}
 		}

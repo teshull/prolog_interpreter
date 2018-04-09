@@ -43,6 +43,11 @@ public class Manager
     	NodeRepresentation.generateNodeRepresentation(parser);
     }
     
+    public void initializeBuiltins(){
+    	AddBuiltins.addBuiltins();
+    	
+    }
+    
     public void executeQueries(){
     	ExecutionEngine.ENGINE.run();
     }
@@ -58,6 +63,7 @@ public class Manager
         AntlrRepresentation.printAntlrRepresentation(parser);
         parser = createAntlrRepresentation(parse(file));
         generateNodeRepresentation(parser);
+        initializeBuiltins();
         executeQueries();
         //startREPL();
     }

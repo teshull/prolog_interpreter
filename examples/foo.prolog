@@ -56,4 +56,6 @@ numberFact(10).
 cutFact :- !, falseFact.
 cutFact.
 
-?- cutFact.
+%?- cutFact.
+
+?- timer(fake).

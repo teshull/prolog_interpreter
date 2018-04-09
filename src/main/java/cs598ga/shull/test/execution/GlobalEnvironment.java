@@ -5,21 +5,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cs598ga.shull.test.nodes.*;
+import cs598ga.shull.test.nodes.builtin.BuiltinNode;
 
 public class GlobalEnvironment {
-	Map<String, ArrayList<PredicateNode>> predicates;
-	ArrayList<QueryNode> queries;
 	final public static GlobalEnvironment globalEnv = new GlobalEnvironment();
+
+	Map<String, ArrayList<PredicateNode>> predicates;
+	Map<String, ArrayList<PredicateNode>> builtins;
+	ArrayList<QueryNode> queries;
 	static final ArrayList<PredicateNode> NORESULT = new ArrayList<>();
 	
 	private GlobalEnvironment(){
 		predicates = new HashMap<>();
+		builtins = new HashMap<>();
 		queries = new ArrayList<>();
 	}
 	
 	public void initializePredIfEmpty(String name){
 		if(!predicates.containsKey(name)){
 			predicates.put(name, new ArrayList<PredicateNode>());
+		}
+	}
+
+	public void initializeBuiltinIfEmpty(String name){
+		if(!builtins.containsKey(name)){
+			builtins.put(name, new ArrayList<PredicateNode>());
 		}
 	}
 
@@ -32,6 +42,14 @@ public class GlobalEnvironment {
 	
 	public ArrayList<PredicateNode> getPredicates(String s){
 		ArrayList<PredicateNode> result = predicates.get(s);
+		ArrayList<PredicateNode> resultB = builtins.get(s);
+		if(resultB != null){
+			if(result == null){
+				result = resultB;
+			} else {
+				result.addAll(resultB);
+			}
+		}
 		if(result == null){
 			return NORESULT;
 		}
@@ -49,6 +67,14 @@ public class GlobalEnvironment {
 	public void addQueryNode(QueryNode node){
 		queries.add(node);
 	}
+
+	public void addBuiltinNode(BuiltinNode node){
+		String name = node.getName();
+		initializeBuiltinIfEmpty(name);
+		ArrayList<PredicateNode> clauses = builtins.get(name);
+		clauses.add(node);
+	}
+	
 	
 	public void printEnvironment(){
 		System.out.println("predicates");
@@ -63,7 +89,6 @@ public class GlobalEnvironment {
 			System.out.println(query);
 			
 		}
-		
 	}
 
 }
