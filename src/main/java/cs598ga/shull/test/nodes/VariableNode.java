@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
 import cs598ga.shull.test.execution.LocalEnvironment;
+import cs598ga.shull.test.execution.error.InvalidArithmeticOperationError;
 
 public class VariableNode extends FactNode implements ComputeNode {
 	String name;
@@ -124,7 +125,7 @@ public class VariableNode extends FactNode implements ComputeNode {
 	public IntegerNode computeValue(ExecutionEnvironment env) {
 		BaseNode result = env.getCurrentLocalEnv().findSourceMatch(base.getName());
 		if(result == null || result instanceof ComputeNode){
-			throw new Error("variable does not match a possible value");
+			throw new InvalidArithmeticOperationError();
 		}
 		ComputeNode compute = (ComputeNode) result;
 		return compute.computeValue(env);

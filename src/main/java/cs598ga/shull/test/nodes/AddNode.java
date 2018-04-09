@@ -1,6 +1,7 @@
 package cs598ga.shull.test.nodes;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
+import cs598ga.shull.test.execution.error.InvalidArithmeticOperationError;
 import cs598ga.shull.test.nodecreation.NodeFactory;
 
 public class AddNode extends ArithmeticNode {
@@ -19,7 +20,7 @@ public class AddNode extends ArithmeticNode {
 		try{
 			left.computeValue(env);
 			right.computeValue(env);
-		} catch(Error e){
+		} catch(InvalidArithmeticOperationError e){
 			return SpecialNode.DEADEND;
 		}
 		return SpecialNode.FINISHED;

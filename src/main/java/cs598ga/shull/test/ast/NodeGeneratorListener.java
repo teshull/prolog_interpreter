@@ -230,4 +230,12 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		}
 		
 	}
+
+	@Override public void exitCut_term(PrologParser.Cut_termContext ctx) { 
+		System.out.println("exit arith operator " + ctx.getText());
+		CutNode node = new CutNode();
+		currentScope.addNode(node);
+	}
+	
+	
 }

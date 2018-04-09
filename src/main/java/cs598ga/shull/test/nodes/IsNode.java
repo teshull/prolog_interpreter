@@ -2,6 +2,7 @@ package cs598ga.shull.test.nodes;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
 import cs598ga.shull.test.execution.LocalEnvironment;
+import cs598ga.shull.test.execution.error.InvalidArithmeticOperationError;
 
 public class IsNode extends LogicalNode{
 
@@ -29,7 +30,7 @@ public class IsNode extends LogicalNode{
 				rightVal = compute.computeValue(env);
 				foundRight = true;
 			}
-		} catch(Error e){
+		} catch(InvalidArithmeticOperationError e){
 			
 		}
 		try{
@@ -38,7 +39,7 @@ public class IsNode extends LogicalNode{
 				leftVal = compute.computeValue(env);
 				foundLeft = true;
 			}
-		} catch(Error e){
+		} catch(InvalidArithmeticOperationError e){
 
 		}
 		LocalEnvironment local = env.getCurrentLocalEnv();

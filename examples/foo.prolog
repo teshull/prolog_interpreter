@@ -51,4 +51,9 @@ numberFact(10).
 
 %?- numberFact(10).
 
-?- X is 10 + 10.
+%?- X is 10 + 10.
+
+cutFact :- !, falseFact.
+cutFact.
+
+?- cutFact.

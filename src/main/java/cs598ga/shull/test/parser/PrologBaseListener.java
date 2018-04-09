@@ -222,6 +222,18 @@ public class PrologBaseListener implements PrologListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCut_term(PrologParser.Cut_termContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCut_term(PrologParser.Cut_termContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRule_operator(PrologParser.Rule_operatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -421,18 +433,6 @@ public class PrologBaseListener implements PrologListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSemicolon(PrologParser.SemicolonContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCut(PrologParser.CutContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCut(PrologParser.CutContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

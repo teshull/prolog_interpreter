@@ -73,8 +73,9 @@ term
 
 atomTerm
 	: atom # atom_term
+	| '!' # cut_term
 	;
-
+	
 supportedOperator
     : ':-' # rule_operator
     | '-->' # arrow_operator
@@ -120,7 +121,6 @@ atom // 6.4.2 and 6.1.2
     | DOUBLE_QUOTED_LIST# dq_string
     | BACK_QUOTED_STRING# backq_string
     | ';'               # semicolon
-    | '!'               # cut
     ;
 
 

@@ -206,6 +206,18 @@ public interface PrologListener extends ParseTreeListener {
 	 */
 	void exitAtom_term(PrologParser.Atom_termContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code cut_term}
+	 * labeled alternative in {@link PrologParser#atomTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterCut_term(PrologParser.Cut_termContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code cut_term}
+	 * labeled alternative in {@link PrologParser#atomTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitCut_term(PrologParser.Cut_termContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code rule_operator}
 	 * labeled alternative in {@link PrologParser#supportedOperator}.
 	 * @param ctx the parse tree
@@ -405,18 +417,6 @@ public interface PrologListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSemicolon(PrologParser.SemicolonContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code cut}
-	 * labeled alternative in {@link PrologParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void enterCut(PrologParser.CutContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code cut}
-	 * labeled alternative in {@link PrologParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void exitCut(PrologParser.CutContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PrologParser#integer}.
 	 * @param ctx the parse tree

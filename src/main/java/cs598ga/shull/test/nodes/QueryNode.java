@@ -1,6 +1,7 @@
 package cs598ga.shull.test.nodes;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
+import cs598ga.shull.test.execution.error.ImpassibleCutError;
 import cs598ga.shull.test.nodes.executionState.BaseExecutionState;
 
 import java.util.ArrayList;
@@ -61,13 +62,18 @@ public class QueryNode extends ClauseNode implements ExecutableNode {
 		BaseNode temp = (BaseNode) child;
 		BaseExecutionState state = env.getCurrentState();
 		//the query must create the first environment
-		env.addLocalEnv(env.createChildLocalEnv());
-		BaseNode result = temp.initializeAndEnter(env);
-		//removing state
-		env.removeStateFromIndex(state.stateIndex);
-		if(result == SpecialNode.FINISHED){
-			System.out.println("environment:\n" + env.getCurrentLocalEnv());
-			//env.getCurrentLocalEnv().printSourceMatchesIfPresent();
+		BaseNode result;
+		try{
+			env.addLocalEnv(env.createChildLocalEnv());
+			result = temp.initializeAndEnter(env);
+			//removing state
+			env.removeStateFromIndex(state.stateIndex);
+			if(result == SpecialNode.FINISHED){
+				System.out.println("environment:\n" + env.getCurrentLocalEnv());
+				//env.getCurrentLocalEnv().printSourceMatchesIfPresent();
+			}
+		} catch(ImpassibleCutError e){
+			result = SpecialNode.DEADEND;
 		}
 		return result;
 	}
