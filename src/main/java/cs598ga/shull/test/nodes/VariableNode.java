@@ -121,7 +121,7 @@ public class VariableNode extends FactNode implements ComputeNode {
 	}
 
 	@Override
-	public int computeValue(ExecutionEnvironment env) {
+	public IntegerNode computeValue(ExecutionEnvironment env) {
 		BaseNode result = env.getCurrentLocalEnv().findSourceMatch(base.getName());
 		if(result == null || result instanceof ComputeNode){
 			throw new Error("variable does not match a possible value");

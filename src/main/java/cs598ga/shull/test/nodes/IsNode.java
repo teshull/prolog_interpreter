@@ -21,8 +21,8 @@ public class IsNode extends LogicalNode{
 	public BaseNode firstStep(ExecutionEnvironment env){
 		boolean foundLeft = false;
 		boolean foundRight = false;
-		int leftVal = 0;
-		int rightVal = 0;
+		IntegerNode leftVal = null;
+		IntegerNode rightVal = null;
 		try{
 			if(right instanceof ComputeNode){
 				ComputeNode compute = (ComputeNode) right;
@@ -43,20 +43,33 @@ public class IsNode extends LogicalNode{
 		}
 		LocalEnvironment local = env.getCurrentLocalEnv();
 		if(foundLeft && foundRight){
-			return leftVal == rightVal? SpecialNode.FINISHED : SpecialNode.DEADEND;
+			return IntegerNode.isEqual(leftVal, rightVal)? SpecialNode.FINISHED : SpecialNode.DEADEND;
 		} else if(foundRight){
 			if(left instanceof VariableNode){
 				//need to set the variable, and make sure it doesn't already exist
 				VariableNode var = (VariableNode) left;
 				if(var.base.isSourceCurrentlyVariable(local)){
-					local.setSourceMatch(var.base.getName(), null);
+					local.setSourceMatch(var.base.getName(), rightVal);
+					return SpecialNode.FINISHED;
 				}
 			}
 		}else {
-			//foundLeft...
+			if(right instanceof VariableNode){
+				//need to set the variable, and make sure it doesn't already exist
+				VariableNode var = (VariableNode) right;
+				if(var.base.isSourceCurrentlyVariable(local)){
+					local.setSourceMatch(var.base.getName(), leftVal);
+					return SpecialNode.FINISHED;
+				}
+			}
 			
 		}
-
 		return SpecialNode.DEADEND;
+	}
+	
+	@Override
+	public String toString(){
+		String message = "Is Node: " + left + " is " + right;
+		return message;
 	}
 }

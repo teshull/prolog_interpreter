@@ -1,15 +1,17 @@
 package cs598ga.shull.test.nodes;
 
 import cs598ga.shull.test.execution.ExecutionEnvironment;
+import cs598ga.shull.test.nodecreation.NodeFactory;
 
 public class AddNode extends ArithmeticNode {
 
 	@Override
-	public int computeValue(ExecutionEnvironment env) {
-		int leftVal = left.computeValue(env);
-		int rightVal = right.computeValue(env);
+	public IntegerNode computeValue(ExecutionEnvironment env) {
+		IntegerNode leftVal = left.computeValue(env);
+		IntegerNode rightVal = right.computeValue(env);
+		int value = leftVal.getInteger() + rightVal.getInteger();
 
-		return leftVal + rightVal;
+		return NodeFactory.createInteger(value);
 	}
 
 	@Override

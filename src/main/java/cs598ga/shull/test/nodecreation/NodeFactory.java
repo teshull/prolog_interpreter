@@ -27,4 +27,10 @@ public class NodeFactory {
 		return node;
 	}
 
+	public static IntegerNode createInteger(int value){
+		NameNode name = new NameNode(Integer.toString(value), true);
+		IntegerNode node = new IntegerNode(name, value);
+		return node;
+	}
+
 }

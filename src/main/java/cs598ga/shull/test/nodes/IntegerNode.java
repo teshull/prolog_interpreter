@@ -9,9 +9,26 @@ public class IntegerNode extends AtomNode implements ComputeNode {
 		super(node);
 		this.value = value;
 	}
-	@Override
-	public int computeValue(ExecutionEnvironment env) {
+	public int getInteger(){
 		return value;
+	}
+
+	@Override
+	public IntegerNode computeValue(ExecutionEnvironment env) {
+		return this;
+	}
+	
+	public static boolean isEqual(IntegerNode one, IntegerNode two){
+		if(one == null || two == null){
+			return false;
+		}
+		return one.getInteger() == two.getInteger();
+	}
+	
+	@Override
+	public String toString(){
+		String message = "Integer: " + super.toString();
+		return message;
 	}
 
 }
