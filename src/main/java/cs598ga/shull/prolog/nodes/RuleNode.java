@@ -50,19 +50,6 @@ public class RuleNode extends PredicateNode {
 	}
 
 	@Override
-	public boolean canMatch(PredicateNode node, LocalEnvironment env) {
-		// TODO Auto-generated method stub
-		return predicate.canMatch(node, env);
-	}
-
-	@Override
-	public ArrayList<String> match(PredicateNode node, LocalEnvironment env) {
-		// TODO Auto-generated method stub
-		return predicate.match(node, env);
-		
-	}
-
-	@Override
 	public BaseExecutionState generateExecutionState(){
 		return new RuleState();
 	}

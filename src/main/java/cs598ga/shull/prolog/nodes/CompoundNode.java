@@ -92,41 +92,6 @@ public class CompoundNode extends FactNode implements ExecutableNode {
 	 * the FactNode parameter is the source
 	 * "this" is the target
 	 */
-	//FIXME NOTE THAT THIS IS WRONG WHEN CHECKING THE VARIABLES SHOULD ALSO MATCH...
-	@Override
-	public boolean canMatch(PredicateNode node, LocalEnvironment env) {
-		if(node.base.isSourceCurrentlyVariable(env)){
-			if(base.isTargetCurrentlyVariable(env)){
-				PrologRuntime.programError("didn't think that this can happen...");
-				return true;
-			} else {
-				env.setTargetMatch(node.base.getName(), this);
-				return true;
-			}
-		}
-		node = node.base.getSourceCurrentNode(node, env);
-		if(base.nameMatches(node.base.getName())){
-			//now making sure all children match
-			//FIXME this is wrong, 
-			if(node.children.size() != children.size()){
-				return false;
-			}
-			for(int i = 0; i < children.size(); i++){
-				if(!(children.get(i)).canMatch(node.children.get(i), env)){
-					return false;
-				}
-			}
-			//met all requirements
-			return true;
-		}
-		return false;
-	}
-
-
-	/**
-	 * the FactNode parameter is the source
-	 * "this" is the target
-	 */
 	@Override
 	public boolean matchNode(BaseNode source, LocalEnvironment env) {
 		if(!(source instanceof PredicateNode)){
@@ -164,11 +129,6 @@ public class CompoundNode extends FactNode implements ExecutableNode {
 
 	}
 
-	@Override
-	public ArrayList<String> match(PredicateNode node, LocalEnvironment env) {
-		return null;
-	}
-	
 	@Override
 	public String toString(){
 		String message = "compound node (" + atom + ") [";

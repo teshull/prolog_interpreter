@@ -12,16 +12,6 @@ public abstract class BuiltinNode extends PredicateNode {
 	public ArrayList<PredicateNode> arguments = null;
 
 	@Override
-	public boolean canMatch(PredicateNode node, LocalEnvironment env){
-		return false;
-	}
-
-	@Override
-	public ArrayList<String> match(PredicateNode node, LocalEnvironment env){
-		return null;
-	}
-
-	@Override
 	public ExecutableNode next(ExecutionEnvironment env) {
 		// TODO Auto-generated method stub
 		return null;
