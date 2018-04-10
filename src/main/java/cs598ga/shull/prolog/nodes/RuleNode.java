@@ -9,7 +9,7 @@ import cs598ga.shull.prolog.nodes.executionState.RuleState;
 
 
 public class RuleNode extends PredicateNode {
-	public ExecutableNode condition = null;
+	public BaseNode condition = null;
 	public PredicateNode predicate = null;
 	
 	
@@ -17,11 +17,11 @@ public class RuleNode extends PredicateNode {
 		predicate = pred;
 	}
 
-	public void addCondition(ExecutableNode cond){
+	public void addCondition(BaseNode cond){
 		condition = cond;
 	}
 
-	public ExecutableNode getCondition(){
+	public BaseNode getCondition(){
 		return condition;
 	}
 

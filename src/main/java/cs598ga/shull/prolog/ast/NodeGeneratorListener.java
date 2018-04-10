@@ -88,7 +88,7 @@ public class NodeGeneratorListener extends PrologBaseListener{
 			QueryNode query = (QueryNode) operator;
 			BaseNode temp = children.get(1);
 			System.out.println("temp " + temp + " class " + temp.getClass());
-			ExecutableNode node = (ExecutableNode) children.get(1);
+			BaseNode node = children.get(1);
 			query.setChild(node);
 			currentScope.addNode(query);
 		} else if (operator instanceof RuleNode){
@@ -109,12 +109,12 @@ public class NodeGeneratorListener extends PrologBaseListener{
 			if(operator instanceof RuleNode){
 				RuleNode rule = (RuleNode) operator;
 				rule.addPredicate((PredicateNode) left);
-				rule.addCondition((ExecutableNode) right);
+				rule.addCondition(right);
 				currentScope.addNode(rule);
 			} else if(operator instanceof LogicalNode){
 				LogicalNode node = (LogicalNode) operator;
-				node.setLeft((ExecutableNode) left);
-				node.setRight((ExecutableNode) right);
+				node.setLeft(left);
+				node.setRight(right);
 				currentScope.addNode(node);
 			} else if(operator instanceof ArithmeticNode){
 				AddNode add = (AddNode) operator;

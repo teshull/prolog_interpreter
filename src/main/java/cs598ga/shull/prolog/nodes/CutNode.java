@@ -3,7 +3,7 @@ package cs598ga.shull.prolog.nodes;
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.error.ImpassibleCutError;
 
-public class CutNode extends BaseNode implements ExecutableNode{
+public class CutNode extends BaseNode {
 
 	@Override
 	public BaseNode firstStep(ExecutionEnvironment env){

@@ -5,7 +5,7 @@ import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 import java.util.ArrayList;
 
-public class SpecialNode extends BaseNode implements ExecutableNode{
+public class SpecialNode extends BaseNode {
 	final public static SpecialNode NONE = new SpecialNode();
 	final public static SpecialNode FINISHED = new SpecialNode();
 	final public static SpecialNode DEADEND = new SpecialNode();

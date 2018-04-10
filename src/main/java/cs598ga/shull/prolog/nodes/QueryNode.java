@@ -6,8 +6,8 @@ import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
 import java.util.ArrayList;
 
-public class QueryNode extends ClauseNode implements ExecutableNode {
-	public ExecutableNode child;
+public class QueryNode extends ClauseNode {
+	public BaseNode child;
 	//public ArrayList<BaseNode> queries;
 
 	public QueryNode(){
@@ -22,7 +22,7 @@ public class QueryNode extends ClauseNode implements ExecutableNode {
 	}
 	*/
 
-	public void setChild (ExecutableNode node){
+	public void setChild (BaseNode node){
 		assert child == SpecialNode.NONE : "should only be instantiated once";
 		child = node;
 	}

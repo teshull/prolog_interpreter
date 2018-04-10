@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import cs598ga.shull.prolog.execution.*;
 import cs598ga.shull.prolog.nodes.executionState.*;
 
-public abstract class PredicateNode extends ClauseNode implements ExecutableNode {
+public abstract class PredicateNode extends ClauseNode {
 	public NameNode base;
 	public ArrayList<PredicateNode> children;
 	public abstract String getName();

@@ -7,7 +7,7 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.AtomState;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
-public class AtomNode extends FactNode implements ExecutableNode {
+public class AtomNode extends FactNode {
 	public String text;
 	public AtomNode(NameNode node){
 		base = node;

@@ -8,7 +8,7 @@ import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 import java.util.ArrayList;
 
-public class CompoundNode extends FactNode implements ExecutableNode {
+public class CompoundNode extends FactNode {
 	public AtomNode atom;
 	
 	private int matchNum = -1;
