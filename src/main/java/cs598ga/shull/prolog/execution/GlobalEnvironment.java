@@ -12,10 +12,10 @@ public class GlobalEnvironment {
 
 	Map<String, ArrayList<PredicateNode>> predicates;
 	Map<String, ArrayList<PredicateNode>> builtins;
-	ArrayList<QueryNode> queries;
+	public ArrayList<QueryNode> queries;
 	static final ArrayList<PredicateNode> NORESULT = new ArrayList<>();
 	
-	private GlobalEnvironment(){
+	public GlobalEnvironment(){
 		predicates = new HashMap<>();
 		builtins = new HashMap<>();
 		queries = new ArrayList<>();

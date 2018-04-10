@@ -20,7 +20,11 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 public class NodeGeneratorListener extends PrologBaseListener{
 	public NodeScope currentScope = NodeScope.EMPTY;
-	final private GlobalEnvironment env = GlobalEnvironment.globalEnv;
+	private GlobalEnvironment env;
+	
+	public NodeGeneratorListener(GlobalEnvironment env){
+		this.env = env;
+	}
 
 	@Override 
 	public void enterEveryRule(ParserRuleContext ctx) { 

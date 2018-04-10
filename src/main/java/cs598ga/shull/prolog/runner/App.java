@@ -23,7 +23,9 @@ public class App
     {
         System.out.println( "Trying to Parse File" );
         Manager h = new Manager();
-        String filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/foo.prolog";
+        String filename = "";
+        filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/foo.prolog";
+        //filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/another.prolog";
         //filename = "/home/tshull226/Documents/school/cs598GA/project/code/maven_testing/maven-test/examples/foo.prolog";
         h.run(new File(filename));
     }

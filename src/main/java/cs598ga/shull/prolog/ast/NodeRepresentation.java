@@ -1,5 +1,6 @@
 package cs598ga.shull.prolog.ast;
 
+import cs598ga.shull.prolog.execution.GlobalEnvironment;
 import cs598ga.shull.prolog.parser.*;
 import cs598ga.shull.prolog.parser.PrologParser.*;
 
@@ -12,8 +13,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 public class NodeRepresentation {
 	
-	public static void generateNodeRepresentation(PrologParser parser){
-		NodeGeneratorListener walker = new NodeGeneratorListener();
+	public static void generateNodeRepresentation(PrologParser parser, GlobalEnvironment env){
+		NodeGeneratorListener walker = new NodeGeneratorListener(env);
 		System.out.println("parser started");
 		ParseTreeWalker.DEFAULT.walk(walker, parser.p_text());
 		System.out.println("parser ended");

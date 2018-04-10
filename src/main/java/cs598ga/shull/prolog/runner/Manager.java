@@ -6,6 +6,7 @@ import cs598ga.shull.prolog.ast.AntlrRepresentation;
 import cs598ga.shull.prolog.ast.NodeRepresentation;
 import cs598ga.shull.prolog.execution.*;
 import cs598ga.shull.prolog.execution.repl.ReplEngine;
+import cs598ga.shull.prolog.nodes.QueryNode;
 import cs598ga.shull.prolog.parser.*;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -32,6 +33,7 @@ public class Manager
 
     public String parse(File file) throws IOException {
         String code = readFile(file, Charset.forName("UTF-8"));
+        System.out.println(code);
         return code;
     }
     
@@ -39,8 +41,8 @@ public class Manager
     	return AntlrRepresentation.generateAntlrRepresentation(code);
     }
     
-    public void generateNodeRepresentation(PrologParser parser){
-    	NodeRepresentation.generateNodeRepresentation(parser);
+    public void generateNodeRepresentation(PrologParser parser, GlobalEnvironment env){
+    	NodeRepresentation.generateNodeRepresentation(parser, env);
     }
     
     public void initializeBuiltins(){
@@ -52,8 +54,16 @@ public class Manager
     	ExecutionEngine.ENGINE.run();
     }
     
+    public QueryNode generateQueryNode(String query){
+		PrologParser parser = createAntlrRepresentation(query);
+		GlobalEnvironment tempEnv = new GlobalEnvironment();
+		generateNodeRepresentation(parser, tempEnv);
+		assert tempEnv.queries.size() == 1 : "problem";
+		return tempEnv.queries.get(0);
+    }
+    
     public void startREPL(){
-    	ReplEngine repl = new ReplEngine();
+    	ReplEngine repl = new ReplEngine(this);
     	repl.begin();
     }
 
@@ -62,9 +72,9 @@ public class Manager
         PrologParser parser = createAntlrRepresentation(parse(file));
         AntlrRepresentation.printAntlrRepresentation(parser);
         parser = createAntlrRepresentation(parse(file));
-        generateNodeRepresentation(parser);
+        generateNodeRepresentation(parser, GlobalEnvironment.globalEnv);
         initializeBuiltins();
         executeQueries();
-        //startREPL();
+        startREPL();
     }
 }

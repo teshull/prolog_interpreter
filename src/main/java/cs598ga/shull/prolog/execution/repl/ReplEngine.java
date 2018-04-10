@@ -1,10 +1,17 @@
 package cs598ga.shull.prolog.execution.repl;
 
+import java.nio.charset.Charset;
 import java.util.Scanner;
 
+import cs598ga.shull.prolog.execution.ExecutionEngine;
+import cs598ga.shull.prolog.nodes.QueryNode;
+import cs598ga.shull.prolog.runner.Manager;
+
 public class ReplEngine {
-	public ReplEngine(){
-		
+
+	private Manager manager;
+	public ReplEngine(Manager man){
+		manager = man;
 	}
 	static Scanner in = new Scanner(System.in);
 	
@@ -26,6 +33,9 @@ public class ReplEngine {
 				System.out.println("**Overall Statement**");
 				System.out.print(totalString);
 				System.out.println("**End Overall Statement**");
+				String result = new String("?- " + totalString);
+				QueryNode query = manager.generateQueryNode(result);
+				ExecutionEngine.ENGINE.satisfyQuery(query);
 				totalString = "";
 				System.out.print(prompt);
 			}
