@@ -6,18 +6,6 @@ import cs598ga.shull.prolog.execution.error.ImpassibleCutError;
 public class CutNode extends BaseNode implements ExecutableNode{
 
 	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public BaseNode firstStep(ExecutionEnvironment env){
 		return SpecialNode.FINISHED;
 	}

@@ -55,19 +55,6 @@ public class RuleNode extends PredicateNode {
 	}
 
 	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		env.addLocalEnv(env.createChildLocalEnv());
-		return condition;
-	}
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
 	public String toString(){
 		String message = "rule node (" + predicate + ") <- " + condition;
 		return message;

@@ -7,18 +7,6 @@ import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 public class IsNode extends LogicalNode{
 
 	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public BaseNode firstStep(ExecutionEnvironment env){
 		boolean foundLeft = false;
 		boolean foundRight = false;

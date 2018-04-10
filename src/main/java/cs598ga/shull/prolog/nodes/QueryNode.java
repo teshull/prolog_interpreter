@@ -44,18 +44,6 @@ public class QueryNode extends ClauseNode implements ExecutableNode {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
-	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		env.addLocalEnv(env.createChildLocalEnv());
-		return child;
-	}
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		return SpecialNode.NOBACKTRACK;
-	}
-	
 	@Override
 	public BaseNode firstStep(ExecutionEnvironment env){
 		

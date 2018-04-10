@@ -12,18 +12,6 @@ public abstract class BuiltinNode extends PredicateNode {
 	public ArrayList<PredicateNode> arguments = null;
 
 	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
 	public BaseNode firstStep(ExecutionEnvironment env){
 		//FIXME do I want to adjust the environment here??
 		//want my own copy of them

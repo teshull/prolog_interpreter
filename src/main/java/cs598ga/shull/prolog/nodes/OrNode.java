@@ -8,18 +8,6 @@ import cs598ga.shull.prolog.nodes.executionState.OrNodeState;
 public class OrNode extends LogicalNode{
 
 	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public BaseExecutionState generateExecutionState(){
 		//PrologRuntime.programError("shouldn't be able to invoke the base class");
 		return new OrNodeState();

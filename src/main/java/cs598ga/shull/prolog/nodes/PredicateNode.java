@@ -20,10 +20,4 @@ public abstract class PredicateNode extends ClauseNode implements MatchableNode,
 	public void enterPredicate(){
 		
 	}
-
-	//TODO this actually should probably be moved to FactNode smh
-	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		return SpecialNode.FINISHED;
-	}
 }

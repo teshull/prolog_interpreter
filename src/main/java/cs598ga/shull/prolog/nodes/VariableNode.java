@@ -39,18 +39,6 @@ public class VariableNode extends FactNode implements ComputeNode {
 	}
 
 	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean matchNode(BaseNode source, LocalEnvironment env) {
 		if(!(source instanceof PredicateNode)){
 			return false;

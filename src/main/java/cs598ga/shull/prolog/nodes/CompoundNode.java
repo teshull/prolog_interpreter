@@ -49,45 +49,6 @@ public class CompoundNode extends FactNode implements ExecutableNode {
 		return new CompoundState();
 	}
 	
-	/*
-	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		CompoundState state = (CompoundState) env.getCurrentState();
-		state.matches = env.globalEnv.getPredicates(base.getName());
-		state.matchNum = 0;
-		int matchNum = state.matchNum;
-		boolean foundMatch = false;
-		ExecutableNode result = null;
-		for(; matchNum < state.matches.size(); matchNum++){
-			PredicateNode node = state.matches.get(matchNum);
-			System.out.println("trying to match " + node);
-			if(node.canMatch(this, env.getCurrentLocalEnv())){
-				node.match(this, env.getCurrentLocalEnv());
-				foundMatch = true;
-				result = node;
-				break;
-			}
-		}
-		state.matchNum = matchNum;
-		if(!foundMatch){
-			return SpecialNode.DEADEND;
-		} else {
-			//don't really care about the others
-			if(result instanceof RuleNode){
-				return result;
-			}
-		}
-		return SpecialNode.FINISHED;
-	}
-	*/
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	/**
 	 * the FactNode parameter is the source
 	 * "this" is the target

@@ -6,19 +6,6 @@ import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 public class AndNode extends LogicalNode{
 
 	@Override
-	public ExecutableNode next(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		env.addLocalEnv(env.createChildLocalEnv());
-		return null;
-	}
-
-	@Override
-	public ExecutableNode backtrack(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
 	public BaseNode firstStep(ExecutionEnvironment env){
 		// TODO Auto-generated method stub
 		LogicalNodeState state  = (LogicalNodeState) env.getCurrentState();
