@@ -18,17 +18,6 @@ public class AddNode extends ArithmeticNode {
 	}
 
 	@Override
-	public BaseNode firstStep(ExecutionEnvironment env){
-		try{
-			left.computeValue(env.getCurrentLocalEnv());
-			right.computeValue(env.getCurrentLocalEnv());
-		} catch(InvalidArithmeticOperationError e){
-			return SpecialNode.DEADEND;
-		}
-		return SpecialNode.FINISHED;
-	}
-
-	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		try{
 			left.computeValue(baseState.localEnv);

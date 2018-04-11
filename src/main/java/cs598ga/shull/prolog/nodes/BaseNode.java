@@ -36,6 +36,7 @@ public abstract class BaseNode {
 		
 	}
 	
+	/*
 	public BaseNode initializeAndEnter(ExecutionEnvironment env){
 		BaseExecutionState state = generateExecutionState();
 		state.stateIndex = env.addState(state);
@@ -55,7 +56,6 @@ public abstract class BaseNode {
 		return null;
 	}
 	
-	/*
 	public BaseNode performBacktrack(ExecutionEnvironment env, int stateIndex){
 		PrologRuntime.programError("need to implement this in " + this.getClass());
 		return null;

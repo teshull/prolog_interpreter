@@ -45,26 +45,6 @@ public class QueryNode extends ClauseNode {
 		// TODO Auto-generated method stub
 		return true;
 	}
-	@Override
-	public BaseNode firstStep(ExecutionEnvironment env){
-		
-		BaseExecutionState state = env.getCurrentState();
-		//the query must create the first environment
-		BaseNode result;
-		try{
-			env.addLocalEnv(env.createChildLocalEnv());
-			result = child.initializeAndEnter(env);
-			//removing state
-			env.removeStateFromIndex(state.stateIndex);
-			if(result == SpecialNode.FINISHED){
-				System.out.println("environment:\n" + env.getCurrentLocalEnv());
-				//env.getCurrentLocalEnv().printSourceMatchesIfPresent();
-			}
-		} catch(ImpassibleCutError e){
-			result = SpecialNode.DEADEND;
-		}
-		return result;
-	}
 
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
