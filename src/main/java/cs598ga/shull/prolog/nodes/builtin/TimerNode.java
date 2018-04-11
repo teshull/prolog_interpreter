@@ -3,6 +3,7 @@ package cs598ga.shull.prolog.nodes.builtin;
 import java.util.ArrayList;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
+import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.BaseNode;
 import cs598ga.shull.prolog.nodes.NameNode;
 import cs598ga.shull.prolog.nodes.PredicateNode;
@@ -15,7 +16,7 @@ public class TimerNode extends BuiltinNode {
 	}
 
 	@Override
-	public BaseNode executeBuiltin(ExecutionEnvironment env, ArrayList<PredicateNode> args) {
+	public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv, ArrayList<PredicateNode> args) {
 		assert args.size() == 1 : "whoops";
 		BaseNode result;
 		long start = 0;
@@ -24,8 +25,7 @@ public class TimerNode extends BuiltinNode {
 			System.out.println("starting timer");
 			start = System.currentTimeMillis();
 			BaseNode arg = args.get(0);
-			assert false : "incomplete need env";
-			BaseExecutionState argState = arg.initializeState(null);
+			BaseExecutionState argState = arg.initializeState(localEnv);
 			result = arg.executeNode(env, argState);
 		} catch(Error e){
 			throw e;

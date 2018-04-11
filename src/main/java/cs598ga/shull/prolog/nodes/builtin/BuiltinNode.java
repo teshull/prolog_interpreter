@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public abstract class BuiltinNode extends PredicateNode {
 	public ArrayList<PredicateNode> arguments = null;
 
-	public abstract BaseNode executeBuiltin(ExecutionEnvironment env, ArrayList<PredicateNode> args);
+	public abstract BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv, ArrayList<PredicateNode> args);
 	
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		ArrayList<PredicateNode> args = new ArrayList<>(arguments);
-		BaseNode result = executeBuiltin(env, args);
+		BaseNode result = executeBuiltin(env, baseState.localEnv, args);
 
 		return result;
 	}
