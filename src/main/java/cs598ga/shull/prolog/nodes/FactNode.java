@@ -8,6 +8,7 @@ import cs598ga.shull.prolog.nodes.executionState.FactState;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class FactNode extends PredicateNode {
 	
@@ -188,8 +189,13 @@ public abstract class FactNode extends PredicateNode {
 	}
 
 	private void rollbackEnvChanges(ExecutionEnvironment env, FactState state){
-		state.localEnv = state.originalEnv.getDeepCopy();
-		LocalEnvironment.updateParentLinkToChild(state.localEnv);
+		LocalEnvironment parent = state.localEnv.parent;
+		//state.localEnv = state.originalEnv.getDeepCopy();
+		//state.localEnv.parent = parent;
+		//LocalEnvironment.updateParentLinkToChild(state.localEnv);
+		state.localEnv.sourceMatches = new HashMap<>(state.originalEnv.sourceMatches);
+		state.localEnv.targetMatches = new HashMap<>(state.originalEnv.targetMatches);
+		state.localEnv.sourceToTargetLink = new HashMap<>(state.originalEnv.sourceToTargetLink);
 	}
 
 	private BaseNode findValidResult(BaseNode childNode, ExecutionEnvironment env, FactState state){
@@ -214,6 +220,7 @@ public abstract class FactNode extends PredicateNode {
 	@Override
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		FactState state = (FactState) baseState;
+		System.out.println("env:\n" + baseState.localEnv);
 		BaseNode previousResult = state.childNode;
 		//first checking if a child node really should be doing the backtracking
 		if(shouldEnterResult(previousResult)){

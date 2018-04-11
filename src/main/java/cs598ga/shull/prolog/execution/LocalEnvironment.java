@@ -61,6 +61,7 @@ public class LocalEnvironment {
 	
 	public void mergeChildLocalEnvironment(LocalEnvironment env){
 		//setting the updates matches for the target
+		assert false;
 		targetMatches = new HashMap<>(env.sourceMatches);
 		//now going through the source to target links to see if any have been resolved
 		ArrayList<String> keysToRemove = new ArrayList<>();
@@ -87,23 +88,20 @@ public class LocalEnvironment {
 
 	public void mergeChildLocalEnvironment(){
 		assert child != EMPTY : "no child exists";
-		LocalEnvironment env = child;
 		//setting the updates matches for the target
-		targetMatches = new HashMap<>(env.sourceMatches);
+		targetMatches = new HashMap<>(targetMatches);
+		for(String key : child.sourceMatches.keySet()){
+			PredicateNode value = child.sourceMatches.get(key);
+			targetMatches.put(key, value);
+		}
 		//now going through the source to target links to see if any have been resolved
-		ArrayList<String> keysToRemove = new ArrayList<>();
 		for(String source : sourceToTargetLink.keySet()){
 			String target = sourceToTargetLink.get(source);
 			if(targetMatches.containsKey(target)){
 				PredicateNode node = targetMatches.get(target);
-				setSourceMatch(source, node);
-				keysToRemove.add(source);
+				//setSourceMatch(source, node);
+				sourceMatches.put(source, node);
 			}
-		}
-		
-		//now removing the keys for the sourceToTargetLink Map
-		for(String key : keysToRemove){
-			sourceToTargetLink.remove(key);
 		}
 	}
 
