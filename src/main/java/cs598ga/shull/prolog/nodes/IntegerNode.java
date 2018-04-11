@@ -1,6 +1,7 @@
 package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
+import cs598ga.shull.prolog.execution.LocalEnvironment;
 
 public class IntegerNode extends AtomNode implements ComputeNode {
 
@@ -14,7 +15,7 @@ public class IntegerNode extends AtomNode implements ComputeNode {
 	}
 
 	@Override
-	public IntegerNode computeValue(ExecutionEnvironment env) {
+	public IntegerNode computeValue(LocalEnvironment env) {
 		return this;
 	}
 	

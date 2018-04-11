@@ -3,6 +3,7 @@ package cs598ga.shull.prolog.execution;
 import java.util.ArrayList;
 
 import cs598ga.shull.prolog.nodes.*;
+import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 //TODO think that I want to make this all static, but it doesn't really matter much...
@@ -16,81 +17,17 @@ public class ExecutionEngine {
 	LocalEnvironment localEnv = null;
 	
 	//making sure no one can call this
-	private ExecutionEngine(){
-		
-	}
-	/*
-			
-	//temp because I don't want to fix this right now
-	private PredicateNode convertToPredicate(ClauseNode node){
-		return (PredicateNode) node;
-	}
-	
-	/***
-	 * 
-	 * @param node the node to execute on
-	 * @return whether the node was successfully able to complete or not
-	public boolean handleNode(BaseNode node){
-		boolean result = false;
-		switch(node.getNodeType()){
-		case Executable:
-			result = executeNode(node);
-			break;
-		case Matchable:
-			result = findMatch((PredicateNode) node);
-			break;
-		case Builtin:
-			result = executeBuiltin(node);
-			break;
-		default:
-			//shouldn't get here
-			break;
-		}
-		return result;
-	}
-	
-	public boolean executeNode(BaseNode node){
-		boolean result = false;
-		return result;
-	}
-
-	public boolean executeBuiltin(BaseNode node){
-		return true;
-	}
-			
-	//this needs to be fixed (and to have a closure)
-	//maybe can use a lambda
-	//this should be a generator, or something like that
-	public boolean findMatch(PredicateNode node){
-		String name = node.getName();
-		ArrayList<ClauseNode> matchOptions = globalEnv.getPredicates(name);
-		boolean result = false;
-		for(ClauseNode clause : matchOptions){
-			PredicateNode predicate  = convertToPredicate(clause);
-			if(!predicate.canMatch(node)){
-				continue;
-			}
-			localEnv = predicate.unifyWith(localEnv, node);
-			if(predicate.isRule()){
-				handleRule((RuleNode) node);
-			}
-			localEnv = localEnv.returnToParent();
-		}
-		return result;
-	}
-	
-	public boolean handleRule(RuleNode rule){
-		BaseNode condition = rule.getCondition();
-		return handleNode(condition);
-	}
-	*/
+	private ExecutionEngine(){ }
 	
 	
 	public void satisfyQuery(QueryNode query){
 		System.out.println("start satisfying query " + query);
 		ExecutionEnvironment env = new ExecutionEnvironment(globalEnv);
 		
-		BaseNode result = query.initializeAndEnter(env);
+		//BaseNode result = query.initializeAndEnter(env);
+		LocalEnvironment localEnv = new LocalEnvironment();
+		BaseExecutionState baseState = query.initializeState(localEnv);
+		BaseNode result = query.executeNode(env, baseState);
 		if(result == SpecialNode.FINISHED){
 			System.out.println("yes");
 		} else if(result == SpecialNode.DEADEND){
@@ -98,31 +35,6 @@ public class ExecutionEngine {
 		} else {
 			assert false:  "discovered a problem";
 		}
-		/*
-		ExecutableNode node = query;
-		env.addLocalEnv(env.createChildLocalEnv());
-		while(node != SpecialNode.FINISHED){
-			System.out.println("node type: " + node.getClass());
-			env.addStateFrame((BaseNode) node);
-			node = node.next(env);
-			System.out.println("result node type: " + node.getClass());
-			if(node == SpecialNode.DEADEND){
-				node = node.backtrack(env);
-				if(node == SpecialNode.NOBACKTRACK){
-					break;
-				}
-			}
-		}
-		//now print result
-		if(node == SpecialNode.NOBACKTRACK){
-			System.out.println("unable to find a match");
-		} else if(node == SpecialNode.FINISHED){
-			System.out.println("found a match");
-		} else {
-			PrologRuntime.programError("shouldn't be able to get here");
-		}
-
-		*/
 		System.out.println("end satisfying query " + query);
 		
 	}
@@ -134,22 +46,4 @@ public class ExecutionEngine {
 		}
 		System.out.println("finished running");
 	}
-
-	
-	public void takeStep(){
-		
-	}
-	
-	public void backtrack(){
-		
-	}
-	
-	public void unify(){
-		
-	}
-	
-	public boolean canMatch(){
-		return false;
-	}
-
 }

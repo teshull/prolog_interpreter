@@ -60,4 +60,13 @@ cutFact.
 
 %?- timer(fake).
 %?- timer(cutFact).
-?- numberFact(10).
+%?- numberFact(10).
+
+
+count(0).
+count(X) :- count(Y), X is Y + 1.
+
+?- count(0).
+%?- count(1).
+%?- count(3).
+

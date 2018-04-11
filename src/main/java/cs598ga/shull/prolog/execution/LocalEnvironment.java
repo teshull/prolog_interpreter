@@ -10,9 +10,6 @@ import cs598ga.shull.prolog.runtime.PrologRuntime;
 public class LocalEnvironment {
 
 	//Old stuff I am unconcerned about 
-	final public static LocalEnvironment EMPTY = null;
-	public LocalEnvironment child = EMPTY;
-	public LocalEnvironment parent = EMPTY;
 
 	public enum LinkType{
 		Variable,
@@ -32,8 +29,13 @@ public class LocalEnvironment {
 	
 	}
 	
-	
 	//Stuff I think I'll actually use
+
+	final public static LocalEnvironment EMPTY = null;
+	private LocalEnvironment child = EMPTY;
+	public LocalEnvironment parent = EMPTY;
+	
+	
 	
 	public Map<String, PredicateNode> sourceMatches;
 	public Map<String, PredicateNode> targetMatches;
@@ -41,15 +43,51 @@ public class LocalEnvironment {
 	//don't think this is necessary
 	public Map<String, String> sourceToTargetLink;
 	//mapping to child variable name
+
+	public LocalEnvironment getChild(){
+		assert false : "i don't think i actually need this, but we'll see";
+		return child;
+	}
 	
-	public LocalEnvironment(LocalEnvironment env){
+	public LocalEnvironment(LocalEnvironment parent){
 		//the source is the predecessors targets
-		sourceMatches  = new HashMap<>(env.targetMatches);
+		sourceMatches  = new HashMap<>(parent.targetMatches);
 		targetMatches  = new HashMap<>();
 		sourceToTargetLink = new HashMap<>();
+		this.parent = parent;
+		//need to set the parent child properly as well
+		this.parent.child = this;
 	}
 	
 	public void mergeChildLocalEnvironment(LocalEnvironment env){
+		//setting the updates matches for the target
+		targetMatches = new HashMap<>(env.sourceMatches);
+		//now going through the source to target links to see if any have been resolved
+		ArrayList<String> keysToRemove = new ArrayList<>();
+		for(String source : sourceToTargetLink.keySet()){
+			String target = sourceToTargetLink.get(source);
+			if(targetMatches.containsKey(target)){
+				PredicateNode node = targetMatches.get(target);
+				setSourceMatch(source, node);
+				keysToRemove.add(source);
+			}
+		}
+		
+		//now removing the keys for the sourceToTargetLink Map
+		for(String key : keysToRemove){
+			sourceToTargetLink.remove(key);
+		}
+	}
+	
+	public static void updateParentLinkToChild(LocalEnvironment child){
+		assert child.parent != EMPTY : "this also shouldn't be possible";
+		//need to make sure it matches
+		child.parent.child = child;
+	}
+
+	public void mergeChildLocalEnvironment(){
+		assert child != EMPTY : "no child exists";
+		LocalEnvironment env = child;
 		//setting the updates matches for the target
 		targetMatches = new HashMap<>(env.sourceMatches);
 		//now going through the source to target links to see if any have been resolved
@@ -117,6 +155,10 @@ public class LocalEnvironment {
 		copy.sourceMatches = new HashMap<>(sourceMatches);
 		copy.targetMatches = new HashMap<>(targetMatches);
 		copy.sourceToTargetLink = new HashMap<>(sourceToTargetLink);
+		copy.parent = parent;
+		//don't need to copy the child i'm pretty sure
+		//because the child should be reinitialized
+		copy.child = EMPTY;
 		return copy;
 	}
 	

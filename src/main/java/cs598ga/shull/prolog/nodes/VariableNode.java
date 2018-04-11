@@ -46,6 +46,7 @@ public class VariableNode extends FactNode implements ComputeNode {
 		PredicateNode node = (PredicateNode) source;
 		// TODO Auto-generated method stub
 		// first check if this Node is matched against something
+		//System.out.println("Environment:\n" + env);
 		if(base.isTargetCurrentlyVariable(env)){
 			if(node.base.isSourceCurrentlyVariable(env)){
 				//both variables
@@ -73,9 +74,9 @@ public class VariableNode extends FactNode implements ComputeNode {
 	}
 
 	@Override
-	public IntegerNode computeValue(ExecutionEnvironment env) {
-		BaseNode result = env.getCurrentLocalEnv().findSourceMatch(base.getName());
-		if(result == null || result instanceof ComputeNode){
+	public IntegerNode computeValue(LocalEnvironment env) {
+		BaseNode result = env.findSourceMatch(base.getName());
+		if(result == null || !(result instanceof ComputeNode)){
 			throw new InvalidArithmeticOperationError();
 		}
 		ComputeNode compute = (ComputeNode) result;

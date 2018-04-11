@@ -68,12 +68,45 @@ public class RuleNode extends PredicateNode {
 	public BaseNode firstStep(ExecutionEnvironment env){
 		//need to add a new environmental level
 		//add environment here
-		BaseExecutionState state = env.getCurrentState();
+		RuleState state = (RuleState) env.getCurrentState();
 		env.pushLocalEnvironment();
+		state.fakeName = env.getStateDepth();
 		BaseNode result = ((BaseNode) condition).initializeAndEnter(env);
+		state.childResult = result;
 		//remove state and environment here
-		env.removeStateFromIndex(state.stateIndex);
+		//env.removeStateFromIndex(state.stateIndex);
 		env.popLocalEnvironment();
+		return result;
+	}
+
+	@Override
+	public BaseNode performBacktrack(ExecutionEnvironment env, int stateIndex){
+		RuleState state = (RuleState) env.getStateIndex(stateIndex);
+		if(state.childResult == SpecialNode.DEADEND){
+			return SpecialNode.DEADEND;
+		}
+		env.pushLocalEnvironment();
+		BaseNode result = condition.performBacktrack(env, state.fakeName);
+		//remove state and environment here
+		//env.removeStateFromIndex(state.stateIndex);
+		env.popLocalEnvironment();
+		return result;
+	}
+
+	@Override
+	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+		RuleState state = (RuleState) baseState;
+		LocalEnvironment newEnv = new LocalEnvironment(state.localEnv);
+		BaseExecutionState childState = condition.initializeState(newEnv);
+		state.childState = childState;
+		BaseNode result = condition.executeNode(env, childState);
+		return result;
+	}
+
+	@Override
+	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
+		RuleState state = (RuleState) baseState;
+		BaseNode result = condition.backtrackNode(env, state.childState);
 		return result;
 	}
 
