@@ -15,39 +15,41 @@ public class OrNode extends LogicalNode{
 	}
 
 	@Override
-	public BaseNode firstStep(ExecutionEnvironment env){
+	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		// TODO Auto-generated method stub
 		OrNodeState state  = (OrNodeState) env.getCurrentState();
-		state.leftStateIndex = env.getStateDepth();
-		BaseNode leftResult = left.initializeAndEnter(env);
-		if(leftResult == SpecialNode.FINISHED){
-			return leftResult;
+		BaseExecutionState leftState = left.initializeState(state.localEnv);
+		state.leftState = leftState;
+		BaseNode result = left.executeNode(env, leftState);
+		if(result == SpecialNode.FINISHED){
+			return result;
 		}
-		assert leftResult == SpecialNode.DEADEND;
+		assert result == SpecialNode.DEADEND;
 
 		state.neededRight = true;
-		state.rightStateIndex = env.getStateDepth();
-		BaseNode rightResult = right.initializeAndEnter(env);
-		if(rightResult == SpecialNode.FINISHED){
-			return rightResult;
+		BaseExecutionState rightState = right.initializeState(state.localEnv);
+		state.rightState = rightState;
+		result = right.executeNode(env, rightState);
+		if(result == SpecialNode.FINISHED){
+			return result;
 		}
 
-		assert rightResult == SpecialNode.DEADEND;
-		return rightResult;
+		assert result == SpecialNode.DEADEND;
+		return result;
 	}
 
 	@Override
-	public BaseNode performBacktrack(ExecutionEnvironment env, int stateIndex){
-		OrNodeState state = (OrNodeState) env.getStateIndex(stateIndex);
+	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
+		OrNodeState state = (OrNodeState) baseState;
 		if(!state.neededRight){
-			BaseNode leftResult = left.performBacktrack(env, state.leftStateIndex);
+			BaseNode leftResult = left.backtrackNode(env, state.leftState);
 			if(leftResult == SpecialNode.FINISHED){
 				return leftResult;
 			}
 			assert leftResult == SpecialNode.DEADEND;
 			state.neededRight = true;
 		}
-		BaseNode rightResult = right.performBacktrack(env, state.rightStateIndex);
+		BaseNode rightResult = right.backtrackNode(env, state.rightState);
 		if(rightResult == SpecialNode.FINISHED){
 			return rightResult;
 		}

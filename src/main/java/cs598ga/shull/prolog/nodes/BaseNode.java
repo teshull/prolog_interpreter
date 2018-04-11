@@ -55,10 +55,12 @@ public abstract class BaseNode {
 		return null;
 	}
 	
+	/*
 	public BaseNode performBacktrack(ExecutionEnvironment env, int stateIndex){
 		PrologRuntime.programError("need to implement this in " + this.getClass());
 		return null;
 	}
+	*/
 
 	public boolean matchNode(BaseNode source, LocalEnvironment env){
 		PrologRuntime.programError("need to implement this in " + this.getClass());

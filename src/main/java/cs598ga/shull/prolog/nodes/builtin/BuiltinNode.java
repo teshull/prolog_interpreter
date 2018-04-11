@@ -4,6 +4,7 @@ import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.ImpassibleCutError;
 import cs598ga.shull.prolog.nodes.*;
+import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 import java.util.ArrayList;
@@ -11,29 +12,19 @@ import java.util.ArrayList;
 public abstract class BuiltinNode extends PredicateNode {
 	public ArrayList<PredicateNode> arguments = null;
 
+	public abstract BaseNode executeBuiltin(ExecutionEnvironment env, ArrayList<PredicateNode> args);
+	
 	@Override
-	public BaseNode firstStep(ExecutionEnvironment env){
-		//FIXME do I want to adjust the environment here??
-		//want my own copy of them
+	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		ArrayList<PredicateNode> args = new ArrayList<>(arguments);
 		BaseNode result = executeBuiltin(env, args);
 
 		return result;
 	}
 	
-	public abstract BaseNode executeBuiltin(ExecutionEnvironment env, ArrayList<PredicateNode> args);
-	
 	
 	@Override
-	public BaseNode nextStep(ExecutionEnvironment env, int stateIndex){
-		PrologRuntime.programError("need to implement this in " + this.getClass());
-		return null;
-	}
-	
-	//shouldn't be able to backtrack
-	@Override
-	public BaseNode performBacktrack(ExecutionEnvironment env, int stateIndex){
-		//throw new ImpassibleCutError();
+	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		return SpecialNode.DEADEND;
 	}
 
