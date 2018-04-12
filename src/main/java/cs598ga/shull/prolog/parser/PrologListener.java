@@ -218,6 +218,18 @@ public interface PrologListener extends ParseTreeListener {
 	 */
 	void exitCut_term(PrologParser.Cut_termContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code empty_list}
+	 * labeled alternative in {@link PrologParser#atomTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterEmpty_list(PrologParser.Empty_listContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code empty_list}
+	 * labeled alternative in {@link PrologParser#atomTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitEmpty_list(PrologParser.Empty_listContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code rule_operator}
 	 * labeled alternative in {@link PrologParser#supportedOperator}.
 	 * @param ctx the parse tree
@@ -321,18 +333,6 @@ public interface PrologListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnsupportedOperator(PrologParser.UnsupportedOperatorContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code empty_list}
-	 * labeled alternative in {@link PrologParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void enterEmpty_list(PrologParser.Empty_listContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code empty_list}
-	 * labeled alternative in {@link PrologParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void exitEmpty_list(PrologParser.Empty_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code empty_braces}
 	 * labeled alternative in {@link PrologParser#atom}.

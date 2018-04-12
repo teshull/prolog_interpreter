@@ -234,6 +234,18 @@ public class PrologBaseListener implements PrologListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEmpty_list(PrologParser.Empty_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEmpty_list(PrologParser.Empty_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRule_operator(PrologParser.Rule_operatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -337,18 +349,6 @@ public class PrologBaseListener implements PrologListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnsupportedOperator(PrologParser.UnsupportedOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEmpty_list(PrologParser.Empty_listContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEmpty_list(PrologParser.Empty_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

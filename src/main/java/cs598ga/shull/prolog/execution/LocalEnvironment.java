@@ -121,6 +121,10 @@ public class LocalEnvironment {
 	}
 	
 	public void setSourceMatch(String s, PredicateNode node){
+		//don't care about these variables
+		if(s.equals("_")){
+			return;
+		}
 		if(sourceMatches.containsKey(s)){
 			PrologRuntime.programError("trying to match twice");
 		}
@@ -128,6 +132,10 @@ public class LocalEnvironment {
 	}
 
 	public void setTargetMatch(String s, PredicateNode node){
+		//don't care about these variables
+		if(s.equals("_")){
+			return;
+		}
 		if(targetMatches.containsKey(s)){
 			PrologRuntime.programError("trying to match twice");
 		}
@@ -142,6 +150,9 @@ public class LocalEnvironment {
 	}
 
 	public void addSourceToTargetLink(String source, String target){
+		if(source.equals("_") || target.equals("_")){
+			return;
+		}
 		if(sourceToTargetLink.containsKey(source)){
 			PrologRuntime.programError("trying to match twice");
 		}

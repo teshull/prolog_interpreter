@@ -18,7 +18,6 @@ public abstract class BuiltinNode extends PredicateNode {
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		ArrayList<PredicateNode> args = new ArrayList<>(arguments);
 		BaseNode result = executeBuiltin(env, baseState.localEnv, args);
-
 		return result;
 	}
 	

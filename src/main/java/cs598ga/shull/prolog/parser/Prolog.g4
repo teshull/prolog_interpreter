@@ -64,7 +64,6 @@ term
     | unsupportedOperator term             # unsupported_unary_operator
     | '[' termlist ( '|' term )? ']' # list_term
     | '{' termlist '}'          # curly_bracketed_term
-
     | atomTerm              # atomVal
     ;
 
@@ -74,6 +73,7 @@ term
 atomTerm
 	: atom # atom_term
 	| '!' # cut_term
+    | '[' ']' # empty_list //NOTE [] is not atom anymore in swipl 7 and later
 	;
 	
 supportedOperator
@@ -113,8 +113,7 @@ unsupportedOperator
 
 
 atom // 6.4.2 and 6.1.2
-    : '[' ']'           # empty_list //NOTE [] is not atom anymore in swipl 7 and later
-    | '{' '}'           # empty_braces
+    : '{' '}'           # empty_braces
     | LETTER_DIGIT      # name
     | GRAPHIC_TOKEN     # graphic
     | QUOTED            # quoted_string

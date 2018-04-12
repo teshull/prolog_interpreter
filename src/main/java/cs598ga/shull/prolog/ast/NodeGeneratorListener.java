@@ -182,7 +182,7 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		BaseNode base = children.get(0);
 		assert base instanceof AtomNode : "didn't expect this";
-		assert children.size() > 1 : "well, crap";
+		assert children.size() == 2 : "well, crap";
 		ArrayList<PredicateNode> terms = new ArrayList<>();
 		for(int i = 1; i < children.size(); i++){
 			BaseNode child = children.get(i);
@@ -191,6 +191,7 @@ public class NodeGeneratorListener extends PrologBaseListener{
 			} else if(child instanceof LogicalNode){
 				LogicalNode node = (LogicalNode) child;
 				ArrayList<PredicateNode> nodes = node.getPredicates();
+				terms.addAll(nodes);
 			} else {
 				PrologRuntime.programError("there is a problem");
 			}
@@ -239,6 +240,35 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		System.out.println("exit arith operator " + ctx.getText());
 		CutNode node = new CutNode();
 		currentScope.addNode(node);
+	}
+
+	@Override public void exitList_term(PrologParser.List_termContext ctx) { 
+		System.out.println("exit list term term " + ctx.getText());
+		ArrayList<BaseNode> children = currentScope.getChildren();
+		int size = children.size();
+		assert size == 1 || size == 2 : "think this is the way it should be";
+		BaseNode head = children.get(0);
+		PredicateNode tail = size == 2? (PredicateNode) children.get(1) : ListNode.EMPTY;
+		assert size == 1 || tail instanceof VariableNode : "also curious about this";
+		ArrayList<PredicateNode> terms = new ArrayList<>();
+		if(head instanceof PredicateNode){
+			PredicateNode value = (PredicateNode) head;
+			terms.add(value);
+		} else if(head instanceof LogicalNode){
+			LogicalNode node = (LogicalNode) head;
+			ArrayList<PredicateNode> nodes = node.getPredicates();
+			terms.addAll(nodes);
+		} else {
+			PrologRuntime.programError("there is a problem");
+		}
+		//now making the lists from back to front
+		ListNode result = null;
+		for(int i = terms.size() - 1; i >= 0; i--){
+			PredicateNode element = terms.get(i);
+			result = ListNode.createListNode(element, tail);
+			tail = result;
+		}
+		currentScope.addNode(result);
 	}
 	
 	
