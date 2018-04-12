@@ -68,5 +68,12 @@ count(X) :- count(Y), X is Y + 1.
 
 %?- count(0).
 %?- count(1).
-?- count(2).
+%?- count(2).
+
+%?- count(_).
+
+listExample([1,2,3]).
+
+?- listExample([1,2,3]).
+
 

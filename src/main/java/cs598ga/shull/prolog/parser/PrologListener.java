@@ -194,6 +194,16 @@ public interface PrologListener extends ParseTreeListener {
 	 */
 	void exitCurly_bracketed_term(PrologParser.Curly_bracketed_termContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PrologParser#variable_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariable_value(PrologParser.Variable_valueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PrologParser#variable_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariable_value(PrologParser.Variable_valueContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code atom_term}
 	 * labeled alternative in {@link PrologParser#atomTerm}.
 	 * @param ctx the parse tree

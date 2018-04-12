@@ -171,7 +171,13 @@ public class NodeGeneratorListener extends PrologBaseListener{
 
 	@Override public void exitAtom_term(PrologParser.Atom_termContext ctx) { 
 		System.out.println("exit atom term " + ctx.getText());
-		BaseNode node = NodeFactory.createAtom(ctx.getText());
+		String value = ctx.getText();
+		BaseNode node = null;
+		if(value.startsWith("_")){
+			node = NodeFactory.createVariable(ctx.getText());
+		} else {
+			node = NodeFactory.createAtom(ctx.getText());
+		}
 		currentScope.addNode(node);
 	}
 
@@ -270,6 +276,13 @@ public class NodeGeneratorListener extends PrologBaseListener{
 		}
 		currentScope.addNode(result);
 	}
+
+	/*
+	@Override public void exitAnonymous_variable(PrologParser.Anonymous_variableContext ctx) { 
+		System.out.println("exit anonymous variable term " + ctx.getText());
+		
+	}
+	*/
 	
 	
 }

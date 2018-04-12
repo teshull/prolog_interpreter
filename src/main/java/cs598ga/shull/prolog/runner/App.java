@@ -25,7 +25,6 @@ public class App
         for(String arg : args){
         	System.out.println(arg);
         }
-        assert false;
         Manager manager = new Manager();
         String filename = "";
         filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/foo.prolog";

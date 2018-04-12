@@ -52,7 +52,7 @@ termlist
     ;
 
 term 
-    : VARIABLE          # variable
+    : variable_value          # variable
     | '(' term ')'      # braced_term
     | '-'? integer      # integer_term //TODO: negative case should be covered by unary_operator
     | '-'? FLOAT        # float
@@ -69,6 +69,10 @@ term
 
 //TODO: operator priority, associativity, arity. Filter valid priority ranges for e.g. [list] syntax
 //TODO: modifying operator table
+
+variable_value
+	: VARIABLE
+	;
 
 atomTerm
 	: atom # atom_term

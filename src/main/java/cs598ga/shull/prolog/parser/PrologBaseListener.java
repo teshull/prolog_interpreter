@@ -210,6 +210,18 @@ public class PrologBaseListener implements PrologListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVariable_value(PrologParser.Variable_valueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVariable_value(PrologParser.Variable_valueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAtom_term(PrologParser.Atom_termContext ctx) { }
 	/**
 	 * {@inheritDoc}
