@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 public class NodeRepresentation {
 	
 	public static void generateNodeRepresentation(PrologParser parser, GlobalEnvironment env){
-		NodeGeneratorListener walker = new NodeGeneratorListener(env);
+		ASTNodeGenerator walker = new ASTNodeGenerator(env);
 		System.out.println("parser started");
 		ParseTreeWalker.DEFAULT.walk(walker, parser.p_text());
 		System.out.println("parser ended");

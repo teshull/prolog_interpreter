@@ -18,11 +18,11 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-public class NodeGeneratorListener extends PrologBaseListener{
+public class ASTNodeGenerator extends PrologBaseListener{
 	public NodeScope currentScope = NodeScope.EMPTY;
 	private GlobalEnvironment env;
 	
-	public NodeGeneratorListener(GlobalEnvironment env){
+	public ASTNodeGenerator(GlobalEnvironment env){
 		this.env = env;
 	}
 

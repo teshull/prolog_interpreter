@@ -70,6 +70,8 @@ term
 //TODO: operator priority, associativity, arity. Filter valid priority ranges for e.g. [list] syntax
 //TODO: modifying operator table
 
+//FIXME the VARIABLE token is not working as expected
+//"-" and "_[ANYTHING]" are being treated as atoms
 variable_value
 	: VARIABLE
 	;
