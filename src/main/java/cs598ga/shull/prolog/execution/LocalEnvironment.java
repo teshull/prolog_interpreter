@@ -2,7 +2,9 @@ package cs598ga.shull.prolog.execution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import cs598ga.shull.prolog.nodes.PredicateNode;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
@@ -39,9 +41,11 @@ public class LocalEnvironment {
 	
 	public Map<String, PredicateNode> sourceMatches;
 	public Map<String, PredicateNode> targetMatches;
+	public Set<String> sourcesLinked;
+	public Set<String> targetsLinked;
 
-	//don't think this is necessary
 	public Map<String, String> sourceToTargetLink;
+	public Map<String, String> targetToSourceLink;
 	//mapping to child variable name
 
 	public LocalEnvironment getChild(){
@@ -54,6 +58,9 @@ public class LocalEnvironment {
 		sourceMatches  = new HashMap<>(parent.targetMatches);
 		targetMatches  = new HashMap<>();
 		sourceToTargetLink = new HashMap<>();
+		targetToSourceLink = new HashMap<>();
+		sourcesLinked = new HashSet<>();
+		targetsLinked = new HashSet<>();
 		this.parent = parent;
 		//need to set the parent child properly as well
 		this.parent.child = this;
@@ -61,22 +68,25 @@ public class LocalEnvironment {
 	
 	public void mergeChildLocalEnvironment(LocalEnvironment env){
 		//setting the updates matches for the target
-		assert false;
+		assert false : "isn't implemented correctly";
 		targetMatches = new HashMap<>(env.sourceMatches);
 		//now going through the source to target links to see if any have been resolved
 		ArrayList<String> keysToRemove = new ArrayList<>();
-		for(String source : sourceToTargetLink.keySet()){
-			String target = sourceToTargetLink.get(source);
+		for(String target : targetsLinked){
 			if(targetMatches.containsKey(target)){
+				String source = targetToSourceLink.get(target);
 				PredicateNode node = targetMatches.get(target);
 				setSourceMatch(source, node);
 				keysToRemove.add(source);
+				sourcesLinked.remove(source);
+				targetToSourceLink.remove(target);
+				sourceToTargetLink.remove(source);
 			}
 		}
 		
 		//now removing the keys for the sourceToTargetLink Map
 		for(String key : keysToRemove){
-			sourceToTargetLink.remove(key);
+			targetsLinked.remove(key);
 		}
 	}
 	
@@ -89,19 +99,13 @@ public class LocalEnvironment {
 	public void mergeChildLocalEnvironment(){
 		assert child != EMPTY : "no child exists";
 		//setting the updates matches for the target
-		targetMatches = new HashMap<>(targetMatches);
-		for(String key : child.sourceMatches.keySet()){
-			PredicateNode value = child.sourceMatches.get(key);
-			targetMatches.put(key, value);
-		}
-		//now going through the source to target links to see if any have been resolved
-		for(String source : sourceToTargetLink.keySet()){
-			String target = sourceToTargetLink.get(source);
-			if(targetMatches.containsKey(target)){
-				PredicateNode node = targetMatches.get(target);
-				//setSourceMatch(source, node);
-				sourceMatches.put(source, node);
-			}
+		//think i can just copy them over directly...
+//		targetMatches = new HashMap<>(targetMatches);
+		targetMatches = new HashMap<>(child.sourceMatches);
+		for(String target : child.sourceMatches.keySet()){
+			PredicateNode value = child.sourceMatches.get(target);
+			//targetMatches.put(target, value);
+			updateSourceToTargets(null, target, value);
 		}
 	}
 
@@ -109,6 +113,9 @@ public class LocalEnvironment {
 		sourceMatches  = new HashMap<>();
 		targetMatches  = new HashMap<>();
 		sourceToTargetLink = new HashMap<>();
+		targetToSourceLink = new HashMap<>();
+		sourcesLinked = new HashSet<>();
+		targetsLinked = new HashSet<>();
 	}
 	
 	public PredicateNode findSourceMatch(String s){
@@ -120,6 +127,30 @@ public class LocalEnvironment {
 		return result;
 	}
 	
+	private void updateSourceToTargets(String source, String target, PredicateNode value){
+		boolean foundMatch = false;
+		if(source == null){
+			if(targetsLinked.contains(target)){
+				foundMatch = true;
+				source = targetToSourceLink.get(target);
+				sourceMatches.put(source, value);
+			}
+		}else {
+			assert target == null;
+			if(sourcesLinked.contains(source)){
+				foundMatch = true;
+				target = sourceToTargetLink.get(source);
+				targetMatches.put(target, value);
+			}
+		}
+		if(foundMatch){
+			targetsLinked.remove(target);
+			sourcesLinked.remove(source);
+			sourceToTargetLink.remove(source);
+			targetToSourceLink.remove(target);
+		}
+	}
+	
 	public void setSourceMatch(String s, PredicateNode node){
 		//don't care about these variables
 		if(s.equals("_")){
@@ -128,6 +159,7 @@ public class LocalEnvironment {
 		if(sourceMatches.containsKey(s)){
 			PrologRuntime.programError("trying to match twice");
 		}
+		updateSourceToTargets(s, null, node);
 		sourceMatches.put(s, node);
 	}
 
@@ -139,13 +171,16 @@ public class LocalEnvironment {
 		if(targetMatches.containsKey(s)){
 			PrologRuntime.programError("trying to match twice");
 		}
+		updateSourceToTargets(null, s, node);
 		targetMatches.put(s, node);
 	}
 
 	public void removeSourceMatch(String s){
+		assert false : "don't think i'm using this";
 		sourceMatches.remove(s);
 	}
 	public void removeTargetMatch(String s){
+		assert false : "don't think i'm using this";
 		targetMatches.remove(s);
 	}
 
@@ -157,6 +192,9 @@ public class LocalEnvironment {
 			PrologRuntime.programError("trying to match twice");
 		}
 		sourceToTargetLink.put(source, target);
+		targetToSourceLink.put(target,source);
+		sourcesLinked.add(source);
+		targetsLinked.add(target);
 	}
 	
 	public LocalEnvironment getDeepCopy(){
@@ -164,6 +202,9 @@ public class LocalEnvironment {
 		copy.sourceMatches = new HashMap<>(sourceMatches);
 		copy.targetMatches = new HashMap<>(targetMatches);
 		copy.sourceToTargetLink = new HashMap<>(sourceToTargetLink);
+		copy.targetToSourceLink = new HashMap<>(targetToSourceLink);
+		copy.sourcesLinked = new HashSet<>(sourcesLinked);
+		copy.targetsLinked = new HashSet<>(targetsLinked);
 		copy.parent = parent;
 		//don't need to copy the child i'm pretty sure
 		//because the child should be reinitialized

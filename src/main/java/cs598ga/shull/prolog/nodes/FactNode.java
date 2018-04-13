@@ -9,6 +9,7 @@ import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public abstract class FactNode extends PredicateNode {
 	
@@ -92,6 +93,9 @@ public abstract class FactNode extends PredicateNode {
 		state.localEnv.sourceMatches = new HashMap<>(state.originalEnv.sourceMatches);
 		state.localEnv.targetMatches = new HashMap<>(state.originalEnv.targetMatches);
 		state.localEnv.sourceToTargetLink = new HashMap<>(state.originalEnv.sourceToTargetLink);
+		state.localEnv.targetToSourceLink = new HashMap<>(state.originalEnv.sourceToTargetLink);
+		state.localEnv.sourcesLinked = new HashSet<>(state.originalEnv.sourcesLinked);
+		state.localEnv.targetsLinked = new HashSet<>(state.originalEnv.targetsLinked);
 	}
 
 	private BaseNode findValidResult(BaseNode childNode, ExecutionEnvironment env, FactState state){
