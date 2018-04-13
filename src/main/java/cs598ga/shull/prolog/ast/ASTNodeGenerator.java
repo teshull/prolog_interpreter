@@ -128,7 +128,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 			for(int i = 0; i < children.size(); i++){
 				System.out.println(children.get(i));
 			}
-			PrologRuntime.programError("shouldn't be able have binary without two now i think");
+			PrologRuntime.programError("shouldn't be able have binary operator without 3 children");
 		}
 		
 	}
@@ -237,9 +237,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 			default:
 				PrologRuntime.programError("unsupported arithmetic operator");
 				break;
-		
 		}
-		
 	}
 
 	@Override public void exitCut_term(PrologParser.Cut_termContext ctx) { 
