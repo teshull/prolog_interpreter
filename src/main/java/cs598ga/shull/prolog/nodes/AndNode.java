@@ -8,6 +8,7 @@ public class AndNode extends LogicalNode{
 
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+		//trying to solve for left side
 		LogicalNodeState state = (LogicalNodeState) baseState;
 		BaseExecutionState leftState = left.initializeState(state.localEnv);
 		state.leftState = leftState;
@@ -17,6 +18,7 @@ public class AndNode extends LogicalNode{
 		}
 		assert leftResult == SpecialNode.FINISHED;
 		while(true){
+			//now solving for right side
 			BaseExecutionState rightState = right.initializeState(state.localEnv);
 			state.rightState = rightState;
 			BaseNode rightResult = right.executeNode(env, rightState);
@@ -25,6 +27,7 @@ public class AndNode extends LogicalNode{
 			}
 
 			assert rightResult == SpecialNode.DEADEND;
+			//finding new answer for left side
 			leftResult = left.backtrackNode(env, state.leftState);
 			if(leftResult == SpecialNode.DEADEND){
 				return leftResult;
@@ -35,12 +38,12 @@ public class AndNode extends LogicalNode{
 	@Override
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		LogicalNodeState state = (LogicalNodeState) baseState;
-		//System.out.println("and node if performing backtrack");
+		//trying to backtrack on right side
 		BaseNode rightResult = right.backtrackNode(env, state.rightState);
 		if(rightResult == SpecialNode.FINISHED){
 			return rightResult;
 		}
-		// TODO Auto-generated method stub
+		//now left side
 		BaseNode leftResult = left.backtrackNode(env, state.leftState);
 		if(leftResult == SpecialNode.DEADEND){
 			return leftResult;

@@ -2,7 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
-import cs598ga.shull.prolog.execution.error.ImpassibleCutError;
+import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class QueryNode extends ClauseNode {
 				System.out.println("environment:\n" + localEnv);
 				localEnv.printSourceMatchesIfPresent();
 			}
-		} catch(ImpassibleCutError e){
+		} catch(ImpossibleCutError e){
 			result = SpecialNode.DEADEND;
 		}
 		return result;

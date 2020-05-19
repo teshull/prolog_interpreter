@@ -80,13 +80,9 @@ public class RuleNode extends PredicateNode {
 	@Override
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		RuleState state = (RuleState) baseState;
-		//LocalEnvironment newEnv = new LocalEnvironment(state.localEnv);
-		//BaseExecutionState childState = condition.initializeState(newEnv);
-		//state.childState = childState;
 		BaseNode result = condition.backtrackNode(env, state.childState);
 		state.resetEnv(state.localEnv);
 		state.localEnv.mergeChildLocalEnvironment();
 		return result;
 	}
-
 }
