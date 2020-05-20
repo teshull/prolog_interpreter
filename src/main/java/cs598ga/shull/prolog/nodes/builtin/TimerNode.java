@@ -12,6 +12,7 @@ import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 public class TimerNode extends BuiltinNode {
 	
 	public TimerNode(){
+		super(1);
 		this.base = new NameNode("timer", false);
 	}
 
@@ -39,20 +40,8 @@ public class TimerNode extends BuiltinNode {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "timer";
 	}
 
-	@Override
-	public boolean isFact() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isQuery() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

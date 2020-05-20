@@ -8,7 +8,8 @@ public class AddBuiltins {
 		System.out.println("are added");
 		GlobalEnvironment env = GlobalEnvironment.globalEnv;
 		env.addBuiltinNode(new TimerNode());
-		
+		env.addBuiltinNode(new ExitNode());
+
 	}
 
 }

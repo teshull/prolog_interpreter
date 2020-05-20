@@ -10,10 +10,6 @@ public abstract class PredicateNode extends ClauseNode {
 	public ArrayList<PredicateNode> children;
 	public abstract String getName();
 	
-	public boolean isRule(){
-		return false;
-	}
-
 	public LocalEnvironment unifyWith(LocalEnvironment current, PredicateNode other){
 		return null;
 	}
