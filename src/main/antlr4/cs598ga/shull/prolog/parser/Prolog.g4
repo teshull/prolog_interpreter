@@ -32,9 +32,9 @@ options {
     language = Java;
 }
 
-@header {
-package cs598ga.shull.prolog.parser;
-}
+//@header {
+//package cs598ga.shull.prolog.parser;
+//}
 
 // Prolog text and data formed from terms (6.2)
 
