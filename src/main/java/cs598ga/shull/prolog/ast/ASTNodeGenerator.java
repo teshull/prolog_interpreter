@@ -117,10 +117,10 @@ public class ASTNodeGenerator extends PrologBaseListener{
 				node.setRight(right);
 				currentScope.addNode(node);
 			} else if(operator instanceof ArithmeticNode){
-				AddNode add = (AddNode) operator;
-				add.setLeft((ComputeNode) left);
-				add.setRight((ComputeNode) right);
-				currentScope.addNode(add);
+				ArithmeticNode node = (ArithmeticNode)  operator;
+				node.setLeft((ComputeNode) left);
+				node.setRight((ComputeNode) right);
+				currentScope.addNode(node);
 			}
 		} else {
 			System.out.println("size: " + children.size());
@@ -236,19 +236,29 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override public void exitArith_operator(PrologParser.Arith_operatorContext ctx) { 
 		System.out.println("exit arith operator " + ctx.getText());
+		ArithmeticNode node = null;
 		switch(ctx.getText()){
 			case "+":
-				AddNode add = new AddNode();
-				currentScope.addNode(add);
+				node = new AddNode();
+				break;
+			case "-":
+				node = new SubtractNode();
+				break;
+			case "*":
+				node = new MultiplyNode();
+				break;
+			case "/":
+				node = new DivideNode();
 				break;
 			default:
 				PrologRuntime.programError("unsupported arithmetic operator");
 				break;
 		}
+		currentScope.addNode(node);
 	}
 
 	@Override public void exitCut_term(PrologParser.Cut_termContext ctx) { 
-		System.out.println("exit arith operator " + ctx.getText());
+		System.out.println("exit cut operator " + ctx.getText());
 		CutNode node = new CutNode();
 		currentScope.addNode(node);
 	}

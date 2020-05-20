@@ -8,6 +8,10 @@ import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
 public class AddNode extends ArithmeticNode {
 
+	public AddNode(){
+		super(Type.ADD);
+	}
+
 	@Override
 	public NumberNode computeValue(LocalEnvironment env) {
 		NumberNode leftVal = left.computeValue(env);
