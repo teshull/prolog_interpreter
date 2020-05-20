@@ -55,7 +55,7 @@ term
     : variable_value          # variable
     | '(' term ')'      # braced_term
     | '-'? integer      # integer_term //TODO: negative case should be covered by unary_operator
-    | '-'? FLOAT        # float
+    | '-'? FLOAT        # float_term
     // structure / compound term
     | atomTerm '(' termlist ')'     # compound_term
     |<assoc=right> term supportedOperator term        # supported_binary_operator

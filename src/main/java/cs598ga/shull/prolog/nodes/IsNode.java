@@ -11,8 +11,8 @@ public class IsNode extends LogicalNode{
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		boolean foundLeft = false;
 		boolean foundRight = false;
-		IntegerNode leftVal = null;
-		IntegerNode rightVal = null;
+		NumberNode leftVal = null;
+		NumberNode rightVal = null;
 		try{
 			if(right instanceof ComputeNode){
 				ComputeNode compute = (ComputeNode) right;
@@ -35,7 +35,7 @@ public class IsNode extends LogicalNode{
 		System.out.println("left value: " + leftVal);
 		System.out.println("right value: " + rightVal);
 		if(foundLeft && foundRight){
-			return IntegerNode.isEqual(leftVal, rightVal)? SpecialNode.FINISHED : SpecialNode.DEADEND;
+			return NumberNode.isEqual(leftVal, rightVal)? SpecialNode.FINISHED : SpecialNode.DEADEND;
 		} else if(!foundRight && !foundLeft){
 			//I don't think that this should be able to happen, but I may change my mind
 			return SpecialNode.DEADEND;

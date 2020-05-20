@@ -33,4 +33,17 @@ public class NodeFactory {
 		return node;
 	}
 
+	public static FloatNode createFloat(String s){
+		double value = Double.parseDouble(s);
+		NameNode name = new NameNode(s, false);
+		FloatNode node = new FloatNode(name, value);
+		return node;
+	}
+
+	public static FloatNode createFloat(double value){
+		NameNode name = new NameNode(Double.toString(value), false);
+		FloatNode node = new FloatNode(name, value);
+		return node;
+	}
+
 }

@@ -27,9 +27,9 @@ public class App
         }
         Manager manager = new Manager();
         String filename = "";
-        filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/foo.prolog";
+        //filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/foo.prolog";
         //filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/another.prolog";
-        //filename = "/home/tshull226/Documents/school/cs598GA/project/code/maven_testing/maven-test/examples/foo.prolog";
+        filename = "/home/tshull226/Documents/school/cs598GA/repo/truffleProlog/examples/foo.prolog";
         manager.run(new File(filename));
     }
 

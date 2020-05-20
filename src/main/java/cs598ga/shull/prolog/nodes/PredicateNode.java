@@ -20,4 +20,8 @@ public abstract class PredicateNode extends ClauseNode {
 	public void enterPredicate(){
 		
 	}
+
+	public NameNode getBase(){
+		return base;
+	}
 }

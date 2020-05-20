@@ -74,7 +74,7 @@ public class VariableNode extends FactNode implements ComputeNode {
 	}
 
 	@Override
-	public IntegerNode computeValue(LocalEnvironment env) {
+	public NumberNode computeValue(LocalEnvironment env) {
 		BaseNode result = env.findSourceMatch(base.getName());
 		if(result == null || !(result instanceof ComputeNode)){
 			throw new InvalidArithmeticOperationError();

@@ -220,7 +220,14 @@ public class ASTNodeGenerator extends PrologBaseListener{
 		currentScope.addNode(node);
 	}
 
-	@Override 
+	@Override
+	public void exitFloat_term(PrologParser.Float_termContext ctx) {
+		System.out.println("exit float term " + ctx.getText());
+		BaseNode node = NodeFactory.createFloat(ctx.getText());
+		currentScope.addNode(node);
+	}
+
+	@Override
 	public void exitInteger_term(PrologParser.Integer_termContext ctx) { 
 		System.out.println("exit integer term " + ctx.getText());
 		BaseNode node = NodeFactory.createInteger(ctx.getText());
