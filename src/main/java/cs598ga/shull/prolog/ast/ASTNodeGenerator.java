@@ -182,6 +182,15 @@ public class ASTNodeGenerator extends PrologBaseListener{
 		currentScope.addNode(query);
 	}
 
+	@Override
+	public void exitGoal_negation_operator(PrologParser.Goal_negation_operatorContext ctx) {
+		System.out.println("exit goal negation term " + ctx.getText());
+		ArrayList<BaseNode> children = currentScope.getChildren();
+		assert false : "still need to implement this";
+		BaseNode node = null;
+		currentScope.addNode(node);
+	}
+
 	@Override public void exitString_term(PrologParser.String_termContext ctx) {
 		System.out.println("exit string term " + ctx.getText());
 		String strValue = ctx.getText();

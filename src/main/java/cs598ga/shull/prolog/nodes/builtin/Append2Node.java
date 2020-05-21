@@ -10,10 +10,10 @@ import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
 import java.util.ArrayList;
 
-public class WriteNode extends BuiltinNode {
-    public WriteNode(){
-        super(1);
-        this.base = new NameNode("write", false);
+public class Append2Node extends BuiltinNode {
+    public Append2Node(){
+        super(2);
+        this.base = new NameNode("append", false);
     }
 
     @Override
@@ -25,6 +25,6 @@ public class WriteNode extends BuiltinNode {
 
     @Override
     public String getName() {
-        return "write";
+        return "append2";
     }
 }
