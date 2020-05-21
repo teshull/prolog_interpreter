@@ -2,6 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
+import cs598ga.shull.prolog.nodecreation.NodeFactory;
 
 public class IntegerNode extends NumberNode {
 
@@ -17,10 +18,13 @@ public class IntegerNode extends NumberNode {
 	public static IntegerNode cast(NumberNode node){
 		if(node instanceof IntegerNode){
 			return (IntegerNode) node;
+		} else if (node instanceof FloatNode){
+			FloatNode floatNode = (FloatNode) node;
+			return NodeFactory.createInteger((int)floatNode.getFloat());
+		} else {
+			StringNode stringNode = (StringNode) node;
+			return NodeFactory.createInteger(Integer.parseInt(stringNode.getString()));
 		}
-		assert node instanceof FloatNode;
-		FloatNode floatNode = (FloatNode) node;
-		return new IntegerNode(floatNode.getBase(), (int)floatNode.getFloat());
 	}
 
 	@Override

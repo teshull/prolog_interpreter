@@ -5,6 +5,7 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 import cs598ga.shull.prolog.nodecreation.NodeFactory;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 public class ArithmeticNode extends BaseNode implements ComputeNode {
 	public ComputeNode left;
@@ -59,7 +60,7 @@ public class ArithmeticNode extends BaseNode implements ComputeNode {
 			}
 			return NodeFactory.createInteger(result);
 
-		} else {
+		} else if (valueType == NumberNode.ValueType.FLOAT) {
 			double lVal = FloatNode.cast(leftVal).getFloat();
 			double rVal = FloatNode.cast(rightVal).getFloat();
 			double result = 0;
@@ -78,6 +79,20 @@ public class ArithmeticNode extends BaseNode implements ComputeNode {
 					break;
 			}
 			return NodeFactory.createFloat(result);
+		} else {
+			String lVal = StringNode.cast(leftVal).getString();
+			String rVal = StringNode.cast(rightVal).getString();
+			String result = "";
+			switch (type) {
+				case ADD:
+					result = lVal + rVal;
+					break;
+				case SUBTRACT:
+				case MULTIPLY:
+				case DIVIDE:
+				    throw new InvalidArithmeticOperationError();
+			}
+			return NodeFactory.createString(result);
 		}
 	}
 

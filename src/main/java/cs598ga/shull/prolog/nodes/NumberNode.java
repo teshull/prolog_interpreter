@@ -6,7 +6,8 @@ public abstract class NumberNode extends AtomNode implements ComputeNode {
 
     public enum ValueType{
         INT,
-        FLOAT
+        FLOAT,
+        STRING
     }
 
     public NumberNode(NameNode node) {
@@ -14,7 +15,9 @@ public abstract class NumberNode extends AtomNode implements ComputeNode {
     }
 
     public static ValueType determineType(NumberNode left, NumberNode right){
-        if(left instanceof FloatNode || right instanceof FloatNode){
+        if(left instanceof StringNode || right instanceof StringNode){
+            return ValueType.STRING;
+        } else if (left instanceof FloatNode || right instanceof FloatNode){
             return ValueType.FLOAT;
         }
         return ValueType.INT;

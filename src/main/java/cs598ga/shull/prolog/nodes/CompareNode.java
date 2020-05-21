@@ -5,6 +5,7 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
+import static cs598ga.shull.prolog.nodes.NumberNode.ValueType.FLOAT;
 import static cs598ga.shull.prolog.nodes.NumberNode.ValueType.INT;
 
 public class CompareNode extends LogicalNode {
@@ -70,7 +71,7 @@ public class CompareNode extends LogicalNode {
                     result = lVal <= rVal;
                     break;
             }
-        } else {
+        } else if (valType == FLOAT){
             double lVal = FloatNode.cast(leftVal).getFloat();
             double rVal = FloatNode.cast(rightVal).getFloat();
             switch(type){
@@ -91,6 +92,29 @@ public class CompareNode extends LogicalNode {
                     break;
                 case LEQ:
                     result = lVal <= rVal;
+                    break;
+            }
+        } else {
+            String lVal = StringNode.cast(leftVal).getString();
+            String rVal = StringNode.cast(rightVal).getString();
+            switch(type) {
+                case EQ:
+                    result = lVal.equals(rVal);
+                    break;
+                case NEQ:
+                    result = !lVal.equals(rVal);
+                    break;
+                case GT:
+                    result = lVal.compareTo(rVal) > 0;
+                    break;
+                case GEQ:
+                    result = lVal.compareTo(rVal) >= 0;
+                    break;
+                case LT:
+                    result = lVal.compareTo(rVal) < 0;
+                    break;
+                case LEQ:
+                    result = lVal.compareTo(rVal) <= 0;
                     break;
             }
         }

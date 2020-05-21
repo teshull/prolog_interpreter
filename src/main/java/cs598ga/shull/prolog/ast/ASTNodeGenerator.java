@@ -175,7 +175,13 @@ public class ASTNodeGenerator extends PrologBaseListener{
 		BaseNode node = null;
 		if(value.startsWith("_")){
 			node = NodeFactory.createVariable(ctx.getText());
+		} else if(value.startsWith("\"") && value.endsWith("\"")) {
+			String strValue = ctx.getText();
+			strValue = strValue.substring(1, strValue.length()-1);
+			System.out.println("created String: " + strValue);
+			node = NodeFactory.createString(strValue);
 		} else {
+			System.out.println("saw new atom term: " + ctx.getText());
 			node = NodeFactory.createAtom(ctx.getText());
 		}
 		currentScope.addNode(node);

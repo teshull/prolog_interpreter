@@ -46,4 +46,9 @@ public class NodeFactory {
 		return node;
 	}
 
+	public static StringNode createString(String s){
+		NameNode name = new NameNode("\""+s+"\"", false);
+		StringNode node = new StringNode(name, s);
+		return node;
+	}
 }
