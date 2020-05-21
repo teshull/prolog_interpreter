@@ -265,16 +265,16 @@ public class ASTNodeGenerator extends PrologBaseListener{
 		ArithmeticNode node = null;
 		switch(ctx.getText()){
 			case "+":
-				node = new AddNode();
+				node = new ArithmeticNode(ArithmeticNode.Type.ADD);
 				break;
 			case "-":
-				node = new SubtractNode();
+				node = new ArithmeticNode(ArithmeticNode.Type.SUBTRACT);
 				break;
 			case "*":
-				node = new MultiplyNode();
+				node = new ArithmeticNode(ArithmeticNode.Type.MULTIPLY);
 				break;
 			case "/":
-				node = new DivideNode();
+				node = new ArithmeticNode(ArithmeticNode.Type.DIVIDE);
 				break;
 			default:
 				PrologRuntime.programError("unsupported arithmetic operator");
