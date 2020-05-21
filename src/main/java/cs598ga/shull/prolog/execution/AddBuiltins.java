@@ -9,6 +9,9 @@ public class AddBuiltins {
 		GlobalEnvironment env = GlobalEnvironment.globalEnv;
 		env.addBuiltinNode(new TimerNode());
 		env.addBuiltinNode(new ExitNode());
+		env.addBuiltinNode(new FailNode());
+		env.addBuiltinNode(new NewlineNode());
+		env.addBuiltinNode(new WriteNode());
 
 		/*
 		other desirable builtins
