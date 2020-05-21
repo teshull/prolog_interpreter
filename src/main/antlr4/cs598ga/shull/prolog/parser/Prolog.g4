@@ -78,6 +78,7 @@ variable_value
 
 atomTerm
 	: atom # atom_term
+	| string # string_term
 	| '!' # cut_term
     | '[' ']' # empty_list //NOTE [] is not atom anymore in swipl 7 and later
 	;
@@ -85,7 +86,7 @@ atomTerm
 supportedOperator
     : ':-' # rule_operator
     | '-->' # arrow_operator
-    | '?-' # querey_operator
+    | '?-' # query_operator
     | ',' # and_operator
     | ';' # or_operator
     | comparisonOperator # compare_operator
@@ -123,11 +124,15 @@ atom // 6.4.2 and 6.1.2
     : '{' '}'           # empty_braces
     | LETTER_DIGIT      # name
     | GRAPHIC_TOKEN     # graphic
-    | QUOTED            # quoted_string
-    | DOUBLE_QUOTED_LIST# dq_string
-    | BACK_QUOTED_STRING# backq_string
     | ';'               # semicolon
     ;
+
+string
+    : QUOTED            # quoted_string
+    | DOUBLE_QUOTED_LIST# dq_string
+    | BACK_QUOTED_STRING# backq_string
+    ;
+
 
 
 integer // 6.4.4

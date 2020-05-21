@@ -160,26 +160,29 @@ public class ASTNodeGenerator extends PrologBaseListener{
 	}
 
 	@Override 
-	public void exitQuerey_operator(PrologParser.Querey_operatorContext ctx) { 
-		System.out.println("exit querey term " + ctx.getText());
+	public void exitQuery_operator(PrologParser.Query_operatorContext ctx) {
+		System.out.println("exit query term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		assert children == SpecialNode.NONODES : "well, I am confused";
 		QueryNode query = new QueryNode();
 		currentScope.addNode(query);
 	}
 
+	@Override public void exitString_term(PrologParser.String_termContext ctx) {
+		System.out.println("exit string term " + ctx.getText());
+		String strValue = ctx.getText();
+		strValue = strValue.substring(1, strValue.length()-1);
+		BaseNode node = NodeFactory.createString(strValue);
+		currentScope.addNode(node);
+	}
 
 	@Override public void exitAtom_term(PrologParser.Atom_termContext ctx) { 
 		System.out.println("exit atom term " + ctx.getText());
 		String value = ctx.getText();
 		BaseNode node = null;
 		if(value.startsWith("_")){
+		    System.out.println("save atom (but really variable) term: " + ctx.getText());
 			node = NodeFactory.createVariable(ctx.getText());
-		} else if(value.startsWith("\"") && value.endsWith("\"")) {
-			String strValue = ctx.getText();
-			strValue = strValue.substring(1, strValue.length()-1);
-			System.out.println("created String: " + strValue);
-			node = NodeFactory.createString(strValue);
 		} else {
 			System.out.println("saw new atom term: " + ctx.getText());
 			node = NodeFactory.createAtom(ctx.getText());
