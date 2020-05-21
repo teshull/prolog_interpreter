@@ -93,6 +93,20 @@ public class ASTNodeGenerator extends PrologBaseListener{
 			currentScope.addNode(query);
 		} else if (operator instanceof RuleNode){
 			assert false : "rule node is coming soon";
+		} else if (operator instanceof ArithmeticNode){
+			ArithmeticNode node = (ArithmeticNode)  operator;
+			assert children.get(1) instanceof AndNode;
+			AndNode operands = (AndNode) children.get(1);
+			node.setLeft((ComputeNode) operands.left);
+			node.setRight((ComputeNode) operands.right);
+			currentScope.addNode(node);
+		} else if (operator instanceof LogicalNode){
+			LogicalNode node = (LogicalNode) operator;
+			assert children.get(1) instanceof AndNode;
+			AndNode operands = (AndNode) children.get(1);
+			node.setLeft(operands.left);
+			node.setRight(operands.right);
+			currentScope.addNode(node);
 		} else {
 			assert false : "am not supporting this yet";
 		}
