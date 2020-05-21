@@ -10,6 +10,12 @@ public class AddBuiltins {
 		env.addBuiltinNode(new TimerNode());
 		env.addBuiltinNode(new ExitNode());
 
+		/*
+		other desirable builtins
+
+		load_file
+		 */
+
 	}
 
 }

@@ -214,9 +214,35 @@ public class ASTNodeGenerator extends PrologBaseListener{
 	}
 
 	@Override 
-	public void exitIs_operator(PrologParser.Is_operatorContext ctx) { 
-		System.out.println("exit is node term " + ctx.getText());
-		IsNode node = new IsNode();
+	public void exitCompare_operator(PrologParser.Compare_operatorContext ctx) {
+		System.out.println("exit compare node term " + ctx.getText());
+		LogicalNode node = null;
+		switch(ctx.getText()){
+			case "is":
+				node = new IsNode();
+				break;
+			case "=:=":
+				node = new CompareNode(CompareNode.Type.EQ);
+				break;
+			case "=\\=":
+				node = new CompareNode(CompareNode.Type.NEQ);
+				break;
+			case "<":
+				node = new CompareNode(CompareNode.Type.LT);
+				break;
+			case "=<":
+				node = new CompareNode(CompareNode.Type.LEQ);
+				break;
+			case ">":
+				node = new CompareNode(CompareNode.Type.GT);
+				break;
+			case ">=":
+				node = new CompareNode(CompareNode.Type.GEQ);
+				break;
+			default:
+				PrologRuntime.programError("unsupported comparison operator");
+				break;
+		}
 		currentScope.addNode(node);
 	}
 

@@ -88,16 +88,18 @@ supportedOperator
     | '?-' # querey_operator
     | ',' # and_operator
     | ';' # or_operator
-    | 'is' # is_operator
+    | comparisonOperator # compare_operator
     | arithmeticOperator # arith_operator
     ;
-    
+
+comparisonOperator
+    : 'is' | '=:=' | '=\\=' | '<' | '=<' | '>' | '>='
+    ;
+
 arithmeticOperator
     : '=' 
-	| '+' 
-	| '-' 
-	| '*' 
-	| '/' 
+	| '+' | '-'
+	| '*' | '/'
 	; 
 
 unsupportedOperator
@@ -107,7 +109,6 @@ unsupportedOperator
     | '\\+'
     | '==' | '\\==' | '@<' | '@=<' | '@>' | '@>='
     | '=..'
-    | '=:=' | '=\\=' | '<' | '=<' | '>' | '>='
     | ':' // modules: 5.2.1
     | '/\\' | '\\/'
     | '//' | 'rem' | 'mod' | '<<' | '>>' //TODO: '/' cannot be used as atom because token here not in GRAPHIC. only works because , is operator too. example: swipl/filesex.pl:177
