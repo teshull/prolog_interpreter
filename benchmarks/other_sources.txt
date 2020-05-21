@@ -1,0 +1,6 @@
+
+CMU Prolog Benchmarking Suites
+(http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/prolog/code/bench/0.html)
+
+Mercury Benchmarks
+(https://www.mercurylang.org/about/benchmarks.html)
