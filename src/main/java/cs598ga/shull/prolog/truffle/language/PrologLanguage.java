@@ -31,8 +31,8 @@ import cs598ga.shull.prolog.truffle.runtime.PrologContext;
 public final class PrologLanguage extends TruffleLanguage<PrologContext> {
     public static volatile int counter;
 
-    public static final String ID = "sl";
-    public static final String MIME_TYPE = "application/x-sl";
+    public static final String ID = "prolog";
+    public static final String MIME_TYPE = "application/x-prolog";
 
     public PrologLanguage() {
         counter++;
