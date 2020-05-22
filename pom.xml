@@ -26,6 +26,17 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.graalvm.truffle</groupId>
+        <artifactId>truffle-api</artifactId>
+        <version>20.0.0</version> <!-- or any later version -->
+    </dependency>
+    <dependency>
+        <groupId>org.graalvm.truffle</groupId>
+        <artifactId>truffle-dsl-processor</artifactId>
+        <version>20.0.0</version>
+        <scope>provided</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
