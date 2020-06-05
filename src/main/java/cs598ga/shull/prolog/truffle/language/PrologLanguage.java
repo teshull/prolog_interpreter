@@ -25,6 +25,20 @@ import com.oracle.truffle.api.source.SourceSection;
 import cs598ga.shull.prolog.truffle.PrologEvalRootNode;
 import cs598ga.shull.prolog.truffle.runtime.PrologContext;
 
+
+import cs598ga.shull.prolog.ast.AntlrRepresentation;
+import cs598ga.shull.prolog.ast.NodeRepresentation;
+import cs598ga.shull.prolog.execution.*;
+import cs598ga.shull.prolog.execution.repl.ReplEngine;
+import cs598ga.shull.prolog.nodes.QueryNode;
+import cs598ga.shull.prolog.parser.*;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
+
 @TruffleLanguage.Registration(id = PrologLanguage.ID, name = "Prolog", defaultMimeType = PrologLanguage.MIME_TYPE, characterMimeTypes = PrologLanguage.MIME_TYPE, contextPolicy = ContextPolicy.SHARED, fileTypeDetectors = PrologFileDetector.class)
 @ProvidedTags({StandardTags.CallTag.class, StandardTags.StatementTag.class, StandardTags.RootTag.class, StandardTags.RootBodyTag.class, StandardTags.ExpressionTag.class, DebuggerTags.AlwaysHalt.class,
         StandardTags.ReadVariableTag.class, StandardTags.WriteVariableTag.class})
@@ -43,6 +57,15 @@ public final class PrologLanguage extends TruffleLanguage<PrologContext> {
         return new PrologContext();
     }
 
+    private PrologParser createAntlrRepresentation(Source source){
+        //doing this twice just for debugging purposes
+        PrologParser parser = AntlrRepresentation.generateAntlrRepresentation(source.getInputStream());
+        AntlrRepresentation.printAntlrRepresentation(parser);
+
+        parser = AntlrRepresentation.generateAntlrRepresentation(source.getInputStream());
+        return parser;
+    }
+
 
     @Override
     protected CallTarget parse(ParsingRequest request) throws Exception {
@@ -54,6 +77,7 @@ public final class PrologLanguage extends TruffleLanguage<PrologContext> {
          */
         assert request.getArgumentNames().isEmpty();
         //TODO this is the first thing I need to add back in
+        PrologParser parser = createAntlrRepresentation(source);
         functions = new HashMap<>();
         //functions = SimpleLanguageParser.parseSL(this, source);
 

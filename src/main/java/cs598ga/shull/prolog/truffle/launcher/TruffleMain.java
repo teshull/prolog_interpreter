@@ -8,7 +8,10 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
+import cs598ga.shull.prolog.execution.ExecutionEngine;
+import cs598ga.shull.prolog.nodes.QueryNode;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
@@ -44,24 +47,55 @@ public class TruffleMain {
             source = Source.newBuilder(Prolog, new File(file)).build();
         }
 
-        System.exit(executeSource(source, System.in, System.out, options));
+        Context context = initializeContext(System.in, System.out, options);
+
+        executeSource(source, context);
+        startRepl(context);
     }
 
-    private static int executeSource(Source source, InputStream in, PrintStream out, Map<String, String> options) {
-        Context context;
-        PrintStream err = System.err;
-        try {
-            context = Context.newBuilder(Prolog).in(in).out(out).options(options).build();
-        } catch (IllegalArgumentException e) {
-            err.println(e.getMessage());
-            return 1;
+    private static Context initializeContext(InputStream in, PrintStream out, Map<String, String> options){
+        Context context = Context.newBuilder(Prolog).in(in).out(out).options(options).build();
+        return context;
+    }
+
+    private static void startRepl(Context context){
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("starting repl");
+        String prompt = ">> ?- ";
+
+
+        System.out.print(prompt);
+        String totalString = "";
+        String lineContinue = "/";
+        while(in.hasNextLine()){
+            String value = in.nextLine();
+            boolean finalStatement = !value.endsWith(lineContinue);
+            if(!finalStatement){
+                value = value.substring(0, value.length() - 1);
+            }
+            totalString += value + "\n";
+            if(finalStatement){
+                System.out.println("**Overall Statement**");
+                System.out.print(totalString);
+                System.out.println("**End Overall Statement**");
+                String result = new String("?- " + totalString);
+                //QueryNode query = manager.generateQueryNode(result);
+                //ExecutionEngine.ENGINE.satisfyQuery(query);
+                totalString = "";
+                System.out.print(prompt);
+            }
         }
-        out.println("== running on " + context.getEngine());
+        System.out.println("\nfinished repl");
+    }
+
+    private static int executeSource(Source source, Context context){
+        PrintStream err = System.err;
 
         try {
             Value result = context.eval(source);
             if (!result.isNull()) {
-                out.println(result.toString());
+                System.out.println(result.toString());
             }
             return 0;
         } catch (PolyglotException ex) {
@@ -71,9 +105,8 @@ public class TruffleMain {
             } else {
                 err.println(ex.getMessage());
             }
+            System.exit(1);
             return 1;
-        } finally {
-            context.close();
         }
     }
 

@@ -8,6 +8,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class AntlrRepresentation {
 
 	public static PrologParser generateAntlrRepresentation(String code){
@@ -20,6 +23,23 @@ public class AntlrRepresentation {
         return parser;
 		
 	}
+
+	public static PrologParser generateAntlrRepresentation(InputStream stream){
+	    PrologParser parser = null;
+	    try {
+            PrologLexer lexer = new PrologLexer(new ANTLRInputStream(stream));
+
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+            parser = new PrologParser(tokens);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return parser;
+
+    }
 
     public static void printAntlrRepresentation(PrologParser parser) {
         explore(parser.p_text(), 0);
