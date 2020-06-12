@@ -36,9 +36,11 @@ public class LocalEnvironment {
 	final public static LocalEnvironment EMPTY = null;
 	private LocalEnvironment child = EMPTY;
 	public LocalEnvironment parent = EMPTY;
-	
-	
-	
+
+
+    /**
+     *  source is the code which is trying to be matched to target
+     */
 	public Map<String, PredicateNode> sourceMatches;
 	public Map<String, PredicateNode> targetMatches;
 	public Set<String> sourcesLinked;

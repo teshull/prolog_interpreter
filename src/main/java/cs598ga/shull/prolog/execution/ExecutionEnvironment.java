@@ -10,10 +10,10 @@ public class ExecutionEnvironment {
 	public GlobalEnvironment globalEnv;
 	
 	
-	public ArrayList<LocalEnvironment> localEnvs;
-	public ArrayList<BaseExecutionState> executionStates;
-	public int envDepth;
-	public int stateDepth;
+	private ArrayList<LocalEnvironment> localEnvs;
+	private ArrayList<BaseExecutionState> executionStates;
+	private int envDepth;
+	private int stateDepth;
 
 	public ExecutionEnvironment(GlobalEnvironment globalEnv){
 		this.globalEnv = globalEnv;
@@ -23,12 +23,12 @@ public class ExecutionEnvironment {
 		stateDepth = 0;
 	}
 	
-	public LocalEnvironment createChildLocalEnv(){
+	private LocalEnvironment createChildLocalEnv(){
 		LocalEnvironment env = new LocalEnvironment();
 		return env;
 	}
 
-	public void addLocalEnv(LocalEnvironment env){
+	private void addLocalEnv(LocalEnvironment env){
 		localEnvs.add(env);
 		envDepth++;
 	}
@@ -87,7 +87,7 @@ public class ExecutionEnvironment {
 		
 	}
 
-	public void popState(){
+	private void popState(){
 		if(stateDepth == 0){
 			PrologRuntime.programError("trying to pop from empty execution state");
 		}
@@ -95,7 +95,7 @@ public class ExecutionEnvironment {
 		executionStates.remove(stateDepth);
 	}
 	
-	public void addNewFrame(BaseNode node){
+	private void addNewFrame(BaseNode node){
 		LocalEnvironment env = new LocalEnvironment();
 		localEnvs.add(env);
 		BaseExecutionState state = node.generateExecutionState();
@@ -103,7 +103,7 @@ public class ExecutionEnvironment {
 		stateDepth++;
 	}
 	
-	public BaseExecutionState getCurrentState(){
+	private BaseExecutionState getCurrentState(){
 		if(stateDepth == 0){
 			PrologRuntime.programError("trying to pull from empty execution state stack");
 		}
@@ -111,14 +111,14 @@ public class ExecutionEnvironment {
 		
 	}
 
-	public BaseExecutionState getStateIndex(int stateIndex){
+	private BaseExecutionState getStateIndex(int stateIndex){
 		if(stateIndex >= stateDepth){
 			PrologRuntime.programError("can't get from there");
 		}
 		return executionStates.get(stateIndex);
 	}
 	
-	public int getStateDepth(){
+	private int getStateDepth(){
 		return stateDepth;
 	}
 

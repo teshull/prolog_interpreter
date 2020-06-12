@@ -132,6 +132,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 				currentScope.addNode(node);
 			} else if(operator instanceof ArithmeticNode){
 				ArithmeticNode node = (ArithmeticNode)  operator;
+				System.out.println(node + " " + left + " " + right);
 				node.setLeft((ComputeNode) left);
 				node.setRight((ComputeNode) right);
 				currentScope.addNode(node);
@@ -319,6 +320,11 @@ public class ASTNodeGenerator extends PrologBaseListener{
 		System.out.println("exit cut operator " + ctx.getText());
 		CutNode node = new CutNode();
 		currentScope.addNode(node);
+	}
+
+	@Override public void exitEmpty_list(PrologParser.Empty_listContext ctx) {
+		System.out.println("exit empty list operator " + ctx.getText());
+		currentScope.addNode(ListNode.EMPTY);
 	}
 
 	@Override public void exitList_term(PrologParser.List_termContext ctx) { 

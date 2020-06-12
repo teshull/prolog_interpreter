@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import cs598ga.shull.prolog.nodecreation.NodeFactory;
 
 public class ListNode extends CompoundNode {
-	public static PredicateNode EMPTY = NodeFactory.createAtom("[endlist]");
+	public static PredicateNode EMPTY = NodeFactory.createAtom(".()");
 	public PredicateNode element;
 	public PredicateNode next;
 

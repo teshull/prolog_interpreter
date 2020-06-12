@@ -39,6 +39,22 @@ public class VariableNode extends FactNode implements ComputeNode {
 	}
 
 	@Override
+	public String toString(){
+		String message = "";
+		message = name;
+		return message;
+	}
+
+	@Override
+	public String generateName(LocalEnvironment env, boolean source){
+	    PredicateNode node = source? env.findSourceMatch(name) : env.findTargetMatch(name);
+	    if (node != null){
+	        return node.generateName(env, source);
+		}
+	    return toString();
+	}
+
+	@Override
 	public boolean matchNode(BaseNode source, LocalEnvironment env) {
 		if(!(source instanceof PredicateNode)){
 			return false;

@@ -17,7 +17,7 @@ public class OrNode extends LogicalNode{
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		// TODO Auto-generated method stub
-		OrNodeState state  = (OrNodeState) env.getCurrentState();
+		OrNodeState state  = (OrNodeState) baseState;
 		BaseExecutionState leftState = left.initializeState(state.localEnv);
 		state.leftState = leftState;
 		BaseNode result = left.executeNode(env, leftState);

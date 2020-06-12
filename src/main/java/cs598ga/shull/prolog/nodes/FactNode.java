@@ -35,6 +35,8 @@ public abstract class FactNode extends PredicateNode {
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		FactState state = (FactState) baseState;
+		//LocalEnvironment newEnv = new LocalEnvironment(state.localEnv);
+		//state.localEnv = newEnv;
 		state.matches = env.globalEnv.getPredicates(base.getName());
 		state.matchNum = 0;
 		state.originalEnv = state.localEnv.getDeepCopy();
@@ -53,7 +55,7 @@ public abstract class FactNode extends PredicateNode {
 		//System.out.println("Environment: State index " + stateIndex + "\n" + env.getCurrentLocalEnv());
 		for(; matchNum < state.matches.size(); matchNum++){
 			PredicateNode node = state.matches.get(matchNum);
-			System.out.println("trying to match " + node + " to " + this );
+			System.out.println("trying to match " + node.generateName(state.localEnv, false) + " to " + this.generateName(state.localEnv, true) );
 			if(node.matchNode(this, state.localEnv)){
 				System.out.println("found match");
 				foundMatch = true;
@@ -120,7 +122,7 @@ public abstract class FactNode extends PredicateNode {
 	@Override
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		FactState state = (FactState) baseState;
-		System.out.println("env:\n" + baseState.localEnv);
+		System.out.println("fact backtracking -- env:\n" + baseState.localEnv);
 		BaseNode previousResult = state.childNode;
 		//first checking if a child node really should be doing the backtracking
 		if(shouldEnterResult(previousResult)){

@@ -17,7 +17,7 @@ public class AtomNode extends FactNode {
 	@Override
 	public String toString(){
 		String message = "";
-		message = "atom node (" + text + ")";
+		message = text;
 		return message;
 	}
 
@@ -44,7 +44,12 @@ public class AtomNode extends FactNode {
 		// TODO Auto-generated method stub
 		return text;
 	}
-	
+
+	@Override
+	public String generateName(LocalEnvironment env, boolean source){
+	    return toString();
+    }
+
 	@Override
 	public BaseExecutionState generateExecutionState(){
 		return new AtomState();
@@ -58,7 +63,7 @@ public class AtomNode extends FactNode {
 		PredicateNode node = (PredicateNode) source;
 
 		//cannot match
-		if(node.children != null){
+		if(node.getNumChildren() != 0){
 			return false;
 		}
 		if(node.base.isSourceCurrentlyVariable(env)){

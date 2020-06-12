@@ -31,6 +31,7 @@ public abstract class BaseNode {
 	}
 	
 	public BaseExecutionState generateExecutionState(){
+	    System.out.println(" Base execution state node for this..."+ this.getClass());
 		//PrologRuntime.programError("shouldn't be able to invoke the base class");
 		return new BaseExecutionState();
 		
@@ -61,6 +62,11 @@ public abstract class BaseNode {
 		return null;
 	}
 	*/
+
+	public String generateName(LocalEnvironment env, boolean source){
+		PrologRuntime.programError("generateName: need to implement this in " + this.getClass());
+		return "";
+	}
 
 	public boolean matchNode(BaseNode source, LocalEnvironment env){
 		PrologRuntime.programError("need to implement this in " + this.getClass());

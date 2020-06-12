@@ -1,6 +1,7 @@
 package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
+import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 
@@ -63,5 +64,16 @@ public class AndNode extends LogicalNode{
 				return leftResult;
 			}
 		}
+	}
+	@Override
+	public String toString(){
+		String message = ""+ left + " && " + right;
+		return message;
+	}
+
+	@Override
+	public String generateName(LocalEnvironment env, boolean source) {
+		String message = ""+ left.generateName(env, source) + " && " + right.generateName(env, source);
+		return message;
 	}
 }

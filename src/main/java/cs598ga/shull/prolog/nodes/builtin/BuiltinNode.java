@@ -59,7 +59,7 @@ public abstract class BuiltinNode extends PredicateNode {
 		}
 		//TODO think this needs further improvement
 		CompoundNode node = (CompoundNode) source;
-		if(node.children.size() != this.numChildren){
+		if(node.getNumChildren() != this.numChildren){
 			return false;
 		}
 		this.children = node.children;

@@ -45,8 +45,12 @@ public class IntegerNode extends NumberNode {
 
 	@Override
 	public String toString(){
-		String message = "Integer: " + super.toString();
+		String message = "" + value;
 		return message;
+	}
+	@Override
+	public String generateName(LocalEnvironment env, boolean source) {
+	    return toString();
 	}
 
 }

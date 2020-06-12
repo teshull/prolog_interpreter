@@ -61,6 +61,12 @@ public class RuleNode extends PredicateNode {
 	}
 
 	@Override
+	public String generateName(LocalEnvironment env, boolean source){
+		String message = "rule node (" + predicate.generateName(env, source) + ") <- " + condition.generateName(env, source);
+		return message;
+	}
+
+	@Override
 	public boolean matchNode(BaseNode source, LocalEnvironment env) {
 		return predicate.matchNode(source, env);
 	}

@@ -74,8 +74,7 @@ public class CompoundNode extends FactNode {
 		node = node.base.getSourceCurrentNode(node, env);
 		if(base.nameMatches(node.base.getName())){
 			//now making sure all children match
-			//FIXME this is wrong, 
-			if(node.children.size() != children.size()){
+			if(getNumChildren() != node.getNumChildren()){
 				return false;
 			}
 			for(int i = 0; i < children.size(); i++){
@@ -87,12 +86,11 @@ public class CompoundNode extends FactNode {
 			return true;
 		}
 		return false;
-
 	}
 
 	@Override
 	public String toString(){
-		String message = "compound node (" + atom + ") [";
+		String message = "" + atom + "(";
 		boolean first = true;
 		for(PredicateNode child : children){
 			if(!first){
@@ -101,7 +99,22 @@ public class CompoundNode extends FactNode {
 			message += child;
 			first = false;
 		}
-		message += "]";
+		message += ")";
 		return message;
 	}
+
+	@Override
+	public String generateName(LocalEnvironment env, boolean source){
+		String message = "" + atom + "(";
+		boolean first = true;
+		for(PredicateNode child : children){
+			if(!first){
+				message += ", ";
+			}
+			message += child.generateName(env, source);
+			first = false;
+		}
+		message += ")";
+		return message;
+    }
 }
