@@ -1,8 +1,5 @@
 package cs598ga.shull.prolog.nodes;
 
-import java.util.ArrayList;
-
-import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 
@@ -47,7 +44,7 @@ public class VariableNode extends FactNode implements ComputeNode {
 
 	@Override
 	public String generateName(LocalEnvironment env, boolean source){
-	    PredicateNode node = source? env.findSourceMatch(name) : env.findTargetMatch(name);
+	    PredicateNode node = source? env.getSourceMatch(name) : env.getTargetMatch(name);
 	    if (node != null){
 	        return node.generateName(env, source);
 		}
@@ -66,10 +63,11 @@ public class VariableNode extends FactNode implements ComputeNode {
 		if(base.isTargetCurrentlyVariable(env)){
 			if(node.base.isSourceCurrentlyVariable(env)){
 				//both variables
-				env.addSourceToTargetLink(node.base.getName(), base.getName());
+                //link together (target, source)
+				env.addTargetToSourceLink(base.getName(), node.base.getName());
 			} else {
 				//target variable, source real
-				node = node.base.getTargetCurrentNode(node, env);
+				node = node.base.getSourceCurrentNode(node, env);
 				env.setTargetMatch(base.getName(), node);
 				
 			}
@@ -91,7 +89,7 @@ public class VariableNode extends FactNode implements ComputeNode {
 
 	@Override
 	public NumberNode computeValue(LocalEnvironment env) {
-		BaseNode result = env.findSourceMatch(base.getName());
+		BaseNode result = env.getTargetMatch(base.getName());
 		if(result == null || !(result instanceof ComputeNode)){
 			throw new InvalidArithmeticOperationError();
 		}

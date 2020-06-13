@@ -25,7 +25,7 @@ public class ExecutionEngine {
 		ExecutionEnvironment env = new ExecutionEnvironment(globalEnv);
 		
 		//BaseNode result = query.initializeAndEnter(env);
-		LocalEnvironment localEnv = new LocalEnvironment();
+		LocalEnvironment localEnv = new LocalEnvironment(null);
 		BaseExecutionState baseState = query.initializeState(localEnv);
 		BaseNode result = query.executeNode(env, baseState);
 		if(result == SpecialNode.FINISHED){

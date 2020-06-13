@@ -1,8 +1,5 @@
 package cs598ga.shull.prolog.nodes;
 
-import java.util.ArrayList;
-
-import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.AtomState;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
@@ -73,7 +70,7 @@ public class AtomNode extends FactNode {
 		}
 
 		node = node.base.getSourceCurrentNode(node, env);
-		if(node.base.nameMatches(base)){
+		if(node instanceof AtomNode && node.base.nameMatches(base)){
 			return true;
 		}
 		return false;

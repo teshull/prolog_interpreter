@@ -1,6 +1,5 @@
 package cs598ga.shull.prolog.nodes;
 
-import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.nodes.executionState.CompoundState;
@@ -72,7 +71,7 @@ public class CompoundNode extends FactNode {
 		}
 		//source not variable
 		node = node.base.getSourceCurrentNode(node, env);
-		if(base.nameMatches(node.base.getName())){
+		if(node instanceof CompoundNode && base.nameMatches(node.base.getName())){
 			//now making sure all children match
 			if(getNumChildren() != node.getNumChildren()){
 				return false;

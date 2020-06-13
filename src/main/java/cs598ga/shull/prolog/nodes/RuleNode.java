@@ -56,13 +56,13 @@ public class RuleNode extends PredicateNode {
 
 	@Override
 	public String toString(){
-		String message = "rule node (" + predicate + ") <- " + condition;
+		String message = "RULE$(" + predicate + ") -> " + condition + "$";
 		return message;
 	}
 
 	@Override
 	public String generateName(LocalEnvironment env, boolean source){
-		String message = "rule node (" + predicate.generateName(env, source) + ") <- " + condition.generateName(env, source);
+		String message = "RULE$(" + predicate.generateName(env, source) + ") -> " + condition.generateName(env, source) + "$";
 		return message;
 	}
 
@@ -74,12 +74,9 @@ public class RuleNode extends PredicateNode {
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		RuleState state = (RuleState) baseState;
-		state.setEnvInfo(state.localEnv);
-		LocalEnvironment newEnv = new LocalEnvironment(state.localEnv);
-		BaseExecutionState childState = condition.initializeState(newEnv);
+		BaseExecutionState childState = condition.initializeState(state.localEnv);
 		state.childState = childState;
 		BaseNode result = condition.executeNode(env, childState);
-		state.localEnv.mergeChildLocalEnvironment();
 		return result;
 	}
 
@@ -87,8 +84,6 @@ public class RuleNode extends PredicateNode {
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		RuleState state = (RuleState) baseState;
 		BaseNode result = condition.backtrackNode(env, state.childState);
-		state.resetEnv(state.localEnv);
-		state.localEnv.mergeChildLocalEnvironment();
 		return result;
 	}
 }

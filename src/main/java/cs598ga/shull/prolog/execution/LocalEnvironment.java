@@ -1,217 +1,111 @@
 package cs598ga.shull.prolog.execution;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import cs598ga.shull.prolog.nodes.PredicateNode;
-import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 public class LocalEnvironment {
 
-	//Old stuff I am unconcerned about 
-
-	public enum LinkType{
-		Variable,
-		ChildEnv,
-	}
-
-	public LocalEnvironment returnToParent(){
-		return null;
-	}
-
-	public LocalEnvironment unifyWithParent(){
-		return null;
-	}
-
-	public LocalEnvironment backtrackToParent(){
-		return null;
-	
-	}
-	
-	//Stuff I think I'll actually use
 
 	final public static LocalEnvironment EMPTY = null;
-	private LocalEnvironment child = EMPTY;
 	public LocalEnvironment parent = EMPTY;
 
 
     /**
      *  source is the code which is trying to be matched to target
      */
-	public Map<String, PredicateNode> sourceMatches;
-	public Map<String, PredicateNode> targetMatches;
-	public Set<String> sourcesLinked;
-	public Set<String> targetsLinked;
+	public Map<String, PredicateNode> varMappings;
+	public Set<String> varsMapped;
 
-	public Map<String, String> sourceToTargetLink;
-	public Map<String, String> targetToSourceLink;
+	//from parent to source name (in this order because multiple parents can map to same key...)
+	public Map<String, String> parentLinks;
 	//mapping to child variable name
 
-	public LocalEnvironment getChild(){
-		assert false : "i don't think i actually need this, but we'll see";
-		return child;
-	}
-	
 	public LocalEnvironment(LocalEnvironment parent){
 		//the source is the predecessors targets
-		sourceMatches  = new HashMap<>(parent.targetMatches);
-		targetMatches  = new HashMap<>();
-		sourceToTargetLink = new HashMap<>();
-		targetToSourceLink = new HashMap<>();
-		sourcesLinked = new HashSet<>();
-		targetsLinked = new HashSet<>();
+		varMappings = new HashMap<>();
+		parentLinks = new HashMap<>();
+		varsMapped = new HashSet<>();
 		this.parent = parent;
-		//need to set the parent child properly as well
-		this.parent.child = this;
+	}
+
+	public LocalEnvironment(LocalEnvironment parent,
+							Map<String, PredicateNode> varMappings,
+							Set<String> varsMapped,
+							Map<String, String> parentLinks) {
+		this.parent = parent;
+		this.varMappings = new HashMap<>(varMappings);
+		this.varsMapped = new HashSet<>(varsMapped);
+		this.parentLinks = new HashMap<>(parentLinks);
 	}
 	
-	public void mergeChildLocalEnvironment(LocalEnvironment env){
+	public void mergeEnvIntoParent(){
 		//setting the updates matches for the target
-		assert false : "isn't implemented correctly";
-		targetMatches = new HashMap<>(env.sourceMatches);
-		//now going through the source to target links to see if any have been resolved
-		ArrayList<String> keysToRemove = new ArrayList<>();
-		for(String target : targetsLinked){
-			if(targetMatches.containsKey(target)){
-				String source = targetToSourceLink.get(target);
-				PredicateNode node = targetMatches.get(target);
-				setSourceMatch(source, node);
-				keysToRemove.add(source);
-				sourcesLinked.remove(source);
-				targetToSourceLink.remove(target);
-				sourceToTargetLink.remove(source);
+		assert parent != null : "this node doesn't have a parent??";
+		//updating parents linked to variables
+		for (Map.Entry<String, String> link : parentLinks.entrySet()){
+			String parentVar = link.getKey();
+			String localVar = link.getValue();
+			if(targetHasMatch(localVar)){
+			    PredicateNode node = varMappings.get(localVar);
+			    setSourceMatch(parentVar, node);
+			} else {
+			    //I *think* this is a problem, but letting it go for now
 			}
 		}
-		
-		//now removing the keys for the sourceToTargetLink Map
-		for(String key : keysToRemove){
-			targetsLinked.remove(key);
-		}
-	}
-	
-	public static void updateParentLinkToChild(LocalEnvironment child){
-		assert child.parent != EMPTY : "this also shouldn't be possible";
-		//need to make sure it matches
-		child.parent.child = child;
 	}
 
-	public void mergeChildLocalEnvironment(){
-		assert child != EMPTY : "no child exists";
-		//setting the updates matches for the target
-		//think i can just copy them over directly...
-//		targetMatches = new HashMap<>(targetMatches);
-		targetMatches = new HashMap<>(child.sourceMatches);
-		for(String target : child.sourceMatches.keySet()){
-			PredicateNode value = child.sourceMatches.get(target);
-			//targetMatches.put(target, value);
-			updateSourceToTargets(null, target, value);
-		}
-	}
-
-	public LocalEnvironment(){
-		sourceMatches  = new HashMap<>();
-		targetMatches  = new HashMap<>();
-		sourceToTargetLink = new HashMap<>();
-		targetToSourceLink = new HashMap<>();
-		sourcesLinked = new HashSet<>();
-		targetsLinked = new HashSet<>();
-	}
-	
-	public PredicateNode findSourceMatch(String s){
-		PredicateNode result = sourceMatches.get(s);
-		return result;
-	}
-	public PredicateNode findTargetMatch(String s){
-		PredicateNode result = targetMatches.get(s);
-		return result;
-	}
-	
-	private void updateSourceToTargets(String source, String target, PredicateNode value){
-		boolean foundMatch = false;
-		if(source == null){
-			if(targetsLinked.contains(target)){
-				foundMatch = true;
-				source = targetToSourceLink.get(target);
-				sourceMatches.put(source, value);
-			}
-		}else {
-			assert target == null;
-			if(sourcesLinked.contains(source)){
-				foundMatch = true;
-				target = sourceToTargetLink.get(source);
-				targetMatches.put(target, value);
-			}
-		}
-		if(foundMatch){
-			targetsLinked.remove(target);
-			sourcesLinked.remove(source);
-			sourceToTargetLink.remove(source);
-			targetToSourceLink.remove(target);
-		}
-	}
-	
-	public void setSourceMatch(String s, PredicateNode node){
-		//don't care about these variables
-		if(s.equals("_")){
+	public void setTargetMatch(String key, PredicateNode value){
+		assert !varsMapped.contains(key) : "this has already been linked??";
+		if(key.equals("_")){
+			//don't actually match these (can be set multiple times)
 			return;
 		}
-		if(sourceMatches.containsKey(s)){
-			PrologRuntime.programError("trying to match twice");
-		}
-		updateSourceToTargets(s, null, node);
-		sourceMatches.put(s, node);
+		varsMapped.add(key);
+		varMappings.put(key, value);
 	}
 
-	public void setTargetMatch(String s, PredicateNode node){
-		//don't care about these variables
-		if(s.equals("_")){
-			return;
-		}
-		if(targetMatches.containsKey(s)){
-			PrologRuntime.programError("trying to match twice");
-		}
-		updateSourceToTargets(null, s, node);
-		targetMatches.put(s, node);
+	public boolean targetHasMatch(String key){
+	    return varsMapped.contains(key);
+	}
+	public PredicateNode getTargetMatch(String key){
+		return varMappings.get(key);
 	}
 
-	public void removeSourceMatch(String s){
-		assert false : "don't think i'm using this";
-		sourceMatches.remove(s);
+
+	public void setSourceMatch(String key, PredicateNode value){
+		parent.setTargetMatch(key, value);
 	}
-	public void removeTargetMatch(String s){
-		assert false : "don't think i'm using this";
-		targetMatches.remove(s);
+	public boolean sourceHasMatch(String key){
+		return parent.targetHasMatch(key);
 	}
 
-	public void addSourceToTargetLink(String source, String target){
-		if(source.equals("_") || target.equals("_")){
-			return;
-		}
-		if(sourceToTargetLink.containsKey(source)){
-			PrologRuntime.programError("trying to match twice");
-		}
-		sourceToTargetLink.put(source, target);
-		targetToSourceLink.put(target,source);
-		sourcesLinked.add(source);
-		targetsLinked.add(target);
+	public PredicateNode getSourceMatch(String key){
+		return parent.getTargetMatch(key);
 	}
-	
+
+	public void addTargetToSourceLink(String targetVar, String sourceVar){
+		if(targetVar.equals("_") || sourceVar.equals("_")){
+			return; //don't want to add a link for this because it is free
+		}
+		assert parentLinks.getOrDefault(sourceVar, targetVar).equals(targetVar) : "already set this link to something else";
+		parentLinks.put(sourceVar, targetVar);
+	}
+
+
+
 	public LocalEnvironment getDeepCopy(){
-		LocalEnvironment copy = new LocalEnvironment();
-		copy.sourceMatches = new HashMap<>(sourceMatches);
-		copy.targetMatches = new HashMap<>(targetMatches);
-		copy.sourceToTargetLink = new HashMap<>(sourceToTargetLink);
-		copy.targetToSourceLink = new HashMap<>(targetToSourceLink);
-		copy.sourcesLinked = new HashSet<>(sourcesLinked);
-		copy.targetsLinked = new HashSet<>(targetsLinked);
-		copy.parent = parent;
-		//don't need to copy the child i'm pretty sure
-		//because the child should be reinitialized
-		copy.child = EMPTY;
+		LocalEnvironment copy = new LocalEnvironment(parent, varMappings, varsMapped, parentLinks);
 		return copy;
+	}
+
+	public void rollbackEnvChanges(LocalEnvironment origEnv){
+		varMappings = new HashMap<>(origEnv.varMappings);
+		varsMapped = new HashSet<>(origEnv.varsMapped);
+		parentLinks = new HashMap<>(origEnv.parentLinks);
 	}
 	
 	private String getMapInfo(Map<String, PredicateNode> map){
@@ -228,8 +122,8 @@ public class LocalEnvironment {
 	}
 	
 	public void printSourceMatchesIfPresent(){
-		if(sourceMatches.size() != 0){
-			System.out.println("variable matches:\n" + getMapInfo(sourceMatches));
+		if(varMappings.size() != 0){
+			System.out.println("variable matches:\n" + getMapInfo(varMappings));
 		}
 		
 	}
@@ -238,13 +132,11 @@ public class LocalEnvironment {
 	public String toString(){
 		String message = "";
 		message += "sources\n";
-		message += getMapInfo(sourceMatches);
-		message += "targets\n";
-		message += getMapInfo(targetMatches);
-		message += "sourceToTargets\n";
-		for(String key : sourceToTargetLink.keySet()){
-			String value = sourceToTargetLink.get(key);
-			message += key + " -> " + value + "\n";
+		message += getMapInfo(varMappings);
+		message += "parentLinks\n";
+		for(String parentVar : parentLinks.keySet()){
+			String localVar = parentLinks.get(parentVar);
+			message += localVar + " -> " + parentVar + "\n";
 		}
 		return message;
 	}

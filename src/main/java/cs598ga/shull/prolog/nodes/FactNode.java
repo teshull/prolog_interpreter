@@ -5,11 +5,6 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.builtin.BuiltinNode;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.nodes.executionState.FactState;
-import cs598ga.shull.prolog.runtime.PrologRuntime;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 public abstract class FactNode extends PredicateNode {
 	
@@ -35,46 +30,61 @@ public abstract class FactNode extends PredicateNode {
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		FactState state = (FactState) baseState;
-		//LocalEnvironment newEnv = new LocalEnvironment(state.localEnv);
-		//state.localEnv = newEnv;
 		state.matches = env.globalEnv.getPredicates(base.getName());
 		state.matchNum = 0;
 		state.originalEnv = state.localEnv.getDeepCopy();
-		BaseNode result = findMatch(env, state);
-		if(result == SpecialNode.DEADEND || result == SpecialNode.FINISHED){
-			return result;
-		} 		
-		result = findValidResult(result, env, state);
-		return result;
+		return searchRules(env, state);
 	}
 
-	private BaseNode findMatch(ExecutionEnvironment env, FactState state){
-		int matchNum = state.matchNum;
-		boolean foundMatch = false;
-		BaseNode result = null;
-		//System.out.println("Environment: State index " + stateIndex + "\n" + env.getCurrentLocalEnv());
-		for(; matchNum < state.matches.size(); matchNum++){
-			PredicateNode node = state.matches.get(matchNum);
-			System.out.println("trying to match " + node.generateName(state.localEnv, false) + " to " + this.generateName(state.localEnv, true) );
-			if(node.matchNode(this, state.localEnv)){
-				System.out.println("found match");
-				foundMatch = true;
-				result = node;
-				break;
-			} else {
-				System.out.println("no match");
-				rollbackEnvChanges(env, state);
+	private BaseNode searchRules(ExecutionEnvironment env, FactState state) {
+		while (true){
+			//making sure it is not set from a previous run
+			state.childNode = null;
+			LocalEnvironment newEnv = new LocalEnvironment(state.localEnv);
+			BaseNode match = getNextMatch(state);
+			if(match == null){
+			    //no more matches to search
+				return SpecialNode.DEADEND;
 			}
+			//System.out.println("trying to match " + this.generateName(newEnv, true) + " to " + match.generateName(newEnv, false) );
+			if(match.matchNode(this, newEnv)){
+				state.childNode = match;
+				if(shouldEnterResult(match)){
+				    //save matched env before execution
+					state.matchedNodeEnv = newEnv.getDeepCopy();
+					state.matchedLocalEnv = state.localEnv.getDeepCopy();
+					BaseExecutionState childState = match.initializeState(newEnv);
+					state.childState = childState;
+					state.childNode = match;
+					BaseNode result = match.executeNode(env, childState);
+					assert result == SpecialNode.FINISHED || result == SpecialNode.DEADEND;
+					if(result == SpecialNode.FINISHED){
+					    //merge the state
+						newEnv.mergeEnvIntoParent();
+						return SpecialNode.FINISHED;
+					}
+					//otherwise proceeding to next match
+				} else {
+					// merge the state
+					newEnv.mergeEnvIntoParent();
+					return SpecialNode.FINISHED;
+				}
+            }
+			//nothing matched, need to rollback any changes made by matching
+			state.localEnv.rollbackEnvChanges(state.originalEnv);
 		}
-		state.matchNum = matchNum;
-		if(!foundMatch){
-			return SpecialNode.DEADEND;
-		} else if(shouldEnterResult(result)) {
-			return result;
-		}
-		return SpecialNode.FINISHED;
 	}
-	
+
+
+	private BaseNode getNextMatch(FactState state){
+		if(state.matchNum == state.matches.size()){
+			return null;
+		}
+		PredicateNode node = state.matches.get(state.matchNum);
+		state.matchNum++;
+		return node;
+	}
+
 	private boolean shouldEnterResult(BaseNode result){
 		if(result instanceof RuleNode){
 			System.out.println("found rule node to enter");
@@ -87,66 +97,28 @@ public abstract class FactNode extends PredicateNode {
 		return false;
 	}
 
-	private void rollbackEnvChanges(ExecutionEnvironment env, FactState state){
-		LocalEnvironment parent = state.localEnv.parent;
-		//state.localEnv = state.originalEnv.getDeepCopy();
-		//state.localEnv.parent = parent;
-		//LocalEnvironment.updateParentLinkToChild(state.localEnv);
-		state.localEnv.sourceMatches = new HashMap<>(state.originalEnv.sourceMatches);
-		state.localEnv.targetMatches = new HashMap<>(state.originalEnv.targetMatches);
-		state.localEnv.sourceToTargetLink = new HashMap<>(state.originalEnv.sourceToTargetLink);
-		state.localEnv.targetToSourceLink = new HashMap<>(state.originalEnv.sourceToTargetLink);
-		state.localEnv.sourcesLinked = new HashSet<>(state.originalEnv.sourcesLinked);
-		state.localEnv.targetsLinked = new HashSet<>(state.originalEnv.targetsLinked);
-	}
-
-	private BaseNode findValidResult(BaseNode childNode, ExecutionEnvironment env, FactState state){
-		while(true) {
-			BaseExecutionState childState = childNode.initializeState(state.localEnv);
-			state.childState = childState;
-			state.childNode = childNode;
-			childNode = childNode.executeNode(env, childState);
-			if( childNode == SpecialNode.FINISHED){
-				return childNode;
-			}
-			assert childNode == SpecialNode.DEADEND : "should be only one of these two";
-			rollbackEnvChanges(env, state);
-			state.matchNum++;
-			childNode = findMatch(env, state);
-			if(childNode == SpecialNode.DEADEND || childNode == SpecialNode.FINISHED){
-				return childNode;
-			} 		
-		}
-	}
-
 	@Override
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		FactState state = (FactState) baseState;
-		System.out.println("fact backtracking -- env:\n" + baseState.localEnv);
 		BaseNode previousResult = state.childNode;
-		//first checking if a child node really should be doing the backtracking
+		assert previousResult != null : "if backtracking, should have match";
+		System.out.println("fact backtracking -- before rollback state env:\n" + state.localEnv + "\n child env: " + state.childState.localEnv);
 		if(shouldEnterResult(previousResult)){
-			BaseNode result = previousResult.backtrackNode(env, state.childState);
+		    //rolling back to when node was matched
+			state.localEnv.rollbackEnvChanges(state.matchedLocalEnv);
+			LocalEnvironment childEnv = state.childState.localEnv;
+			//restoring state to when child was matched
+			childEnv.rollbackEnvChanges(state.matchedNodeEnv);
+			BaseNode result  = previousResult.executeNode(env, state.childState);
 			if(result == SpecialNode.FINISHED){
-				return result;
+			    childEnv.mergeEnvIntoParent();
+				return SpecialNode.FINISHED;
 			}
 		}
-		//clearing them because they will be reinitialized if necessary
-		state.childNode = null;
-		state.childState = null;
-		//System.out.println("performing backtrack in fact node\n");
-		//System.out.println("env before rollback\n" + env.getCurrentLocalEnv());
-		rollbackEnvChanges(env, state);
-		//System.out.println("env after rollback\n" + env.getCurrentLocalEnv());
-		state.matchNum++;
-		//System.out.println("match num: " + state.matchNum);
-		BaseNode result = findMatch(env, state);
-		if(result == SpecialNode.DEADEND || result == SpecialNode.FINISHED){
-			return result;
-		} 		
-		result = findValidResult(result, env, state);
-		//System.out.println("fact backtrack result " + result);
-		//System.out.println("env backtrack result\n" + env.getCurrentLocalEnv());
-		return result;
+		// could not backtrack child node.
+		// at this point need to try to find another match
+		// rolling all of the way back
+		state.localEnv.rollbackEnvChanges(state.originalEnv);
+		return searchRules(env, state);
 	}
 }
