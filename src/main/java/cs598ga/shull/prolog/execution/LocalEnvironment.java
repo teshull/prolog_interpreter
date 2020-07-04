@@ -42,7 +42,7 @@ public class LocalEnvironment {
 		this.parentLinks = new HashMap<>(parentLinks);
 	}
 	
-	public void mergeEnvIntoParent(){
+	public void unifyWithParent(){
 		//setting the updates matches for the target
 		assert parent != null : "this node doesn't have a parent??";
 		//updating parents linked to variables

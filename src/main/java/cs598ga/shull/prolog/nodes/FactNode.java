@@ -51,7 +51,7 @@ public abstract class FactNode extends PredicateNode {
 				state.childNode = match;
 				if(shouldEnterResult(match)){
 				    //save matched env before execution
-					state.matchedNodeEnv = newEnv.getDeepCopy();
+					//state.matchedNodeEnv = newEnv.getDeepCopy();
 					state.matchedLocalEnv = state.localEnv.getDeepCopy();
 					BaseExecutionState childState = match.initializeState(newEnv);
 					state.childState = childState;
@@ -60,13 +60,13 @@ public abstract class FactNode extends PredicateNode {
 					assert result == SpecialNode.FINISHED || result == SpecialNode.DEADEND;
 					if(result == SpecialNode.FINISHED){
 					    //merge the state
-						newEnv.mergeEnvIntoParent();
+						newEnv.unifyWithParent();
 						return SpecialNode.FINISHED;
 					}
 					//otherwise proceeding to next match
 				} else {
 					// merge the state
-					newEnv.mergeEnvIntoParent();
+					newEnv.unifyWithParent();
 					return SpecialNode.FINISHED;
 				}
             }
@@ -87,11 +87,11 @@ public abstract class FactNode extends PredicateNode {
 
 	private boolean shouldEnterResult(BaseNode result){
 		if(result instanceof RuleNode){
-			System.out.println("found rule node to enter");
+			System.out.println("found rule node to enter: " + result);
 			//System.out.println("environment:\n" + env.getCurrentLocalEnv());
 			return true;
 		} else if(result instanceof BuiltinNode){
-			System.out.println("found a builtin node to enter");
+			System.out.println("found a builtin node to enter: " + result);
 			return true;
 		}
 		return false;
@@ -102,16 +102,18 @@ public abstract class FactNode extends PredicateNode {
 		FactState state = (FactState) baseState;
 		BaseNode previousResult = state.childNode;
 		assert previousResult != null : "if backtracking, should have match";
-		System.out.println("fact backtracking -- before rollback state env:\n" + state.localEnv + "\n child env: " + state.childState.localEnv);
+		System.out.println("backtracking from: " + previousResult);
+		//System.out.println("fact backtracking -- before rollback state env:\n" + state.localEnv + "\n child env: " + state.childState.localEnv);
+		System.out.println("all info: " + state);
 		if(shouldEnterResult(previousResult)){
 		    //rolling back to when node was matched
 			state.localEnv.rollbackEnvChanges(state.matchedLocalEnv);
-			LocalEnvironment childEnv = state.childState.localEnv;
 			//restoring state to when child was matched
-			childEnv.rollbackEnvChanges(state.matchedNodeEnv);
-			BaseNode result  = previousResult.executeNode(env, state.childState);
+			//childEnv.rollbackEnvChanges(state.matchedNodeEnv);
+			BaseNode result  = previousResult.backtrackNode(env, state.childState);
 			if(result == SpecialNode.FINISHED){
-			    childEnv.mergeEnvIntoParent();
+				LocalEnvironment childEnv = state.childState.localEnv;
+			    childEnv.unifyWithParent();
 				return SpecialNode.FINISHED;
 			}
 		}
