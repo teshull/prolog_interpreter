@@ -29,13 +29,18 @@ public abstract class PredicateNode extends ClauseNode {
 		return base;
 	}
 
-	public PredicateNode generateCurrentState(LocalEnvironment env){
-		assert false: "should be overwritten: " + this.getClass();
+	public PredicateNode getNodeBinding(VariableEnvironment env){
+		assert false: "generate: should be overwritten: " + this.getClass();
 		return null;
 	}
 
-	public PredicateNode renameVariables(Map<String,String> renamings, long id){
-		assert false: "should be overwritten: " + this.getClass();
+	/**
+	 *
+	 * @param env
+	 * @return
+	 */
+	public PredicateNode getScopedName(LocalEnvironment env){
+		assert false: "scoped name: should be overwritten: " + this.getClass();
 		return null;
 	}
 }

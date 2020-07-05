@@ -55,7 +55,6 @@ public class QueryNode extends ClauseNode {
 			result = child.executeNode(env, childState);
 			if(result == SpecialNode.FINISHED){
 				System.out.println("environment:\n" + localEnv);
-				localEnv.printSourceMatchesIfPresent();
 			}
 		} catch(ImpossibleCutError e){
 			result = SpecialNode.DEADEND;

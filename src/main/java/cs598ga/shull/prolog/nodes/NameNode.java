@@ -19,7 +19,8 @@ public class NameNode {
 	public boolean isVariable(){
 		return isVariable;
 	}
-	
+
+	/*
 	public boolean isTargetCurrentlyVariable(LocalEnvironment env){
 		if(!isVariable){
 			return false;
@@ -59,6 +60,7 @@ public class NameNode {
 		PrologRuntime.programError("expected source to not return a variable");
 		return original;
 	}
+	 */
 
 	public boolean nameMatches(String other){
 		return other.equals(getName());

@@ -2,6 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
+import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
 
@@ -63,7 +64,7 @@ public abstract class BaseNode {
 	}
 	*/
 
-	public String generateName(LocalEnvironment env){
+	public String generateName(VariableEnvironment env){
 		PrologRuntime.programError("generateName: need to implement this in " + this.getClass());
 		return "";
 	}

@@ -2,6 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
+import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.nodes.executionState.RuleState;
 
@@ -59,14 +60,22 @@ public class RuleNode extends PredicateNode {
 	}
 
 	@Override
-	public String generateName(LocalEnvironment env){
+	public String generateName(VariableEnvironment env){
 		String message = "RULE$(" + predicate.generateName(env) + ") -> " + condition.generateName(env) + "$";
 		return message;
 	}
 
 	@Override
 	public boolean matchNode(BaseNode source, LocalEnvironment env) {
+
+		//PredicateNode renamedNode = predicate.renameVariables(env);
+		//System.out.println("trying to match " + this + " === " + renamedNode.generateName(env) );
 		return predicate.matchNode(source, env);
+	}
+
+	@Override
+	public PredicateNode getScopedName(LocalEnvironment env){
+		return predicate.getScopedName(env);
 	}
 
 	@Override

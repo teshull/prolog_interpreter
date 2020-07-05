@@ -2,6 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
+import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 
@@ -72,7 +73,7 @@ public class AndNode extends LogicalNode{
 	}
 
 	@Override
-	public String generateName(LocalEnvironment env) {
+	public String generateName(VariableEnvironment env) {
 		String message = ""+ left.generateName(env) + " && " + right.generateName(env);
 		return message;
 	}

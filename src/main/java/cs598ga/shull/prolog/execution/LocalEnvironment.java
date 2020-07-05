@@ -15,157 +15,83 @@ public class LocalEnvironment {
 
 	private static long environmentCount = 0;
 
-
-    /**
-     *  source is the code which is trying to be matched to target
-     */
-	public Map<String, PredicateNode> varMappings;
-	public Set<String> varsMapped;
-
-	//from parent to source name (in this order because multiple parents can map to same key...)
-	public Map<String, String> parentLinks;
-	//mapping to child variable name
+	public VariableEnvironment variableEnvironment;
 
 	public final long id;
 
 	public LocalEnvironment(LocalEnvironment parent){
-		//the source is the predecessors targets
-		varMappings = new HashMap<>();
-		parentLinks = new HashMap<>();
-		varsMapped = new HashSet<>();
 		this.parent = parent;
 		id = environmentCount++;
+		if(parent == null){
+			variableEnvironment = new VariableEnvironment();
+		} else {
+			variableEnvironment = parent.variableEnvironment;
+		}
 	}
 
 	public LocalEnvironment(LocalEnvironment parent,
-							Map<String, PredicateNode> varMappings,
-							Set<String> varsMapped,
-							Map<String, String> parentLinks) {
+							VariableEnvironment variableEnvironment) {
 		this.parent = parent;
-		this.varMappings = new HashMap<>(varMappings);
-		this.varsMapped = new HashSet<>(varsMapped);
-		this.parentLinks = new HashMap<>(parentLinks);
-		id = environmentCount++;
+		this.variableEnvironment = variableEnvironment;
+		id = -1; //aren't using this env in this way
 	}
 	
-	public void unifyWithParent(){
+	//public void unifyWithParent(){
 		//setting the updates matches for the target
-		assert parent != null : "this node doesn't have a parent??";
-		//updating parents linked to variables
-		for (Map.Entry<String, String> link : parentLinks.entrySet()){
-			String parentVar = link.getKey();
-			String localVar = link.getValue();
-			if(targetHasMatch(localVar)){
-			    PredicateNode node = varMappings.get(localVar);
-			    setSourceMatch(parentVar, node);
-			} else {
-			    //I *think* this is a problem, but letting it go for now
-			}
-		}
+
+		// not doing anything for the time being
+
+		//assert parent != null : "this node doesn't have a parent??";
+		//for(String entry : localVariables){
+		//	//asserting no values are unlinked
+        //    Set<String> links = variableEnvironment.linkedVariables.get(entry);
+        //    assert links == null || links.size() == 0 : "shouldn't have anything";
+
+		//	//deleting elements no longer needed
+		//	variableEnvironment.removeVariable(entry);
+		//}
+	//}
+
+	public boolean hasMatch(String key){
+		return variableEnvironment.hasMatch(key);
 	}
 
 	public void setMatch(String key, PredicateNode value){
-		System.out.println(key + " -> " + value.generateName(this));
-		assert !varsMapped.contains(key) : "this has already been linked??";
-		if(key.equals("_")){
-			//don't actually match these (can be set multiple times)
-			return;
-		}
-		varsMapped.add(key);
-		varMappings.put(key, value);
+		assert !hasMatch(key) : "already has match";
+		variableEnvironment.setMatch(key, value);
 	}
 
-	public void setTargetMatch(String key, PredicateNode value){
-		Map<String, String> renamingMap = new HashMap<>();
-		PredicateNode resolvedNode = value.renameVariables(renamingMap, parent.id);
-		if(renamingMap.size() != 0){
-			for(Map.Entry<String,String> entry : renamingMap.entrySet()){
-			    addTargetToSourceLink(entry.getValue(), entry.getKey());
-			}
-		}
-		System.out.println("Target match:");
-		this.setMatch(key, resolvedNode);
+	//public PredicateNode getMatch(String key){
+	//	assert hasMatch(key) : "doesn't have match";
+	//	return variableEnvironment.getMatch(key);
+	//}
+
+	public void setLink(String var1, String var2){
+		variableEnvironment.setLink(var1, var2);
 	}
 
-	public boolean targetHasMatch(String key){
-	    return varsMapped.contains(key);
-	}
-	public PredicateNode getTargetMatch(String key){
-		return varMappings.get(key);
-	}
-
-
-	public void setSourceMatch(String key, PredicateNode value){
-		Map<String, String> renamingMap = new HashMap<>();
-		PredicateNode resolvedNode = value.renameVariables(renamingMap, this.id);
-		if(renamingMap.size() != 0){
-			for(Map.Entry<String,String> entry : renamingMap.entrySet()){
-				addTargetToSourceLink(entry.getKey(), entry.getValue());
-			}
-		}
-		System.out.println("Source match:");
-		parent.setMatch(key, resolvedNode);
-	}
-	public boolean sourceHasMatch(String key){
-		return parent.targetHasMatch(key);
-	}
-
-	public PredicateNode getSourceMatch(String key){
-		return parent.getTargetMatch(key);
-	}
-
-	public void addTargetToSourceLink(String targetVar, String sourceVar){
-		System.out.println("linking: " + targetVar + " -> " + sourceVar);
-		if(targetVar.equals("_") || sourceVar.equals("_")){
-			return; //don't want to add a link for this because it is free
-		}
-		assert parentLinks.getOrDefault(sourceVar, targetVar).equals(targetVar) : "already set this link to something else";
-		parentLinks.put(sourceVar, targetVar);
+	public String getScopedName(String key) {
+		assert this.id != -1 : "using wrong type of local env";
+		String result = key + "$$" + this.id;
+		return result;
 	}
 
 
 
 	public LocalEnvironment getDeepCopy(){
-		LocalEnvironment copy = new LocalEnvironment(parent, varMappings, varsMapped, parentLinks);
+		VariableEnvironment newEnv = variableEnvironment.getDeepCopy();
+		LocalEnvironment copy = new LocalEnvironment(parent, newEnv);
 		return copy;
 	}
 
 	public void rollbackEnvChanges(LocalEnvironment origEnv){
-		varMappings = new HashMap<>(origEnv.varMappings);
-		varsMapped = new HashSet<>(origEnv.varsMapped);
-		parentLinks = new HashMap<>(origEnv.parentLinks);
-	}
-	
-	private String getMapInfo(Map<String, PredicateNode> map){
-		String message = "";
-		if(map.size() == 0){
-			message = "<empty>\n";
-		} else {
-			for(String key : map.keySet()){
-				PredicateNode value = map.get(key);
-				message += key + " -> " + value + "\n";
-			}
-		}
-		return message;
-	}
-	
-	public void printSourceMatchesIfPresent(){
-		if(varMappings.size() != 0){
-			System.out.println("variable matches:\n" + getMapInfo(varMappings));
-		}
-		
+		variableEnvironment.rollbackEnvChanges(origEnv.variableEnvironment);
 	}
 
 	@Override
 	public String toString(){
-		String message = "";
-		message += "sources\n";
-		message += getMapInfo(varMappings);
-		message += "parentLinks\n";
-		for(String parentVar : parentLinks.keySet()){
-			String localVar = parentLinks.get(parentVar);
-			message += localVar + " -> " + parentVar + "\n";
-		}
+		String message = "id: " + id + "\n";
+		message += variableEnvironment;
 		return message;
 	}
 }
