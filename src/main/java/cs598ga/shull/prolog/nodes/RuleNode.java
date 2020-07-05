@@ -1,7 +1,5 @@
 package cs598ga.shull.prolog.nodes;
 
-import java.util.ArrayList;
-
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
@@ -61,8 +59,8 @@ public class RuleNode extends PredicateNode {
 	}
 
 	@Override
-	public String generateName(LocalEnvironment env, boolean source){
-		String message = "RULE$(" + predicate.generateName(env, source) + ") -> " + condition.generateName(env, source) + "$";
+	public String generateName(LocalEnvironment env){
+		String message = "RULE$(" + predicate.generateName(env) + ") -> " + condition.generateName(env) + "$";
 		return message;
 	}
 

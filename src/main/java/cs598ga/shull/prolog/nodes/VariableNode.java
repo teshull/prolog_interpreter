@@ -3,6 +3,8 @@ package cs598ga.shull.prolog.nodes;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 
+import java.util.Map;
+
 public class VariableNode extends FactNode implements ComputeNode {
 	String name;
 	
@@ -43,12 +45,9 @@ public class VariableNode extends FactNode implements ComputeNode {
 	}
 
 	@Override
-	public String generateName(LocalEnvironment env, boolean source){
-	    PredicateNode node = source? env.getSourceMatch(name) : env.getTargetMatch(name);
-	    if (node != null){
-	        return node.generateName(env, source);
-		}
-	    return toString();
+	public String generateName(LocalEnvironment env){
+	    PredicateNode node = this.generateCurrentState(env);
+		return node.toString();
 	}
 
 	@Override
@@ -56,33 +55,34 @@ public class VariableNode extends FactNode implements ComputeNode {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
-		PredicateNode node = (PredicateNode) source;
+		PredicateNode currentNode = this.generateCurrentState(env);
+		PredicateNode node = ((PredicateNode) source).generateCurrentState(env.parent);
+		//FIXME can change this now
 		// TODO Auto-generated method stub
 		// first check if this Node is matched against something
 		//System.out.println("Environment:\n" + env);
-		if(base.isTargetCurrentlyVariable(env)){
-			if(node.base.isSourceCurrentlyVariable(env)){
+		if(currentNode instanceof VariableNode){
+			assert currentNode.base.isTargetCurrentlyVariable(env);
+			if(node instanceof VariableNode) {
+				assert node.base.isSourceCurrentlyVariable(env);
 				//both variables
                 //link together (target, source)
-				env.addTargetToSourceLink(base.getName(), node.base.getName());
+				env.addTargetToSourceLink(currentNode.base.getName(), node.base.getName());
 			} else {
 				//target variable, source real
-				node = node.base.getSourceCurrentNode(node, env);
-				env.setTargetMatch(base.getName(), node);
+				env.setTargetMatch(currentNode.base.getName(), node);
 				
 			}
 		} else {
-			PredicateNode current = base.getTargetCurrentNode(this, env);
-			if(node.base.isSourceCurrentlyVariable(env)){
+			if(node instanceof VariableNode){
+				assert node.base.isSourceCurrentlyVariable(env);
 				//target real, source variable
-				env.setSourceMatch(node.base.getName(), current);
+				env.setSourceMatch(node.base.getName(), currentNode);
 				return true;
 			} else {
 				//target real, source real
-				node = node.base.getSourceCurrentNode(node, env);
-				return current.matchNode(node, env);
+				return currentNode.matchNode(node, env);
 			}
-			
 		}
 		return true;
 	}
@@ -95,6 +95,25 @@ public class VariableNode extends FactNode implements ComputeNode {
 		}
 		ComputeNode compute = (ComputeNode) result;
 		return compute.computeValue(env);
+	}
+
+	@Override
+	public PredicateNode generateCurrentState(LocalEnvironment env){
+		if(this.base.isTargetCurrentlyVariable(env)){
+			return this;
+		}
+		//this expects to return a real node
+	    PredicateNode result = this.base.getTargetCurrentNode(this, env);
+		return result.generateCurrentState(env);
+	}
+
+	@Override
+	public PredicateNode renameVariables(Map<String,String> renamings, long id){
+		String newName =  this.name + "$$" + id;
+		assert renamings.getOrDefault(this.name, newName).equals(newName) : "providing multiple names";
+		renamings.put(this.name, newName);
+	    VariableNode newVar = new VariableNode(new NameNode(newName, true));
+		return newVar;
 	}
 
 }

@@ -6,6 +6,8 @@ import cs598ga.shull.prolog.nodes.executionState.CompoundState;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.spi.LocaleNameProvider;
 
 public class CompoundNode extends FactNode {
 	public AtomNode atom;
@@ -57,27 +59,23 @@ public class CompoundNode extends FactNode {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
-		PredicateNode node = (PredicateNode) source;
-		if(node.base.isSourceCurrentlyVariable(env)){
-			if(base.isTargetCurrentlyVariable(env)){
-				//source variable, target variable
-				//this can happen
-				PrologRuntime.programError("didn't think that this can happen...");
-			} else {
-				//source variable, target not variable
-				env.setSourceMatch(node.base.getName(), this);
-			}
+		CompoundNode currentNode = (CompoundNode) this.generateCurrentState(env);
+		PredicateNode node = ((PredicateNode) source).generateCurrentState(env.parent);
+		if(node instanceof VariableNode){
+			assert node.base.isSourceCurrentlyVariable(env);
+			//source variable, target not variable
+			env.setSourceMatch(node.base.getName(), currentNode);
 			return true;
 		}
 		//source not variable
-		node = node.base.getSourceCurrentNode(node, env);
-		if(node instanceof CompoundNode && base.nameMatches(node.base.getName())){
+		//node = node.base.getSourceCurrentNode(node, env);
+		if(node instanceof CompoundNode && currentNode.base.nameMatches(node.base.getName())){
 			//now making sure all children match
 			if(getNumChildren() != node.getNumChildren()){
 				return false;
 			}
-			for(int i = 0; i < children.size(); i++){
-				if(!(children.get(i)).matchNode(node.children.get(i), env)){
+			for(int i = 0; i < currentNode.children.size(); i++){
+				if(!(currentNode.children.get(i)).matchNode(node.children.get(i), env)){
 					return false;
 				}
 			}
@@ -86,6 +84,29 @@ public class CompoundNode extends FactNode {
 		}
 		return false;
 	}
+
+	@Override
+	public PredicateNode generateCurrentState(LocalEnvironment env){
+		ArrayList newChildren = new ArrayList();
+		for(PredicateNode child : this.children){
+			newChildren.add(child.generateCurrentState(env));
+		}
+	    CompoundNode newNode = new CompoundNode(this.atom, newChildren);
+
+	    return newNode;
+	}
+
+	@Override
+	public PredicateNode renameVariables(Map<String,String> renamings, long id){
+		ArrayList newChildren = new ArrayList();
+		for(PredicateNode child : this.children){
+			newChildren.add(child.renameVariables(renamings, id));
+		}
+		CompoundNode newNode = new CompoundNode(this.atom, newChildren);
+		return newNode; // this has a name and is an atomic, so nothing variable about it...
+	}
+
+
 
 	@Override
 	public String toString(){
@@ -103,14 +124,14 @@ public class CompoundNode extends FactNode {
 	}
 
 	@Override
-	public String generateName(LocalEnvironment env, boolean source){
+	public String generateName(LocalEnvironment env){
 		String message = "" + atom + "(";
 		boolean first = true;
 		for(PredicateNode child : children){
 			if(!first){
 				message += ", ";
 			}
-			message += child.generateName(env, source);
+			message += child.generateName(env);
 			first = false;
 		}
 		message += ")";

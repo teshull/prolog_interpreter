@@ -1,6 +1,7 @@
 package cs598ga.shull.prolog.nodes;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import cs598ga.shull.prolog.execution.*;
 import cs598ga.shull.prolog.nodes.executionState.*;
@@ -26,5 +27,15 @@ public abstract class PredicateNode extends ClauseNode {
 
 	public NameNode getBase(){
 		return base;
+	}
+
+	public PredicateNode generateCurrentState(LocalEnvironment env){
+		assert false: "should be overwritten: " + this.getClass();
+		return null;
+	}
+
+	public PredicateNode renameVariables(Map<String,String> renamings, long id){
+		assert false: "should be overwritten: " + this.getClass();
+		return null;
 	}
 }

@@ -46,10 +46,11 @@ public abstract class FactNode extends PredicateNode {
 			    //no more matches to search
 				return SpecialNode.DEADEND;
 			}
-			//System.out.println("trying to match " + this.generateName(newEnv, true) + " to " + match.generateName(newEnv, false) );
+			System.out.println("current state: " + this.generateName(state.localEnv));
+			System.out.println("trying to match " + match + " === " + match.generateName(newEnv) );
 			if(match.matchNode(this, newEnv)){
 				state.childNode = match;
-				if(shouldEnterResult(match)){
+				if(shouldEnterResult(newEnv, match)){
 				    //save matched env before execution
 					//state.matchedNodeEnv = newEnv.getDeepCopy();
 					state.matchedLocalEnv = state.localEnv.getDeepCopy();
@@ -70,6 +71,7 @@ public abstract class FactNode extends PredicateNode {
 					return SpecialNode.FINISHED;
 				}
             }
+			System.out.println("fail");
 			//nothing matched, need to rollback any changes made by matching
 			state.localEnv.rollbackEnvChanges(state.originalEnv);
 		}
@@ -85,9 +87,10 @@ public abstract class FactNode extends PredicateNode {
 		return node;
 	}
 
-	private boolean shouldEnterResult(BaseNode result){
+	private boolean shouldEnterResult(LocalEnvironment env, BaseNode result){
 		if(result instanceof RuleNode){
-			System.out.println("found rule node to enter: " + result);
+			System.out.println("found rule node to enter: " + result + " === " + result.generateName(env));
+			;
 			//System.out.println("environment:\n" + env.getCurrentLocalEnv());
 			return true;
 		} else if(result instanceof BuiltinNode){
@@ -97,15 +100,16 @@ public abstract class FactNode extends PredicateNode {
 		return false;
 	}
 
+
 	@Override
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		FactState state = (FactState) baseState;
 		BaseNode previousResult = state.childNode;
 		assert previousResult != null : "if backtracking, should have match";
-		System.out.println("backtracking from: " + previousResult);
+		System.out.println("backtracking from: " + previousResult.generateName(state.childState.localEnv));
 		//System.out.println("fact backtracking -- before rollback state env:\n" + state.localEnv + "\n child env: " + state.childState.localEnv);
 		System.out.println("all info: " + state);
-		if(shouldEnterResult(previousResult)){
+		if(shouldEnterResult(state.childState.localEnv, previousResult)){
 		    //rolling back to when node was matched
 			state.localEnv.rollbackEnvChanges(state.matchedLocalEnv);
 			//restoring state to when child was matched

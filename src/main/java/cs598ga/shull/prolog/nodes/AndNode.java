@@ -72,8 +72,8 @@ public class AndNode extends LogicalNode{
 	}
 
 	@Override
-	public String generateName(LocalEnvironment env, boolean source) {
-		String message = ""+ left.generateName(env, source) + " && " + right.generateName(env, source);
+	public String generateName(LocalEnvironment env) {
+		String message = ""+ left.generateName(env) + " && " + right.generateName(env);
 		return message;
 	}
 }

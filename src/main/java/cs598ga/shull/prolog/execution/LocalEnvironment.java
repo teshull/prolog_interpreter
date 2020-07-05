@@ -13,6 +13,8 @@ public class LocalEnvironment {
 	final public static LocalEnvironment EMPTY = null;
 	public LocalEnvironment parent = EMPTY;
 
+	private static long environmentCount = 0;
+
 
     /**
      *  source is the code which is trying to be matched to target
@@ -24,12 +26,15 @@ public class LocalEnvironment {
 	public Map<String, String> parentLinks;
 	//mapping to child variable name
 
+	public final long id;
+
 	public LocalEnvironment(LocalEnvironment parent){
 		//the source is the predecessors targets
 		varMappings = new HashMap<>();
 		parentLinks = new HashMap<>();
 		varsMapped = new HashSet<>();
 		this.parent = parent;
+		id = environmentCount++;
 	}
 
 	public LocalEnvironment(LocalEnvironment parent,
@@ -40,6 +45,7 @@ public class LocalEnvironment {
 		this.varMappings = new HashMap<>(varMappings);
 		this.varsMapped = new HashSet<>(varsMapped);
 		this.parentLinks = new HashMap<>(parentLinks);
+		id = environmentCount++;
 	}
 	
 	public void unifyWithParent(){
@@ -58,7 +64,8 @@ public class LocalEnvironment {
 		}
 	}
 
-	public void setTargetMatch(String key, PredicateNode value){
+	public void setMatch(String key, PredicateNode value){
+		System.out.println(key + " -> " + value.generateName(this));
 		assert !varsMapped.contains(key) : "this has already been linked??";
 		if(key.equals("_")){
 			//don't actually match these (can be set multiple times)
@@ -66,6 +73,18 @@ public class LocalEnvironment {
 		}
 		varsMapped.add(key);
 		varMappings.put(key, value);
+	}
+
+	public void setTargetMatch(String key, PredicateNode value){
+		Map<String, String> renamingMap = new HashMap<>();
+		PredicateNode resolvedNode = value.renameVariables(renamingMap, parent.id);
+		if(renamingMap.size() != 0){
+			for(Map.Entry<String,String> entry : renamingMap.entrySet()){
+			    addTargetToSourceLink(entry.getValue(), entry.getKey());
+			}
+		}
+		System.out.println("Target match:");
+		this.setMatch(key, resolvedNode);
 	}
 
 	public boolean targetHasMatch(String key){
@@ -77,7 +96,15 @@ public class LocalEnvironment {
 
 
 	public void setSourceMatch(String key, PredicateNode value){
-		parent.setTargetMatch(key, value);
+		Map<String, String> renamingMap = new HashMap<>();
+		PredicateNode resolvedNode = value.renameVariables(renamingMap, this.id);
+		if(renamingMap.size() != 0){
+			for(Map.Entry<String,String> entry : renamingMap.entrySet()){
+				addTargetToSourceLink(entry.getKey(), entry.getValue());
+			}
+		}
+		System.out.println("Source match:");
+		parent.setMatch(key, resolvedNode);
 	}
 	public boolean sourceHasMatch(String key){
 		return parent.targetHasMatch(key);
@@ -88,6 +115,7 @@ public class LocalEnvironment {
 	}
 
 	public void addTargetToSourceLink(String targetVar, String sourceVar){
+		System.out.println("linking: " + targetVar + " -> " + sourceVar);
 		if(targetVar.equals("_") || sourceVar.equals("_")){
 			return; //don't want to add a link for this because it is free
 		}

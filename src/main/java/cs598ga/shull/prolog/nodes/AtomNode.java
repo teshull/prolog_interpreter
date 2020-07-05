@@ -4,6 +4,8 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.AtomState;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
+import java.util.Map;
+
 public class AtomNode extends FactNode {
 	public String text;
 	public AtomNode(NameNode node){
@@ -43,7 +45,7 @@ public class AtomNode extends FactNode {
 	}
 
 	@Override
-	public String generateName(LocalEnvironment env, boolean source){
+	public String generateName(LocalEnvironment env){
 	    return toString();
     }
 
@@ -57,22 +59,33 @@ public class AtomNode extends FactNode {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
-		PredicateNode node = (PredicateNode) source;
+		AtomNode currentNode = this;
+		PredicateNode node = ((PredicateNode) source).generateCurrentState(env.parent);
 
 		//cannot match
 		if(node.getNumChildren() != 0){
 			return false;
 		}
-		if(node.base.isSourceCurrentlyVariable(env)){
+		if(node instanceof VariableNode){
+			assert node.base.isSourceCurrentlyVariable(env);
 			//need to set the environment here...
-			env.setSourceMatch(node.base.getName(), this);
+			env.setSourceMatch(node.base.getName(), currentNode);
 			return true;
 		}
 
-		node = node.base.getSourceCurrentNode(node, env);
-		if(node instanceof AtomNode && node.base.nameMatches(base)){
+		if(node instanceof AtomNode && node.base.nameMatches(currentNode.base)){
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public PredicateNode generateCurrentState(LocalEnvironment env){
+		return this; // this has a name and is an atomic, so nothing variable about it...
+	}
+
+	@Override
+	public PredicateNode renameVariables(Map<String,String> renamings, long id){
+		return this; // this has a name and is an atomic, so nothing variable about it...
 	}
 }

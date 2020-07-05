@@ -1,6 +1,5 @@
 package cs598ga.shull.prolog.nodes;
 
-import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodecreation.NodeFactory;
 
@@ -49,7 +48,7 @@ public class IntegerNode extends NumberNode {
 		return message;
 	}
 	@Override
-	public String generateName(LocalEnvironment env, boolean source) {
+	public String generateName(LocalEnvironment env) {
 	    return toString();
 	}
 

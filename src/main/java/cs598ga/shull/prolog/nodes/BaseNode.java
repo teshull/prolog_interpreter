@@ -63,7 +63,7 @@ public abstract class BaseNode {
 	}
 	*/
 
-	public String generateName(LocalEnvironment env, boolean source){
+	public String generateName(LocalEnvironment env){
 		PrologRuntime.programError("generateName: need to implement this in " + this.getClass());
 		return "";
 	}
