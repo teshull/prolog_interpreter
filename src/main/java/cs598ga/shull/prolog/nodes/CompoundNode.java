@@ -35,12 +35,12 @@ public class CompoundNode extends FactNode {
 	 * "this" is the target
 	 */
 	@Override
-	public boolean matchNode(BaseNode source, LocalEnvironment env) {
+	public boolean matchNode(BaseNode source, VariableEnvironment env) {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
-		CompoundNode currentNode = (CompoundNode) this.getNodeBinding(env.variableEnvironment);
-		PredicateNode node = ((PredicateNode) source).getNodeBinding(env.variableEnvironment);
+		CompoundNode currentNode = (CompoundNode) this.getNodeBinding(env);
+		PredicateNode node = ((PredicateNode) source).getNodeBinding(env);
 		if(node instanceof VariableNode){
 			//source variable, target not variable
 			env.setMatch(node.base.getName(), currentNode);

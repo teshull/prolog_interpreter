@@ -2,6 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
+import org.graalvm.compiler.lir.Variable;
 
 public class VariableNode extends FactNode implements ComputeNode {
 	String name;
@@ -49,12 +50,12 @@ public class VariableNode extends FactNode implements ComputeNode {
 	}
 
 	@Override
-	public boolean matchNode(BaseNode source, LocalEnvironment env) {
+	public boolean matchNode(BaseNode source, VariableEnvironment env) {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
-		PredicateNode currentNode = this.getNodeBinding(env.variableEnvironment);
-		PredicateNode node = ((PredicateNode) source).getNodeBinding(env.variableEnvironment);
+		PredicateNode currentNode = this.getNodeBinding(env);
+		PredicateNode node = ((PredicateNode) source).getNodeBinding(env);
 		if(currentNode instanceof VariableNode){
 			if(node instanceof VariableNode) {
 				//both variables

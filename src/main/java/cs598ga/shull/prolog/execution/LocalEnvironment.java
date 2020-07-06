@@ -15,7 +15,7 @@ public class LocalEnvironment {
 
 	private static long environmentCount = 0;
 
-	public VariableEnvironment variableEnvironment;
+	private VariableEnvironment variableEnvironment;
 
 	public final long id;
 
@@ -29,45 +29,15 @@ public class LocalEnvironment {
 		}
 	}
 
+	public VariableEnvironment getVariableEnvironment() {
+		return variableEnvironment;
+	}
+
 	public LocalEnvironment(LocalEnvironment parent,
 							VariableEnvironment variableEnvironment) {
 		this.parent = parent;
 		this.variableEnvironment = variableEnvironment;
 		id = -1; //aren't using this env in this way
-	}
-	
-	//public void unifyWithParent(){
-		//setting the updates matches for the target
-
-		// not doing anything for the time being
-
-		//assert parent != null : "this node doesn't have a parent??";
-		//for(String entry : localVariables){
-		//	//asserting no values are unlinked
-        //    Set<String> links = variableEnvironment.linkedVariables.get(entry);
-        //    assert links == null || links.size() == 0 : "shouldn't have anything";
-
-		//	//deleting elements no longer needed
-		//	variableEnvironment.removeVariable(entry);
-		//}
-	//}
-
-	public boolean hasMatch(String key){
-		return variableEnvironment.hasMatch(key);
-	}
-
-	public void setMatch(String key, PredicateNode value){
-		assert !hasMatch(key) : "already has match";
-		variableEnvironment.setMatch(key, value);
-	}
-
-	//public PredicateNode getMatch(String key){
-	//	assert hasMatch(key) : "doesn't have match";
-	//	return variableEnvironment.getMatch(key);
-	//}
-
-	public void setLink(String var1, String var2){
-		variableEnvironment.setLink(var1, var2);
 	}
 
 	public String getScopedName(String key) {
@@ -75,8 +45,6 @@ public class LocalEnvironment {
 		String result = key + "$$" + this.id;
 		return result;
 	}
-
-
 
 	public LocalEnvironment getDeepCopy(){
 		VariableEnvironment newEnv = variableEnvironment.getDeepCopy();

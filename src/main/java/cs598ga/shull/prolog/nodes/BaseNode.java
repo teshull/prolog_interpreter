@@ -69,7 +69,7 @@ public abstract class BaseNode {
 		return "";
 	}
 
-	public boolean matchNode(BaseNode source, LocalEnvironment env){
+	public boolean matchNode(BaseNode source, VariableEnvironment env){
 		PrologRuntime.programError("need to implement this in " + this.getClass());
 		return false;
 	}

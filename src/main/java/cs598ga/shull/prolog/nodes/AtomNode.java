@@ -55,12 +55,12 @@ public class AtomNode extends FactNode {
 	}
 
 	@Override
-	public boolean matchNode(BaseNode source, LocalEnvironment env) {
+	public boolean matchNode(BaseNode source, VariableEnvironment env) {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
 		AtomNode currentNode = this;
-		PredicateNode node = ((PredicateNode) source).getNodeBinding(env.variableEnvironment);
+		PredicateNode node = ((PredicateNode) source).getNodeBinding(env);
 
 		//cannot match
 		if(node.getNumChildren() != 0){

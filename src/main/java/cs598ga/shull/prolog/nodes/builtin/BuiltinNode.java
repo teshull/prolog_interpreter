@@ -2,10 +2,12 @@ package cs598ga.shull.prolog.nodes.builtin;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
+import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
 import cs598ga.shull.prolog.nodes.*;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
+import org.graalvm.compiler.lir.Variable;
 
 import java.util.ArrayList;
 
@@ -48,7 +50,7 @@ public abstract class BuiltinNode extends PredicateNode {
 
 	//this should be improved in the future
 	@Override
-	public boolean matchNode(BaseNode source, LocalEnvironment env){
+	public boolean matchNode(BaseNode source, VariableEnvironment env){
 		if(! (source instanceof CompoundNode || source instanceof  AtomNode)){
 			return false;
 		}

@@ -47,9 +47,9 @@ public abstract class FactNode extends PredicateNode {
 			    //no more matches to search
 				return SpecialNode.DEADEND;
 			}
-			System.out.println("current state: " + state.renamedNode.generateName(state.localEnv.variableEnvironment));
+			System.out.println("current state: " + state.renamedNode.generateName(state.localEnv.getVariableEnvironment()));
 			PredicateNode renamedMatch = match.getScopedName(newEnv);
-			if(renamedMatch.matchNode(state.renamedNode, newEnv)){
+			if(renamedMatch.matchNode(state.renamedNode, newEnv.getVariableEnvironment())){
 				state.childNode = match;
 				if(shouldEnterResult(match)){
 					BaseExecutionState childState = match.initializeState(newEnv);
