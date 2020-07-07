@@ -17,7 +17,7 @@ public class NewlineNode extends BuiltinNode {
     }
 
     @Override
-    public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv, ArrayList<PredicateNode> args) {
+    public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv) {
         System.out.println();
         return SpecialNode.FINISHED;
     }

@@ -3,7 +3,6 @@ package cs598ga.shull.prolog.nodes;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodecreation.NodeFactory;
-import org.graalvm.compiler.lir.Variable;
 
 public class IntegerNode extends NumberNode {
 

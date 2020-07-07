@@ -59,6 +59,10 @@ public class VariableEnvironment {
     }
 
     public void setMatch(String key, PredicateNode match){
+        if(key.startsWith("_")){
+            //don't set these
+            return;
+        }
         Set<String> list = linkedVariables.get(key);
         if(list == null){
             varMappings.put(key, match);
@@ -82,6 +86,10 @@ public class VariableEnvironment {
     }
 
     public void setLink(String key1, String key2){
+        if(key1.startsWith("_") || key2.startsWith("_")){
+            //this isn't a real match
+            return;
+        }
         assert !key1.equals(key2) : "this shouldn't happen";
         Set<String> combined = new HashSet<>();
         combined.add(key1);

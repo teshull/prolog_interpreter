@@ -7,14 +7,13 @@ import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
 import cs598ga.shull.prolog.nodes.*;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
-import org.graalvm.compiler.lir.Variable;
 
 import java.util.ArrayList;
 
 public abstract class BuiltinNode extends PredicateNode {
 	private int numChildren;
 
-	public abstract BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv, ArrayList<PredicateNode> args);
+	public abstract BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv);
 
 	protected BuiltinNode(int numChildren){
 		this.numChildren = numChildren;
@@ -37,8 +36,7 @@ public abstract class BuiltinNode extends PredicateNode {
 
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
-		ArrayList<PredicateNode> args = numChildren == 0? null : new ArrayList<>(children);
-		BaseNode result = executeBuiltin(env, baseState.localEnv, args);
+		BaseNode result = executeBuiltin(env, baseState.localEnv);
 		return result;
 	}
 	
@@ -54,29 +52,29 @@ public abstract class BuiltinNode extends PredicateNode {
 		if(! (source instanceof CompoundNode || source instanceof  AtomNode)){
 			return false;
 		}
-		if(this.numChildren == 0){
-		    return source instanceof AtomNode;
-		} else if(source instanceof AtomNode){
-			return false;
+
+		if (source instanceof AtomNode){
+			AtomNode atomNode = (AtomNode) source;
+			return this.numChildren == 0 && this.base.nameMatches(atomNode.base);
 		}
-		//TODO think this needs further improvement
+
+        assert source instanceof CompoundNode;
 		CompoundNode node = (CompoundNode) source;
-		if(node.getNumChildren() != this.numChildren){
-			return false;
+		if(this.base.nameMatches(node.base.getName())){
+			//now making sure all children match
+			if(getNumChildren() != node.getNumChildren()){
+				return false;
+			}
+			for(int i = 0; i < this.children.size(); i++){
+				if(!(this.children.get(i)).matchNode(node.children.get(i), env)){
+					return false;
+				}
+			}
+			//met all requirements
+			return true;
 		}
-		this.children = node.children;
-		return true;
-		//ArrayList<PredicateNode> children = node.children;
-		////ArrayList<PredicateNode> arguments = new ArrayList<>();
-		//for(PredicateNode child : children){
-		//	if(child.base.isSourceCurrentlyVariable(env)){
-		//		return false;
-		//	}
-		//	PredicateNode resolved = child.base.getSourceCurrentNode(child, env);
-		//	//arguments.add(resolved);
-		//}
-		//this.arguments = children;
-		//return true;
+
+		return false;
 	}
 	
 	//will have to implement later

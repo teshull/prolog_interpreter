@@ -2,6 +2,8 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
+import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
+import cs598ga.shull.prolog.execution.error.ImpossibleGoalError;
 import cs598ga.shull.prolog.nodes.builtin.BuiltinNode;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.nodes.executionState.FactState;
@@ -43,18 +45,28 @@ public abstract class FactNode extends PredicateNode {
 			state.childNode = null;
 			LocalEnvironment newEnv = new LocalEnvironment(state.localEnv);
 			PredicateNode match = getNextMatch(state);
-			if(match == null){
-			    //no more matches to search
-				return SpecialNode.DEADEND;
+			String message = "current state: " + state.renamedNode.generateName(state.localEnv.getVariableEnvironment());
+			if(message.equals("current state: fake")) {
+			    System.out.println("found it");
 			}
 			System.out.println("current state: " + state.renamedNode.generateName(state.localEnv.getVariableEnvironment()));
+			if(match == null){
+			    //no more matches to search
+                System.out.println("no more matches");
+				return SpecialNode.DEADEND;
+			}
 			PredicateNode renamedMatch = match.getScopedName(newEnv);
+			System.out.println("trying to match: " + renamedMatch.generateName(state.localEnv.getVariableEnvironment()) + " === " + match);
 			if(renamedMatch.matchNode(state.renamedNode, newEnv.getVariableEnvironment())){
+			    message = "success: -> " + renamedMatch.generateName(state.localEnv.getVariableEnvironment());
+				if (message.equals("success: -> queens(.(), .(1, .()), .(1, .()))")){
+					System.out.println("huh...");
+				}
+			    System.out.println("success: -> " + renamedMatch.generateName(state.localEnv.getVariableEnvironment()));
 				state.childNode = match;
 				if(shouldEnterResult(match)){
 					BaseExecutionState childState = match.initializeState(newEnv);
 					state.childState = childState;
-					state.childNode = match;
 					BaseNode result = match.executeNode(env, childState);
 					assert result == SpecialNode.FINISHED || result == SpecialNode.DEADEND;
 					if(result == SpecialNode.FINISHED){
@@ -83,10 +95,10 @@ public abstract class FactNode extends PredicateNode {
 
 	private boolean shouldEnterResult(BaseNode result){
 		if(result instanceof RuleNode){
-			System.out.println("found rule node to enter: " + result);
+			//System.out.println("found rule node to enter: " + result);
 			return true;
 		} else if(result instanceof BuiltinNode){
-			System.out.println("found a builtin node to enter: " + result);
+			//System.out.println("found a builtin node to enter: " + result);
 			return true;
 		}
 		return false;
@@ -98,18 +110,28 @@ public abstract class FactNode extends PredicateNode {
 		FactState state = (FactState) baseState;
 		BaseNode previousResult = state.childNode;
 		assert previousResult != null : "if backtracking, should have match";
+		//System.out.println("all info: " + state);
 		System.out.println("backtracking from: " + previousResult);
-		System.out.println("all info: " + state);
-		if(shouldEnterResult(previousResult)){
-		    //rolling back to when node was matched
-			BaseNode result  = previousResult.backtrackNode(env, state.childState);
-			if(result == SpecialNode.FINISHED){
-				return SpecialNode.FINISHED;
+		try {
+			if (shouldEnterResult(previousResult)) {
+				//rolling back to when node was matched
+				BaseNode result = previousResult.backtrackNode(env, state.childState);
+				if (result == SpecialNode.FINISHED) {
+					return SpecialNode.FINISHED;
+				}
 			}
+		} catch(ImpossibleGoalError e){
+			//this means I shouldn't test the rest of the options.
+			state.localEnv.rollbackEnvChanges(state.originalEnv);
+			System.out.println("CUTCUTCUT");
+			state.childNode = null;
+			state.matchNum = state.matches.size();
+			return SpecialNode.DEADEND;
 		}
 		// could not backtrack child node.
 		// at this point need to try to find another match
 		// rolling all of the way back
+        System.out.println("performing the rollback");
 		state.localEnv.rollbackEnvChanges(state.originalEnv);
 		return searchRules(env, state);
 	}

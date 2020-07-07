@@ -17,7 +17,7 @@ public class LoadFilesNode extends BuiltinNode {
     }
 
     @Override
-    public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv, ArrayList<PredicateNode> args) {
+    public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv) {
         assert false : "still working on implementing this";
         System.out.println("in progress");
         return SpecialNode.FINISHED;

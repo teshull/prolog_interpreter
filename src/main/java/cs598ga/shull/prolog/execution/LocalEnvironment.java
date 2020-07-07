@@ -41,6 +41,9 @@ public class LocalEnvironment {
 	}
 
 	public String getScopedName(String key) {
+	    if (key.startsWith("_")){
+	    	return key;
+		}
 		assert this.id != -1 : "using wrong type of local env";
 		String result = key + "$$" + this.id;
 		return result;

@@ -16,23 +16,23 @@ public class AndNode extends LogicalNode{
 		state.leftState = leftState;
 		BaseNode leftResult = left.executeNode(env, leftState);
 		if(leftResult == SpecialNode.DEADEND){
-			return leftResult;
+			return SpecialNode.DEADEND;
 		}
-		assert leftResult == SpecialNode.FINISHED;
 		while(true){
+			assert leftResult == SpecialNode.FINISHED;
 			//now solving for right side
 			BaseExecutionState rightState = right.initializeState(state.localEnv);
 			state.rightState = rightState;
 			BaseNode rightResult = right.executeNode(env, rightState);
 			if(rightResult == SpecialNode.FINISHED){
-				return rightResult;
+				return SpecialNode.FINISHED;
 			}
 
 			assert rightResult == SpecialNode.DEADEND;
 			//finding new answer for left side
 			leftResult = left.backtrackNode(env, state.leftState);
 			if(leftResult == SpecialNode.DEADEND){
-				return leftResult;
+				return SpecialNode.DEADEND;
 			}
 		}
 	}
@@ -43,26 +43,26 @@ public class AndNode extends LogicalNode{
 		//trying to backtrack on right side
 		BaseNode rightResult = right.backtrackNode(env, state.rightState);
 		if(rightResult == SpecialNode.FINISHED){
-			return rightResult;
+			return SpecialNode.FINISHED;
 		}
 		//now left side
 		BaseNode leftResult = left.backtrackNode(env, state.leftState);
 		if(leftResult == SpecialNode.DEADEND){
-			return leftResult;
+			return SpecialNode.DEADEND;
 		}
-		assert leftResult == SpecialNode.FINISHED;
 		while(true){
+			assert leftResult == SpecialNode.FINISHED;
 			BaseExecutionState rightState = right.initializeState(state.localEnv);
 			state.rightState = rightState;
 			rightResult = right.executeNode(env, rightState);
 			if(rightResult == SpecialNode.FINISHED){
-				return rightResult;
+				return SpecialNode.FINISHED;
 			}
 
 			assert rightResult == SpecialNode.DEADEND;
 			leftResult = left.backtrackNode(env, state.leftState);
 			if(leftResult == SpecialNode.DEADEND){
-				return leftResult;
+				return SpecialNode.DEADEND;
 			}
 		}
 	}

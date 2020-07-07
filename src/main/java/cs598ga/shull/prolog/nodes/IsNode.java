@@ -4,11 +4,23 @@ import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.nodes.executionState.IsNodeState;
+import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 
 public class IsNode extends LogicalNode{
 
+
+	@Override
+	public BaseExecutionState generateExecutionState(){
+		//PrologRuntime.programError("shouldn't be able to invoke the base class");
+		return new IsNodeState();
+	}
+
 	@Override
 	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	    IsNodeState state = (IsNodeState) baseState;
+	    //saving the original value
+	    state.originalEnv = state.localEnv.getDeepCopy();
 		boolean foundLeft = false;
 		boolean foundRight = false;
 		NumberNode leftVal = null;
@@ -31,42 +43,36 @@ public class IsNode extends LogicalNode{
 		} catch(InvalidArithmeticOperationError e){
 
 		}
-		assert false : "need to reimplement this";
-		//original code
-		//LocalEnvironment local = baseState.localEnv;
-		//System.out.println("left value: " + leftVal);
-		//System.out.println("right value: " + rightVal);
-		//if(foundLeft && foundRight){
-		//	return NumberNode.isEqual(leftVal, rightVal)? SpecialNode.FINISHED : SpecialNode.DEADEND;
-		//} else if(!foundRight && !foundLeft){
-		//	//I don't think that this should be able to happen, but I may change my mind
-		//	return SpecialNode.DEADEND;
-		//} else if(foundRight){
-		//	if(left instanceof VariableNode){
-		//		//need to set the variable, and make sure it doesn't already exist
-		//		//assert false : "should be getting here";
-		//		VariableNode var = (VariableNode) left;
-		//		if(var.base.isSourceCurrentlyVariable(local)){
-		//			local.setSourceMatch(var.base.getName(), rightVal);
-		//			return SpecialNode.FINISHED;
-		//		}
-		//	}
-		//}else {
-		//	if(right instanceof VariableNode){
-		//		//need to set the variable, and make sure it doesn't already exist
-		//		VariableNode var = (VariableNode) right;
-		//		if(var.base.isSourceCurrentlyVariable(local)){
-		//			local.setSourceMatch(var.base.getName(), leftVal);
-		//			return SpecialNode.FINISHED;
-		//		}
-		//	}
-		//
-		//}
+		LocalEnvironment local = baseState.localEnv;
+		System.out.println("left value: " + leftVal);
+		System.out.println("right value: " + rightVal);
+		if(foundLeft && foundRight){
+			return NumberNode.isEqual(leftVal, rightVal)? SpecialNode.FINISHED : SpecialNode.DEADEND;
+		} else if(!foundRight && !foundLeft){
+			//I don't think that this should be able to happen, but I may change my mind
+			return SpecialNode.DEADEND;
+		} else if(foundRight){
+			if(left instanceof VariableNode){
+				PredicateNode var = ((VariableNode) left).getScopedName(local);
+				local.getVariableEnvironment().setMatch(var.base.getName(), rightVal);
+				return SpecialNode.FINISHED;
+			}
+		}else {
+			if(right instanceof VariableNode){
+				//need to set the variable, and make sure it doesn't already exist
+				PredicateNode var = ((VariableNode) right).getScopedName(local);
+				local.getVariableEnvironment().setMatch(var.base.getName(), leftVal);
+				return SpecialNode.FINISHED;
+			}
+		}
 		return SpecialNode.DEADEND;
 	}
 
 	@Override
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
+		IsNodeState state = (IsNodeState) baseState;
+		//rolling back the original value
+		state.localEnv.rollbackEnvChanges(state.originalEnv);
 		return SpecialNode.DEADEND;
 	}
 	

@@ -46,4 +46,5 @@ public abstract class LogicalNode extends BaseNode {
 		}
 		return result;
 	}
+
 }

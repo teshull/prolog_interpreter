@@ -4,7 +4,6 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.AtomState;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
-import org.graalvm.compiler.lir.Variable;
 
 public class AtomNode extends FactNode {
 	public String text;

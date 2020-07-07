@@ -37,32 +37,6 @@ public abstract class BaseNode {
 		return new BaseExecutionState();
 		
 	}
-	
-	/*
-	public BaseNode initializeAndEnter(ExecutionEnvironment env){
-		BaseExecutionState state = generateExecutionState();
-		state.stateIndex = env.addState(state);
-		BaseNode result =  firstStep(env);
-		return result;
-	}
-	
-
-	public BaseNode firstStep(ExecutionEnvironment env){
-		PrologRuntime.programError("need to implement this in " + this.getClass());
-		return null;
-	}
-	
-	
-	public BaseNode nextStep(ExecutionEnvironment env, int stateIndex){
-		PrologRuntime.programError("need to implement this in " + this.getClass());
-		return null;
-	}
-	
-	public BaseNode performBacktrack(ExecutionEnvironment env, int stateIndex){
-		PrologRuntime.programError("need to implement this in " + this.getClass());
-		return null;
-	}
-	*/
 
 	public String generateName(VariableEnvironment env){
 		PrologRuntime.programError("generateName: need to implement this in " + this.getClass());

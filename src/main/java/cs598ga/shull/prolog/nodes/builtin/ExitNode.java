@@ -17,7 +17,7 @@ public class ExitNode extends BuiltinNode {
     }
 
     @Override
-    public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv, ArrayList<PredicateNode> args) {
+    public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv) {
         System.out.println("requesting exit...");
         System.exit(0);
         return SpecialNode.FINISHED;

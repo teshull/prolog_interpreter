@@ -17,15 +17,15 @@ public class TimerNode extends BuiltinNode {
 	}
 
 	@Override
-	public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv, ArrayList<PredicateNode> args) {
-		assert args.size() == 1 : "whoops";
+	public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv) {
+		assert children.size() == 1 : "whoops";
 		BaseNode result;
 		long start = 0;
 		long end = 0;
 		try{
 			System.out.println("starting timer");
 			start = System.currentTimeMillis();
-			BaseNode arg = args.get(0);
+			BaseNode arg = children.get(0);
 			BaseExecutionState argState = arg.initializeState(localEnv);
 			result = arg.executeNode(env, argState);
 		} catch(Error e){

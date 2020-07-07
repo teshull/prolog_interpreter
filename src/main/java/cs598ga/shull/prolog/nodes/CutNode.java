@@ -13,6 +13,7 @@ public class CutNode extends BaseNode {
 
 	@Override
 	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
+		//return SpecialNode.DEADEND;
 		throw new ImpossibleCutError();
 	}
 

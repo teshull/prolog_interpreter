@@ -2,7 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
-import org.graalvm.compiler.lir.Variable;
+import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 
 public class VariableNode extends FactNode implements ComputeNode {
 	String name;
@@ -81,16 +81,18 @@ public class VariableNode extends FactNode implements ComputeNode {
 
 	@Override
 	public NumberNode computeValue(LocalEnvironment env) {
-		assert false : "need to reimplement";
-		return null;
-
-		//prior implementation
-		//BaseNode result = env.getTargetMatch(base.getName());
-		//if(result == null || !(result instanceof ComputeNode)){
-		//	throw new InvalidArithmeticOperationError();
-		//}
-		//ComputeNode compute = (ComputeNode) result;
-		//return compute.computeValue(env);
+        PredicateNode scopedNode = this.getScopedName(env);
+        PredicateNode bindedNode = null;
+        VariableEnvironment varInfo = env.getVariableEnvironment();
+        String key = scopedNode.base.getName();
+        if(varInfo.hasMatch(key)){
+        	bindedNode = varInfo.getMatch(key);
+		}
+		if(bindedNode == null || !(bindedNode instanceof ComputeNode)){
+			throw new InvalidArithmeticOperationError();
+		}
+		ComputeNode compute = (ComputeNode) bindedNode;
+		return compute.computeValue(env);
 	}
 
 	@Override

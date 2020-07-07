@@ -28,6 +28,10 @@ public class CompareNode extends LogicalNode {
     public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
         NumberNode leftVal = null;
         NumberNode rightVal = null;
+
+        //System.out.println("compute left value: " + left);
+        //System.out.println("compute right value: " + right);
+        //System.out.println("state: " + baseState.localEnv.getVariableEnvironment());
         if(!(right instanceof ComputeNode && left instanceof ComputeNode)){
             return SpecialNode.DEADEND;
         }
@@ -43,9 +47,8 @@ public class CompareNode extends LogicalNode {
         } catch(InvalidArithmeticOperationError e){
 
         }
-        LocalEnvironment local = baseState.localEnv;
-        System.out.println("left value: " + leftVal);
-        System.out.println("right value: " + rightVal);
+        assert leftVal != null && rightVal != null : "oops";
+
         NumberNode.ValueType valType = NumberNode.determineType(leftVal, rightVal);
         boolean result = false;
         if(valType == INT){
@@ -119,5 +122,10 @@ public class CompareNode extends LogicalNode {
             }
         }
         return result? SpecialNode.FINISHED : SpecialNode.DEADEND;
+    }
+
+    @Override
+    public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState) {
+        return SpecialNode.DEADEND;
     }
 }

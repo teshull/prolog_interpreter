@@ -39,7 +39,7 @@ public class CompoundNode extends FactNode {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
-		CompoundNode currentNode = (CompoundNode) this.getNodeBinding(env);
+		CompoundNode currentNode = (CompoundNode) this.getNodeBinding(env); // note this is the same as "this"
 		PredicateNode node = ((PredicateNode) source).getNodeBinding(env);
 		if(node instanceof VariableNode){
 			//source variable, target not variable
@@ -66,8 +66,13 @@ public class CompoundNode extends FactNode {
 
 	@Override
 	public PredicateNode getNodeBinding(VariableEnvironment env){
-	    // this is a real value, doesn't need to be bound
-	    return this;
+	    //return this;
+		ArrayList newChildren = new ArrayList();
+		for(PredicateNode child : this.children){
+			newChildren.add(child.getNodeBinding(env));
+		}
+		CompoundNode newNode = new CompoundNode(this.atom, newChildren);
+		return newNode; // this has a name and is an atomic, so nothing variable about it...
 	}
 
 	@Override
