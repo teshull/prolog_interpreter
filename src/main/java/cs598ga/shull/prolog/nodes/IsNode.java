@@ -5,7 +5,6 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.nodes.executionState.IsNodeState;
-import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 
 public class IsNode extends LogicalNode{
 
@@ -17,7 +16,7 @@ public class IsNode extends LogicalNode{
 	}
 
 	@Override
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 	    IsNodeState state = (IsNodeState) baseState;
 	    //saving the original value
 	    state.originalEnv = state.localEnv.getDeepCopy();

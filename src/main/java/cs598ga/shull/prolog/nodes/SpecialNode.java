@@ -9,7 +9,6 @@ public class SpecialNode extends BaseNode {
 	final public static SpecialNode NONE = new SpecialNode("None");
 	final public static SpecialNode FINISHED = new SpecialNode("Finish");
 	final public static SpecialNode DEADEND = new SpecialNode("DeadEnd");
-	final public static SpecialNode NOBACKTRACK = new SpecialNode("NoBackTrack");
 	final public static ArrayList<BaseNode> NONODES = null;
 	
 	private String name;

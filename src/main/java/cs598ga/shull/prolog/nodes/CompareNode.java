@@ -1,7 +1,6 @@
 package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
-import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
@@ -25,7 +24,7 @@ public class CompareNode extends LogicalNode {
     }
 
     @Override
-    public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+    public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
         NumberNode leftVal = null;
         NumberNode rightVal = null;
 

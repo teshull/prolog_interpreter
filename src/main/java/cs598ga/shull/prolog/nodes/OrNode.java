@@ -2,7 +2,6 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
-import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 import cs598ga.shull.prolog.nodes.executionState.OrNodeState;
 
 public class OrNode extends LogicalNode{
@@ -15,12 +14,12 @@ public class OrNode extends LogicalNode{
 	}
 
 	@Override
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		// TODO Auto-generated method stub
 		OrNodeState state  = (OrNodeState) baseState;
 		BaseExecutionState leftState = left.initializeState(state.localEnv);
 		state.leftState = leftState;
-		BaseNode result = left.executeNode(env, leftState);
+		SpecialNode result = left.executeNode(env, leftState);
 		if(result == SpecialNode.FINISHED){
 			return result;
 		}

@@ -80,11 +80,11 @@ public class RuleNode extends PredicateNode {
 	}
 
 	@Override
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		RuleState state = (RuleState) baseState;
 		BaseExecutionState childState = condition.initializeState(state.localEnv);
 		state.childState = childState;
-		BaseNode result = condition.executeNode(env, childState);
+		SpecialNode result = condition.executeNode(env, childState);
 		return result;
 	}
 

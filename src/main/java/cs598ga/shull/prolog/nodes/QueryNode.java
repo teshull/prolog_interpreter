@@ -5,8 +5,6 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
-import java.util.ArrayList;
-
 public class QueryNode extends ClauseNode {
 	public BaseNode child;
 	//public ArrayList<BaseNode> queries;
@@ -47,8 +45,8 @@ public class QueryNode extends ClauseNode {
 	}
 
 	@Override
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
-		BaseNode result;
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+		SpecialNode result;
 		try{
 			LocalEnvironment localEnv = new LocalEnvironment(baseState.localEnv);
 			BaseExecutionState childState = child.initializeState(localEnv);

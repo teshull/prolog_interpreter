@@ -2,7 +2,6 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
-import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
 import cs598ga.shull.prolog.execution.error.ImpossibleGoalError;
 import cs598ga.shull.prolog.nodes.builtin.BuiltinNode;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
@@ -30,7 +29,7 @@ public abstract class FactNode extends PredicateNode {
 	//public abstract boolean isVariable();
 	
 	@Override
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		FactState state = (FactState) baseState;
 		state.matches = env.globalEnv.getPredicates(base.getName());
 		state.matchNum = 0;
@@ -39,7 +38,7 @@ public abstract class FactNode extends PredicateNode {
 		return searchRules(env, state);
 	}
 
-	private BaseNode searchRules(ExecutionEnvironment env, FactState state) {
+	private SpecialNode searchRules(ExecutionEnvironment env, FactState state) {
 		while (true){
 			//making sure it is not set from a previous run
 			state.childNode = null;

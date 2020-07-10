@@ -5,7 +5,6 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
 import cs598ga.shull.prolog.nodecreation.NodeFactory;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
-import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 public class ArithmeticNode extends BaseNode implements ComputeNode {
 	public ComputeNode left;
@@ -97,7 +96,7 @@ public class ArithmeticNode extends BaseNode implements ComputeNode {
 	}
 
 	@Override
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState) {
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState) {
 		try {
 			left.computeValue(baseState.localEnv);
 			right.computeValue(baseState.localEnv);

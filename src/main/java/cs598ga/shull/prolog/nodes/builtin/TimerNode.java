@@ -1,12 +1,10 @@
 package cs598ga.shull.prolog.nodes.builtin;
 
-import java.util.ArrayList;
-
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.BaseNode;
 import cs598ga.shull.prolog.nodes.NameNode;
-import cs598ga.shull.prolog.nodes.PredicateNode;
+import cs598ga.shull.prolog.nodes.SpecialNode;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
 public class TimerNode extends BuiltinNode {
@@ -17,9 +15,9 @@ public class TimerNode extends BuiltinNode {
 	}
 
 	@Override
-	public BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv) {
+	public SpecialNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv) {
 		assert children.size() == 1 : "whoops";
-		BaseNode result;
+		SpecialNode result;
 		long start = 0;
 		long end = 0;
 		try{

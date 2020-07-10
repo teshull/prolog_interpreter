@@ -1,7 +1,6 @@
 package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
-import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
@@ -9,7 +8,7 @@ import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 public class AndNode extends LogicalNode{
 
 	@Override
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		//trying to solve for left side
 		LogicalNodeState state = (LogicalNodeState) baseState;
 		BaseExecutionState leftState = left.initializeState(state.localEnv);

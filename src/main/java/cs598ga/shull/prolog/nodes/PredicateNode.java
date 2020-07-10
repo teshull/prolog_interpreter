@@ -5,19 +5,13 @@ import java.util.Map;
 
 import cs598ga.shull.prolog.execution.*;
 import cs598ga.shull.prolog.nodes.executionState.*;
+import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 public abstract class PredicateNode extends ClauseNode {
 	public NameNode base;
 	public ArrayList<PredicateNode> children;
 	public abstract String getName();
 	
-	public LocalEnvironment unifyWith(LocalEnvironment current, PredicateNode other){
-		return null;
-	}
-	public void enterPredicate(){
-		
-	}
-
 	public int getNumChildren(){
 		if(children == null){
 			return 0;
@@ -30,7 +24,7 @@ public abstract class PredicateNode extends ClauseNode {
 	}
 
 	public PredicateNode getNodeBinding(VariableEnvironment env){
-		assert false: "generate: should be overwritten: " + this.getClass();
+		PrologRuntime.programError("generate: should be overwritten: " + this.getClass());
 		return null;
 	}
 
@@ -40,7 +34,13 @@ public abstract class PredicateNode extends ClauseNode {
 	 * @return
 	 */
 	public PredicateNode getScopedName(LocalEnvironment env){
-		assert false: "scoped name: should be overwritten: " + this.getClass();
+		PrologRuntime.programError("scoped name: should be overwritten: " + this.getClass());
 		return null;
 	}
+
+	public boolean matchNode(BaseNode source, VariableEnvironment env){
+		PrologRuntime.programError("need to implement this in " + this.getClass());
+		return false;
+	}
+
 }

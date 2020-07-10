@@ -12,27 +12,8 @@ public class VariableNode extends FactNode implements ComputeNode {
 		name = node.getName();
 	}
 
-	//@Override
-	//public boolean isAtom() {
-	//	// TODO Auto-generated method stub
-	//	return false;
-	//}
-
-	//@Override
-	//public boolean isCompound() {
-	//	// TODO Auto-generated method stub
-	//	return false;
-	//}
-
-	//@Override
-	//public boolean isVariable() {
-	//	// TODO Auto-generated method stub
-	//	return true;
-	//}
-
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return name;
 	}
 
@@ -58,21 +39,21 @@ public class VariableNode extends FactNode implements ComputeNode {
 		PredicateNode node = ((PredicateNode) source).getNodeBinding(env);
 		if(currentNode instanceof VariableNode){
 			if(node instanceof VariableNode) {
-				//both variables
-                //link together (target, source)
+				// both variables
+                // link together (target, source)
 				env.setLink(currentNode.base.getName(), node.base.getName());
 			} else {
-				//target variable, source real
+				// target variable, source real
 				env.setMatch(currentNode.base.getName(), node);
 				
 			}
 		} else {
 			if(node instanceof VariableNode){
-				//target real, source variable
+				// target real, source variable
 				env.setMatch(node.base.getName(), currentNode);
 				return true;
 			} else {
-				//target real, source real
+				// target real, source real
 				return currentNode.matchNode(node, env);
 			}
 		}
@@ -100,7 +81,7 @@ public class VariableNode extends FactNode implements ComputeNode {
 		if(!env.hasMatch(name)){
 			return this;
 		}
-		//this expects to return a real node
+		// this expects to return a real node
 	    PredicateNode result = env.getMatch(name);
 		return result.getNodeBinding(env);
 	}

@@ -3,17 +3,13 @@ package cs598ga.shull.prolog.nodes.builtin;
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
-import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
 import cs598ga.shull.prolog.nodes.*;
 import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
-import cs598ga.shull.prolog.runtime.PrologRuntime;
-
-import java.util.ArrayList;
 
 public abstract class BuiltinNode extends PredicateNode {
 	private int numChildren;
 
-	public abstract BaseNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv);
+	public abstract SpecialNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv);
 
 	protected BuiltinNode(int numChildren){
 		this.numChildren = numChildren;
@@ -35,8 +31,8 @@ public abstract class BuiltinNode extends PredicateNode {
 	}
 
 	@Override
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
-		BaseNode result = executeBuiltin(env, baseState.localEnv);
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+		SpecialNode result = executeBuiltin(env, baseState.localEnv);
 		return result;
 	}
 	

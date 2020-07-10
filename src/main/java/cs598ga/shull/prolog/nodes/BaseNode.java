@@ -43,18 +43,13 @@ public abstract class BaseNode {
 		return "";
 	}
 
-	public boolean matchNode(BaseNode source, VariableEnvironment env){
-		PrologRuntime.programError("need to implement this in " + this.getClass());
-		return false;
-	}
-	
 	public BaseExecutionState initializeState(LocalEnvironment env){
 		BaseExecutionState state = generateExecutionState();
 		state.localEnv = env;
 		return state;
 	}
 	
-	public BaseNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
 		PrologRuntime.programError("EXECUTE: need to implement this in " + this.getClass());
 		return null;
 	}
