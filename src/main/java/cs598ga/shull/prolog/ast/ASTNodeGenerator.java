@@ -7,6 +7,7 @@ import cs598ga.shull.prolog.nodecreation.*;
 import cs598ga.shull.prolog.nodes.*;
 import cs598ga.shull.prolog.parser.*;
 import cs598ga.shull.prolog.parser.PrologParser.*;
+import cs598ga.shull.prolog.runtime.Log;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -18,6 +19,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import static cs598ga.shull.prolog.runtime.Log.Phase.PARSING;
+
 public class ASTNodeGenerator extends PrologBaseListener{
 	public NodeScope currentScope = NodeScope.EMPTY;
 	private GlobalEnvironment env;
@@ -28,14 +31,12 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override 
 	public void enterEveryRule(ParserRuleContext ctx) { 
-		//System.out.println("enter every rule " + ctx.getText());
 		currentScope = currentScope.transferToChildScope();
 		
 	}
 
 	@Override 
 	public void exitEveryRule(ParserRuleContext ctx) { 
-		//System.out.println("exit every rule " + ctx.getText());
 		currentScope = currentScope.transferToParentScope();
 	}
 
@@ -47,7 +48,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override 
 	public void exitClause(PrologParser.ClauseContext ctx) { 
-		System.out.println("exit clause term " + ctx.getText());
+		Log.logMessage(PARSING, "exit clause term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		assert children.size() == 1 : "should only have one here";
 		assert children.get(0) instanceof ClauseNode : "also surprising";
@@ -74,12 +75,12 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override 
 	public void exitSupported_unary_operator(PrologParser.Supported_unary_operatorContext ctx) { 
-		System.out.println("exit supported unary operator term " + ctx.getText());
+		Log.logMessage(PARSING, "exit supported unary operator term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		if(children.size() != 2){
-			System.out.println("children");
+			Log.logMessage(PARSING, "children");
 			for(BaseNode child : children){
-				System.out.println(child);
+				Log.logMessage(PARSING, child);
 			}
 		}
 		assert children.size() == 2 : "will need to handle more cases soon";
@@ -87,7 +88,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 		if(operator instanceof QueryNode){
 			QueryNode query = (QueryNode) operator;
 			BaseNode temp = children.get(1);
-			System.out.println("temp " + temp + " class " + temp.getClass());
+			Log.logMessage(PARSING, "temp " + temp + " class " + temp.getClass());
 			BaseNode node = children.get(1);
 			query.setChild(node);
 			currentScope.addNode(query);
@@ -114,7 +115,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 	}
 
 	@Override public void exitSupported_binary_operator(PrologParser.Supported_binary_operatorContext ctx) { 
-		System.out.println("exit supported binary operator term " + ctx.getText());
+		Log.logMessage(PARSING, "exit supported binary operator term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		if(children.size() == 3){
 			BaseNode operator = children.get(1);
@@ -132,16 +133,16 @@ public class ASTNodeGenerator extends PrologBaseListener{
 				currentScope.addNode(node);
 			} else if(operator instanceof ArithmeticNode){
 				ArithmeticNode node = (ArithmeticNode)  operator;
-				System.out.println(node + " " + left + " " + right);
+				Log.logMessage(PARSING, node + " " + left + " " + right);
 				node.setLeft((ComputeNode) left);
 				node.setRight((ComputeNode) right);
 				currentScope.addNode(node);
 			}
 		} else {
-			System.out.println("size: " + children.size());
-			System.out.println("children:");
+			Log.logMessage(PARSING, "size: " + children.size());
+			Log.logMessage(PARSING, "children:");
 			for(int i = 0; i < children.size(); i++){
-				System.out.println(children.get(i));
+				Log.logMessage(PARSING, children.get(i));
 			}
 			PrologRuntime.programError("shouldn't be able have binary operator without 3 children");
 		}
@@ -150,7 +151,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override 
 	public void exitRule_operator(PrologParser.Rule_operatorContext ctx) { 
-		System.out.println("exit rule operator " + ctx.getText());
+		Log.logMessage(PARSING, "exit rule operator " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		assert children == SpecialNode.NONODES : "well, I am confused";
 		RuleNode rule = new RuleNode();
@@ -159,7 +160,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override 
 	public void exitAnd_operator(PrologParser.And_operatorContext ctx) { 
-		System.out.println("exit and operator " + ctx.getText());
+		Log.logMessage(PARSING, "exit and operator " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		assert children == SpecialNode.NONODES : "well, I am confused";
 		AndNode and = new AndNode();
@@ -167,7 +168,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 	}
 
 	@Override public void exitOr_operator(PrologParser.Or_operatorContext ctx) { 
-		System.out.println("exit or operator " + ctx.getText());
+		Log.logMessage(PARSING, "exit or operator " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		assert children == SpecialNode.NONODES : "well, I am confused";
 		OrNode or = new OrNode();
@@ -176,7 +177,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override 
 	public void exitQuery_operator(PrologParser.Query_operatorContext ctx) {
-		System.out.println("exit query term " + ctx.getText());
+		Log.logMessage(PARSING, "exit query term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		assert children == SpecialNode.NONODES : "well, I am confused";
 		QueryNode query = new QueryNode();
@@ -185,7 +186,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override
 	public void exitGoal_negation_operator(PrologParser.Goal_negation_operatorContext ctx) {
-		System.out.println("exit goal negation term " + ctx.getText());
+		Log.logMessage(PARSING, "exit goal negation term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		assert false : "still need to implement this";
 		BaseNode node = null;
@@ -193,7 +194,7 @@ public class ASTNodeGenerator extends PrologBaseListener{
 	}
 
 	@Override public void exitString_term(PrologParser.String_termContext ctx) {
-		System.out.println("exit string term " + ctx.getText());
+		Log.logMessage(PARSING, "exit string term " + ctx.getText());
 		String strValue = ctx.getText();
 		strValue = strValue.substring(1, strValue.length()-1);
 		BaseNode node = NodeFactory.createString(strValue);
@@ -201,14 +202,14 @@ public class ASTNodeGenerator extends PrologBaseListener{
 	}
 
 	@Override public void exitAtom_term(PrologParser.Atom_termContext ctx) { 
-		System.out.println("exit atom term " + ctx.getText());
+		Log.logMessage(PARSING, "exit atom term " + ctx.getText());
 		String value = ctx.getText();
 		BaseNode node = null;
 		if(value.startsWith("_")){
-		    System.out.println("save atom (but really variable) term: " + ctx.getText());
+		    Log.logMessage(PARSING, "save atom (but really variable) term: " + ctx.getText());
 			node = NodeFactory.createVariable(ctx.getText());
 		} else {
-			System.out.println("saw new atom term: " + ctx.getText());
+			Log.logMessage(PARSING, "saw new atom term: " + ctx.getText());
 			node = NodeFactory.createAtom(ctx.getText());
 		}
 		currentScope.addNode(node);
@@ -216,8 +217,8 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	
 	@Override public void exitCompound_term(PrologParser.Compound_termContext ctx) { 
-		System.out.println("exit compound term " + ctx.getText());
-		System.out.println("tree " + ctx.toStringTree());
+		Log.logMessage(PARSING, "exit compound term " + ctx.getText());
+		Log.logMessage(PARSING, "tree " + ctx.toStringTree());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		BaseNode base = children.get(0);
 		assert base instanceof AtomNode : "didn't expect this";
@@ -241,14 +242,14 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override 
 	public void exitVariable(PrologParser.VariableContext ctx) { 
-		System.out.println("exit variable term " + ctx.getText());
+		Log.logMessage(PARSING, "exit variable term " + ctx.getText());
 		BaseNode node = NodeFactory.createVariable(ctx.getText());
 		currentScope.addNode(node);
 	}
 
 	@Override 
 	public void exitCompare_operator(PrologParser.Compare_operatorContext ctx) {
-		System.out.println("exit compare node term " + ctx.getText());
+		Log.logMessage(PARSING, "exit compare node term " + ctx.getText());
 		LogicalNode node = null;
 		switch(ctx.getText()){
 			case "is":
@@ -281,20 +282,20 @@ public class ASTNodeGenerator extends PrologBaseListener{
 
 	@Override
 	public void exitFloat_term(PrologParser.Float_termContext ctx) {
-		System.out.println("exit float term " + ctx.getText());
+		Log.logMessage(PARSING, "exit float term " + ctx.getText());
 		BaseNode node = NodeFactory.createFloat(ctx.getText());
 		currentScope.addNode(node);
 	}
 
 	@Override
 	public void exitInteger_term(PrologParser.Integer_termContext ctx) { 
-		System.out.println("exit integer term " + ctx.getText());
+		Log.logMessage(PARSING, "exit integer term " + ctx.getText());
 		BaseNode node = NodeFactory.createInteger(ctx.getText());
 		currentScope.addNode(node);
 	}
 
 	@Override public void exitArith_operator(PrologParser.Arith_operatorContext ctx) { 
-		System.out.println("exit arith operator " + ctx.getText());
+		Log.logMessage(PARSING, "exit arith operator " + ctx.getText());
 		ArithmeticNode node = null;
 		switch(ctx.getText()){
 			case "+":
@@ -317,18 +318,18 @@ public class ASTNodeGenerator extends PrologBaseListener{
 	}
 
 	@Override public void exitCut_term(PrologParser.Cut_termContext ctx) { 
-		System.out.println("exit cut operator " + ctx.getText());
+		Log.logMessage(PARSING, "exit cut operator " + ctx.getText());
 		CutNode node = new CutNode();
 		currentScope.addNode(node);
 	}
 
 	@Override public void exitEmpty_list(PrologParser.Empty_listContext ctx) {
-		System.out.println("exit empty list operator " + ctx.getText());
+		Log.logMessage(PARSING, "exit empty list operator " + ctx.getText());
 		currentScope.addNode(ListNode.EMPTY);
 	}
 
 	@Override public void exitList_term(PrologParser.List_termContext ctx) { 
-		System.out.println("exit list term term " + ctx.getText());
+		Log.logMessage(PARSING, "exit list term term " + ctx.getText());
 		ArrayList<BaseNode> children = currentScope.getChildren();
 		int size = children.size();
 		assert size == 1 || size == 2 : "think this is the way it should be";
@@ -356,12 +357,4 @@ public class ASTNodeGenerator extends PrologBaseListener{
 		currentScope.addNode(result);
 	}
 
-	/*
-	@Override public void exitAnonymous_variable(PrologParser.Anonymous_variableContext ctx) { 
-		System.out.println("exit anonymous variable term " + ctx.getText());
-		
-	}
-	*/
-	
-	
 }

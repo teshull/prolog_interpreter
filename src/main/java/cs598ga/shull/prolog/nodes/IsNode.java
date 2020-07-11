@@ -43,8 +43,6 @@ public class IsNode extends LogicalNode{
 
 		}
 		LocalEnvironment local = baseState.localEnv;
-		System.out.println("left value: " + leftVal);
-		System.out.println("right value: " + rightVal);
 		if(foundLeft && foundRight){
 			return NumberNode.isEqual(leftVal, rightVal)? SpecialNode.FINISHED : SpecialNode.DEADEND;
 		} else if(!foundRight && !foundLeft){

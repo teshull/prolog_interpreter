@@ -28,9 +28,6 @@ public class CompareNode extends LogicalNode {
         NumberNode leftVal = null;
         NumberNode rightVal = null;
 
-        //System.out.println("compute left value: " + left);
-        //System.out.println("compute right value: " + right);
-        //System.out.println("state: " + baseState.localEnv.getVariableEnvironment());
         if(!(right instanceof ComputeNode && left instanceof ComputeNode)){
             return SpecialNode.DEADEND;
         }

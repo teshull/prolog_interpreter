@@ -7,6 +7,9 @@ import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
 import cs598ga.shull.prolog.execution.error.ImpossibleGoalError;
 import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 import cs598ga.shull.prolog.nodes.executionState.RuleNodeState;
+import cs598ga.shull.prolog.runtime.Log;
+
+import static cs598ga.shull.prolog.runtime.Log.Phase.RULE;
 
 
 public class RuleNode extends PredicateNode {
@@ -70,7 +73,7 @@ public class RuleNode extends PredicateNode {
 	@Override
 	public boolean matchNode(BaseNode source, VariableEnvironment env) {
 		//PredicateNode renamedNode = predicate.renameVariables(env);
-		//System.out.println("trying to match " + this + " === " + renamedNode.generateName(env) );
+		//Log.logMessage(RULE, ("trying to match " + this + " === " + renamedNode.generateName(env) );
 		return predicate.matchNode(source, env);
 	}
 
@@ -95,7 +98,7 @@ public class RuleNode extends PredicateNode {
 			BaseNode result = condition.backtrackNode(env, state.childState);
 			return result;
 		} catch(ImpossibleCutError e){
-			System.out.println("CUTCUTCUT");
+			Log.logMessage(RULE, "caught cut");
 			throw new ImpossibleGoalError();
 		}
 	}
