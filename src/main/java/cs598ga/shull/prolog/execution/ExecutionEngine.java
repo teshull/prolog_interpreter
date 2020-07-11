@@ -1,10 +1,7 @@
 package cs598ga.shull.prolog.execution;
 
-import java.util.ArrayList;
-
 import cs598ga.shull.prolog.nodes.*;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
-import cs598ga.shull.prolog.runtime.PrologRuntime;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 
 //TODO think that I want to make this all static, but it doesn't really matter much...
 //should make static methods because then they can be turned into nodes
@@ -26,7 +23,7 @@ public class ExecutionEngine {
 		
 		//BaseNode result = query.initializeAndEnter(env);
 		LocalEnvironment localEnv = new LocalEnvironment(null);
-		BaseExecutionState baseState = query.initializeState(localEnv);
+		BaseNodeState baseState = query.initializeState(localEnv);
 		BaseNode result = query.executeNode(env, baseState);
 		if(result == SpecialNode.FINISHED){
 			System.out.println("yes");

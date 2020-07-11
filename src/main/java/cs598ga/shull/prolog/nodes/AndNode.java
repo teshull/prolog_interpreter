@@ -2,16 +2,16 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 
 public class AndNode extends LogicalNode{
 
 	@Override
-	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState baseState){
 		//trying to solve for left side
 		LogicalNodeState state = (LogicalNodeState) baseState;
-		BaseExecutionState leftState = left.initializeState(state.localEnv);
+		BaseNodeState leftState = left.initializeState(state.localEnv);
 		state.leftState = leftState;
 		BaseNode leftResult = left.executeNode(env, leftState);
 		if(leftResult == SpecialNode.DEADEND){
@@ -20,7 +20,7 @@ public class AndNode extends LogicalNode{
 		while(true){
 			assert leftResult == SpecialNode.FINISHED;
 			//now solving for right side
-			BaseExecutionState rightState = right.initializeState(state.localEnv);
+			BaseNodeState rightState = right.initializeState(state.localEnv);
 			state.rightState = rightState;
 			BaseNode rightResult = right.executeNode(env, rightState);
 			if(rightResult == SpecialNode.FINISHED){
@@ -37,7 +37,7 @@ public class AndNode extends LogicalNode{
 	}
 
 	@Override
-	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public BaseNode backtrackNode(ExecutionEnvironment env, BaseNodeState baseState){
 		LogicalNodeState state = (LogicalNodeState) baseState;
 		//trying to backtrack on right side
 		BaseNode rightResult = right.backtrackNode(env, state.rightState);
@@ -51,7 +51,7 @@ public class AndNode extends LogicalNode{
 		}
 		while(true){
 			assert leftResult == SpecialNode.FINISHED;
-			BaseExecutionState rightState = right.initializeState(state.localEnv);
+			BaseNodeState rightState = right.initializeState(state.localEnv);
 			state.rightState = rightState;
 			rightResult = right.executeNode(env, rightState);
 			if(rightResult == SpecialNode.FINISHED){

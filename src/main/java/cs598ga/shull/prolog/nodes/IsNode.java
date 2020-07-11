@@ -3,20 +3,20 @@ package cs598ga.shull.prolog.nodes;
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 import cs598ga.shull.prolog.nodes.executionState.IsNodeState;
 
 public class IsNode extends LogicalNode{
 
 
 	@Override
-	public BaseExecutionState generateExecutionState(){
+	public BaseNodeState generateExecutionState(){
 		//PrologRuntime.programError("shouldn't be able to invoke the base class");
 		return new IsNodeState();
 	}
 
 	@Override
-	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState baseState){
 	    IsNodeState state = (IsNodeState) baseState;
 	    //saving the original value
 	    state.originalEnv = state.localEnv.getDeepCopy();
@@ -68,7 +68,7 @@ public class IsNode extends LogicalNode{
 	}
 
 	@Override
-	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public BaseNode backtrackNode(ExecutionEnvironment env, BaseNodeState baseState){
 		IsNodeState state = (IsNodeState) baseState;
 		//rolling back the original value
 		state.localEnv.rollbackEnvChanges(state.originalEnv);

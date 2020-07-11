@@ -5,7 +5,7 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.nodes.BaseNode;
 import cs598ga.shull.prolog.nodes.NameNode;
 import cs598ga.shull.prolog.nodes.SpecialNode;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 
 public class TimerNode extends BuiltinNode {
 	
@@ -24,7 +24,7 @@ public class TimerNode extends BuiltinNode {
 			System.out.println("starting timer");
 			start = System.currentTimeMillis();
 			BaseNode arg = children.get(0);
-			BaseExecutionState argState = arg.initializeState(localEnv);
+			BaseNodeState argState = arg.initializeState(localEnv);
 			result = arg.executeNode(env, argState);
 		} catch(Error e){
 			throw e;

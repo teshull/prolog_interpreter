@@ -2,8 +2,6 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
-import cs598ga.shull.prolog.nodes.executionState.AtomState;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
 
 public class AtomNode extends FactNode {
 	public String text;
@@ -21,7 +19,6 @@ public class AtomNode extends FactNode {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return text;
 	}
 
@@ -31,11 +28,6 @@ public class AtomNode extends FactNode {
     }
 
 	@Override
-	public BaseExecutionState generateExecutionState(){
-		return new AtomState();
-	}
-
-	@Override
 	public boolean matchNode(BaseNode source, VariableEnvironment env) {
 		if(!(source instanceof PredicateNode)){
 			return false;
@@ -43,17 +35,13 @@ public class AtomNode extends FactNode {
 		AtomNode currentNode = this;
 		PredicateNode node = ((PredicateNode) source).getNodeBinding(env);
 
-		//cannot match
-		if(node.getNumChildren() != 0){
-			return false;
-		}
+		// set the variable
 		if(node instanceof VariableNode){
-			//assert node.base.isSourceCurrentlyVariable(env);
-			//need to set the environment here...
 			env.setMatch(node.base.getName(), currentNode);
 			return true;
 		}
 
+		// confirming match
 		if(node instanceof AtomNode && node.base.nameMatches(currentNode.base)){
 			return true;
 		}

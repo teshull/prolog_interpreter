@@ -2,8 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import java.util.ArrayList;
 
-import cs598ga.shull.prolog.execution.ExecutionEnvironment;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 import cs598ga.shull.prolog.nodes.executionState.LogicalNodeState;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
 
@@ -20,7 +19,7 @@ public abstract class LogicalNode extends BaseNode {
 	}
 
 	@Override
-	public BaseExecutionState generateExecutionState(){
+	public BaseNodeState generateExecutionState(){
 		//PrologRuntime.programError("shouldn't be able to invoke the base class");
 		return new LogicalNodeState();
 		

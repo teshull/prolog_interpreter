@@ -13,7 +13,6 @@ public class VariableEnvironment {
     public Map<String, Set<String>> linkedVariables;
 
     public VariableEnvironment(){
-        //the source is the predecessors targets
         varMappings = new HashMap<>();
         varsMapped = new HashSet<>();
         linkedVariables = new HashMap<>();
@@ -60,7 +59,7 @@ public class VariableEnvironment {
 
     public void setMatch(String key, PredicateNode match){
         if(key.startsWith("_")){
-            //don't set these
+            // this isn't a real match
             return;
         }
         Set<String> list = linkedVariables.get(key);
@@ -87,28 +86,18 @@ public class VariableEnvironment {
 
     public void setLink(String key1, String key2){
         if(key1.startsWith("_") || key2.startsWith("_")){
-            //this isn't a real match
+            // this isn't a real match
             return;
         }
         assert !key1.equals(key2) : "this shouldn't happen";
         Set<String> combined = new HashSet<>();
         combined.add(key1);
         combined.add(key2);
-        int oldSize = combined.size();
         Set<String> list1 = linkedVariables.getOrDefault(key1, combined);
         Set<String> list2 = linkedVariables.getOrDefault(key2, combined);
         combined.addAll(list1);
         combined.addAll(list2);
-        int newSize = combined.size();
-        if(oldSize != newSize){
-            oldSize = newSize;
-            for(String entry : combined){
-                Set<String> list = linkedVariables.getOrDefault(entry, combined);
-                combined.addAll(list);
-            }
-            newSize = combined.size();
-        }
-        //making all variables to be set to the same combined set
+        // making all variables linked together to be mapped to the same combined set
         for(String entry : combined){
             linkedVariables.put(entry, combined);
         }

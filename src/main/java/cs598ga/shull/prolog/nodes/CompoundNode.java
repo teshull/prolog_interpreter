@@ -2,8 +2,6 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
-import cs598ga.shull.prolog.nodes.executionState.CompoundState;
 
 import java.util.ArrayList;
 
@@ -26,35 +24,27 @@ public class CompoundNode extends FactNode {
 	}
 
 	@Override
-	public BaseExecutionState generateExecutionState(){
-		return new CompoundState();
-	}
-	
-	/**
-	 * the FactNode parameter is the source
-	 * "this" is the target
-	 */
-	@Override
 	public boolean matchNode(BaseNode source, VariableEnvironment env) {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
-		CompoundNode currentNode = (CompoundNode) this.getNodeBinding(env); // note this is the same as "this"
-		PredicateNode node = ((PredicateNode) source).getNodeBinding(env);
-		if(node instanceof VariableNode){
+		PredicateNode bindedSource = ((PredicateNode) source).getNodeBinding(env);
+
+		if(bindedSource instanceof VariableNode){
 			//source variable, target not variable
-			env.setMatch(node.base.getName(), currentNode);
+			env.setMatch(bindedSource.base.getName(), this);
 			return true;
 		}
-		//source not variable
-		//node = node.base.getSourceCurrentNode(node, env);
-		if(node instanceof CompoundNode && currentNode.base.nameMatches(node.base.getName())){
+
+		// making sure base name matches
+		if(bindedSource instanceof CompoundNode && this.base.nameMatches(bindedSource.base.getName())){
 			//now making sure all children match
-			if(getNumChildren() != node.getNumChildren()){
+			if(this.getNumChildren() != bindedSource.getNumChildren()){
 				return false;
 			}
-			for(int i = 0; i < currentNode.children.size(); i++){
-				if(!(currentNode.children.get(i)).matchNode(node.children.get(i), env)){
+			// validating all children
+			for(int i = 0; i < this.children.size(); i++){
+				if(!(this.children.get(i)).matchNode(bindedSource.children.get(i), env)){
 					return false;
 				}
 			}

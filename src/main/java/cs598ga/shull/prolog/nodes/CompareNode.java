@@ -2,7 +2,7 @@ package cs598ga.shull.prolog.nodes;
 
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.error.InvalidArithmeticOperationError;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 
 import static cs598ga.shull.prolog.nodes.NumberNode.ValueType.FLOAT;
 import static cs598ga.shull.prolog.nodes.NumberNode.ValueType.INT;
@@ -24,7 +24,7 @@ public class CompareNode extends LogicalNode {
     }
 
     @Override
-    public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+    public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState baseState){
         NumberNode leftVal = null;
         NumberNode rightVal = null;
 
@@ -124,7 +124,7 @@ public class CompareNode extends LogicalNode {
     }
 
     @Override
-    public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState) {
+    public BaseNode backtrackNode(ExecutionEnvironment env, BaseNodeState baseState) {
         return SpecialNode.DEADEND;
     }
 }

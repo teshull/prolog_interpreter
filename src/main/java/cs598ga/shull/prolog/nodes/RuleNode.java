@@ -5,8 +5,8 @@ import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
 import cs598ga.shull.prolog.execution.error.ImpossibleGoalError;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
-import cs598ga.shull.prolog.nodes.executionState.RuleState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
+import cs598ga.shull.prolog.nodes.executionState.RuleNodeState;
 
 
 public class RuleNode extends PredicateNode {
@@ -51,8 +51,8 @@ public class RuleNode extends PredicateNode {
 	}
 
 	@Override
-	public BaseExecutionState generateExecutionState(){
-		return new RuleState();
+	public BaseNodeState generateExecutionState(){
+		return new RuleNodeState();
 	}
 
 	@Override
@@ -80,17 +80,17 @@ public class RuleNode extends PredicateNode {
 	}
 
 	@Override
-	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
-		RuleState state = (RuleState) baseState;
-		BaseExecutionState childState = condition.initializeState(state.localEnv);
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState baseState){
+		RuleNodeState state = (RuleNodeState) baseState;
+		BaseNodeState childState = condition.initializeState(state.localEnv);
 		state.childState = childState;
 		SpecialNode result = condition.executeNode(env, childState);
 		return result;
 	}
 
 	@Override
-	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
-		RuleState state = (RuleState) baseState;
+	public BaseNode backtrackNode(ExecutionEnvironment env, BaseNodeState baseState){
+		RuleNodeState state = (RuleNodeState) baseState;
 		try {
 			BaseNode result = condition.backtrackNode(env, state.childState);
 			return result;

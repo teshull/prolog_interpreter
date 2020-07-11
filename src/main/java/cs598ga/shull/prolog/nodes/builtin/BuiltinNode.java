@@ -4,7 +4,7 @@ import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodes.*;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 
 public abstract class BuiltinNode extends PredicateNode {
 	private int numChildren;
@@ -31,14 +31,14 @@ public abstract class BuiltinNode extends PredicateNode {
 	}
 
 	@Override
-	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState baseState){
 		SpecialNode result = executeBuiltin(env, baseState.localEnv);
 		return result;
 	}
 	
 	
 	@Override
-	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public BaseNode backtrackNode(ExecutionEnvironment env, BaseNodeState baseState){
 		return SpecialNode.DEADEND;
 	}
 

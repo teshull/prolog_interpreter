@@ -3,7 +3,7 @@ package cs598ga.shull.prolog.nodes;
 import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.ImpossibleCutError;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 
 public class QueryNode extends ClauseNode {
 	public BaseNode child;
@@ -45,11 +45,11 @@ public class QueryNode extends ClauseNode {
 	}
 
 	@Override
-	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState baseState){
 		SpecialNode result;
 		try{
 			LocalEnvironment localEnv = new LocalEnvironment(baseState.localEnv);
-			BaseExecutionState childState = child.initializeState(localEnv);
+			BaseNodeState childState = child.initializeState(localEnv);
 			result = child.executeNode(env, childState);
 			if(result == SpecialNode.FINISHED){
 				System.out.println("environment:\n" + localEnv);

@@ -4,8 +4,8 @@ import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.error.ImpossibleGoalError;
 import cs598ga.shull.prolog.nodes.builtin.BuiltinNode;
-import cs598ga.shull.prolog.nodes.executionState.BaseExecutionState;
-import cs598ga.shull.prolog.nodes.executionState.FactState;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
+import cs598ga.shull.prolog.nodes.executionState.FactNodeState;
 
 public abstract class FactNode extends PredicateNode {
 	
@@ -24,30 +24,22 @@ public abstract class FactNode extends PredicateNode {
 		return false;
 	}
 	
-	//public abstract boolean isAtom();
-	//public abstract boolean isCompound();
-	//public abstract boolean isVariable();
-	
 	@Override
-	public SpecialNode executeNode(ExecutionEnvironment env, BaseExecutionState baseState){
-		FactState state = (FactState) baseState;
-		state.matches = env.globalEnv.getPredicates(base.getName());
+	public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState baseState){
+		FactNodeState state = (FactNodeState) baseState;
+		state.candidates = env.globalEnv.getPredicates(base.getName());
 		state.matchNum = 0;
 		state.originalEnv = state.localEnv.getDeepCopy();
 		state.renamedNode = this.getScopedName(state.localEnv);
-		return searchRules(env, state);
+		return searchCandidates(env, state);
 	}
 
-	private SpecialNode searchRules(ExecutionEnvironment env, FactState state) {
+	private SpecialNode searchCandidates(ExecutionEnvironment env, FactNodeState state) {
 		while (true){
 			//making sure it is not set from a previous run
-			state.childNode = null;
+			state.currentMatch = null;
 			LocalEnvironment newEnv = new LocalEnvironment(state.localEnv);
-			PredicateNode match = getNextMatch(state);
-			String message = "current state: " + state.renamedNode.generateName(state.localEnv.getVariableEnvironment());
-			if(message.equals("current state: fake")) {
-			    System.out.println("found it");
-			}
+			PredicateNode match = getNextCandidate(state);
 			System.out.println("current state: " + state.renamedNode.generateName(state.localEnv.getVariableEnvironment()));
 			if(match == null){
 			    //no more matches to search
@@ -57,15 +49,11 @@ public abstract class FactNode extends PredicateNode {
 			PredicateNode renamedMatch = match.getScopedName(newEnv);
 			System.out.println("trying to match: " + renamedMatch.generateName(state.localEnv.getVariableEnvironment()) + " === " + match);
 			if(renamedMatch.matchNode(state.renamedNode, newEnv.getVariableEnvironment())){
-			    message = "success: -> " + renamedMatch.generateName(state.localEnv.getVariableEnvironment());
-				if (message.equals("success: -> queens(.(), .(1, .()), .(1, .()))")){
-					System.out.println("huh...");
-				}
 			    System.out.println("success: -> " + renamedMatch.generateName(state.localEnv.getVariableEnvironment()));
-				state.childNode = match;
+				state.currentMatch = match;
 				if(shouldEnterResult(match)){
-					BaseExecutionState childState = match.initializeState(newEnv);
-					state.childState = childState;
+					BaseNodeState childState = match.initializeState(newEnv);
+					state.matchState = childState;
 					BaseNode result = match.executeNode(env, childState);
 					assert result == SpecialNode.FINISHED || result == SpecialNode.DEADEND;
 					if(result == SpecialNode.FINISHED){
@@ -76,18 +64,18 @@ public abstract class FactNode extends PredicateNode {
 					return SpecialNode.FINISHED;
 				}
             }
-			System.out.println("fail");
+			System.out.println("match failed.");
 			//nothing matched, need to rollback any changes made by matching
 			state.localEnv.rollbackEnvChanges(state.originalEnv);
 		}
 	}
 
 
-	private PredicateNode getNextMatch(FactState state){
-		if(state.matchNum == state.matches.size()){
+	private PredicateNode getNextCandidate(FactNodeState state){
+		if(state.matchNum == state.candidates.size()){
 			return null;
 		}
-		PredicateNode node = state.matches.get(state.matchNum);
+		PredicateNode node = state.candidates.get(state.matchNum);
 		state.matchNum++;
 		return node;
 	}
@@ -105,33 +93,31 @@ public abstract class FactNode extends PredicateNode {
 
 
 	@Override
-	public BaseNode backtrackNode(ExecutionEnvironment env, BaseExecutionState baseState){
-		FactState state = (FactState) baseState;
-		BaseNode previousResult = state.childNode;
-		assert previousResult != null : "if backtracking, should have match";
-		//System.out.println("all info: " + state);
-		System.out.println("backtracking from: " + previousResult);
+	public BaseNode backtrackNode(ExecutionEnvironment env, BaseNodeState baseState){
+		FactNodeState state = (FactNodeState) baseState;
+		BaseNode previousMatch = state.currentMatch;
+		assert previousMatch != null : "if backtracking, should have match";
+		System.out.println("backtracking from: " + previousMatch);
 		try {
-			if (shouldEnterResult(previousResult)) {
-				//rolling back to when node was matched
-				BaseNode result = previousResult.backtrackNode(env, state.childState);
+			if (shouldEnterResult(previousMatch)) {
+				// rolling back to when node was matched
+				BaseNode result = previousMatch.backtrackNode(env, state.matchState);
 				if (result == SpecialNode.FINISHED) {
 					return SpecialNode.FINISHED;
 				}
 			}
 		} catch(ImpossibleGoalError e){
-			//this means I shouldn't test the rest of the options.
+			// this means I shouldn't test the rest of the options.
 			state.localEnv.rollbackEnvChanges(state.originalEnv);
-			System.out.println("CUTCUTCUT");
-			state.childNode = null;
-			state.matchNum = state.matches.size();
+			// clearing state
+			state.currentMatch = null;
+			state.matchNum = state.candidates.size();
 			return SpecialNode.DEADEND;
 		}
 		// could not backtrack child node.
 		// at this point need to try to find another match
-		// rolling all of the way back
         System.out.println("performing the rollback");
 		state.localEnv.rollbackEnvChanges(state.originalEnv);
-		return searchRules(env, state);
+		return searchCandidates(env, state);
 	}
 }
