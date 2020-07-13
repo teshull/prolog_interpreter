@@ -6,9 +6,9 @@ import cs598ga.shull.prolog.nodes.NameNode;
 import cs598ga.shull.prolog.nodes.SpecialNode;
 import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 
-public class ExitNode extends BuiltinNode {
-    public ExitNode(){
-        setParameters("exit", 0);
+public class HaltNode extends BuiltinNode {
+    public HaltNode(){
+        setParameters("halt", 0);
     }
 
     @Override

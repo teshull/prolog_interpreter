@@ -13,16 +13,16 @@ public class TimerNode extends BuiltinNode {
 
 	@Override
 	public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState state) {
-			assert children.size() == 1 : "whoops";
+		assert children.size() == 1 : "whoops";
 		SpecialNode result;
 		long start = 0;
 		long end = 0;
+		LocalEnvironment localEnv = state.localEnv;
+		PredicateNode bound = getBoundChild(0, localEnv);
+		if(bound == null){
+			return SpecialNode.DEADEND;
+		}
 		try{
-			LocalEnvironment localEnv = state.localEnv;
-			PredicateNode bound = getBoundChild(0, localEnv);
-			if(bound == null){
-				return SpecialNode.DEADEND;
-			}
 			System.out.println("starting timer");
 			start = System.currentTimeMillis();
 			BaseNodeState argState = bound.initializeState(state.localEnv);
@@ -31,7 +31,6 @@ public class TimerNode extends BuiltinNode {
 			throw e;
 		} finally {
 			end = System.currentTimeMillis();
-			System.out.println("ending timer");
 			System.out.println("Total time (ms): " + (end - start));
 		}
 		return result;

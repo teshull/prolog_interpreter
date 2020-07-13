@@ -35,6 +35,6 @@ before(pair(X1,_),pair(X2,_)) :- X1 < X2.
 
 numbered(tree(T1,pair(_,N1),T2),N0,N) :-
     numbered(T1,N0,N1),
-    N2 is N1+1,
+    (N2 is (N1+1)),
     numbered(T2,N2,N).
 numbered(void,N,N).

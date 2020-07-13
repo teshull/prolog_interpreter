@@ -2,6 +2,7 @@ package cs598ga.shull.prolog.ast;
 
 import cs598ga.shull.prolog.parser.*;
 
+import cs598ga.shull.prolog.runtime.Log;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -48,9 +49,9 @@ public class AntlrRepresentation {
     private static void explore(RuleContext ctx, int indentation) {
         String ruleName = PrologParser.ruleNames[ctx.getRuleIndex()];
         for (int i = 0; i < indentation; i++) {
-            System.out.print("  ");
+            Log.logMessageNoNewline(Log.Phase.PARSING, "  ");
         }
-        System.out.println(ruleName);
+        Log.logMessage(Log.Phase.PARSING, ruleName);
         for (int i=0;i<ctx.getChildCount();i++) {
             ParseTree element = ctx.getChild(i);
             if (element instanceof RuleContext) {

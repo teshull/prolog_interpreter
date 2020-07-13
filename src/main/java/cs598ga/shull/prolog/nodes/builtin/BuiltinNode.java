@@ -57,42 +57,13 @@ public abstract class BuiltinNode extends CompoundNode {
 	}
 
 	@Override
-	public boolean matchNode(BaseNode source, VariableEnvironment env){
-		if(!(source instanceof PredicateNode)){
-			return false;
-		}
-		PredicateNode node = ((PredicateNode) source).getNodeBinding(env);
-		if(! (source instanceof CompoundNode || source instanceof  AtomNode)){
-			return false;
+	public PredicateNode getScopedName(LocalEnvironment env){
+	    //if no children, should match against an atom node
+	    if(getNumChildren() == 0){
+	    	return this.atom;
 		}
 
-		if (this.getNumChildren() == 0 && node.getNumChildren() == 0) {
-			if (node.base.nameMatches(this.base)) {
-				return true;
-			}
-			return false;
-		}
-
-		if(!(node instanceof CompoundNode)){
-			return false;
-		}
-
-        assert source instanceof CompoundNode;
-		CompoundNode compound = (CompoundNode) source;
-		if(this.base.nameMatches(compound.base.getName())){
-			//now making sure all children match
-			if(getNumChildren() != compound.getNumChildren()){
-				return false;
-			}
-			for(int i = 0; i < this.children.size(); i++){
-				if(!(this.children.get(i)).matchNode(compound.children.get(i), env)){
-					return false;
-				}
-			}
-			//met all requirements
-			return true;
-		}
-
-		return false;
+	    //otherwise should be treated as a compound node
+	    return super.getScopedName(env);
 	}
 }

@@ -3,6 +3,8 @@ package cs598ga.shull.prolog.runner;
 
 import cs598ga.shull.prolog.parser.*;
 
+import cs598ga.shull.prolog.runtime.Log;
+import cs598ga.shull.prolog.runtime.PrologRuntime;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -19,24 +21,52 @@ import java.nio.file.Files;
  */
 public class App 
 {
+
+    private static void addLoggingPhase(String phase){
+        switch(phase){
+            case "ALL":
+                Log.allPhases = true;
+                break;
+            case "FACT":
+                Log.enabledPhases.add(Log.Phase.FACT);
+                break;
+            case "RULE":
+                Log.enabledPhases.add(Log.Phase.RULE);
+                break;
+            case "PARSING":
+                Log.enabledPhases.add(Log.Phase.PARSING);
+                break;
+            case "STATE":
+                Log.enabledPhases.add(Log.Phase.STATE);
+                break;
+            default:
+                PrologRuntime.programError("invalid option");
+        }
+    }
+
     public static void main( String[] args ) throws IOException
     {
         System.out.println( "Trying to Parse File" );
+        String filename = null;
         int index;
         for(index = 0; index < args.length; index++){
             String arg = args[index];
-            System.out.println(arg);
+            switch(arg){
+                case "-d":
+                    arg = args[++index];
+                    addLoggingPhase(arg);
+                    break;
+                default:
+                    filename = arg;
+            }
         }
-        String filename = "";
+
+        if(filename == null){
+            filename = "applications/vanRoy/nreverse.pl";
+            //filename = "applications/tutorial/rules.pl";
+        }
 
         Manager manager = new Manager();
-        //filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/foo.prolog";
-        //filename = "/Users/tshull7/UIUC/CS598GA/project/code/maven-test/examples/another.prolog";
-        //filename = "/home/tshull226/Documents/school/cs598GA/repo/truffleProlog/examples/foo.prolog";
-        //filename = "/home/tshull226/Documents/school/cs598GA/repo/truffleProlog/examples/another.prolog";
-        filename = "/home/tshull226/Documents/school/cs598GA/repo/truffleProlog/applications/vanRoy/queens_8.pl";
-        //filename = "/home/tshull226/Documents/school/cs598GA/repo/truffleProlog/benchmarks/vanRoy/nreverse.pl";
-        //filename = "/home/tshull226/Documents/school/cs598GA/repo/truffleProlog/examples/curious.prolog";
         manager.run(new File(filename));
     }
 

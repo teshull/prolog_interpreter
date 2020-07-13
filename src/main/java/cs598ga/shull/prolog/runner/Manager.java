@@ -9,6 +9,7 @@ import cs598ga.shull.prolog.execution.repl.ReplEngine;
 import cs598ga.shull.prolog.nodes.QueryNode;
 import cs598ga.shull.prolog.parser.*;
 
+import cs598ga.shull.prolog.runtime.Log;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -33,7 +34,7 @@ public class Manager
 
     public String parse(File file) throws IOException {
         String code = readFile(file, Charset.forName("UTF-8"));
-        System.out.println(code);
+        Log.logMessage(Log.Phase.PARSING, code);
         return code;
     }
     

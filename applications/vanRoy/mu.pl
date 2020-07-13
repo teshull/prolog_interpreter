@@ -9,10 +9,10 @@
 
 top:-mu.
 
-mu :- theorem([m,u,i,i,u], 5, _), !.
+mu :- theorem(([m,u,i,i,u]), 5, _), !.
 
-theorem([m,i], _, [[a|[m,i]]]).
-theorem(R, Depth, [[N|R]|P]) :-
+theorem(([m,i]), _, ([[a|[m,i]]])).
+theorem(R, Depth, ([[N|R]|P])) :-
     Depth > 0,
     D is Depth-1,
     theorem(S, D, P),
@@ -24,7 +24,7 @@ rule(3, S, R) :- rule3(S, R).
 rule(4, S, R) :- rule4(S, R).
 
 rule1([i], [i,u]).
-rule1([H|X], [H|Y]) :-
+rule1(([H|X]), ([H|Y])) :-
     rule1(X, Y).
 
 rule2([m|X], [m|Y]) :- 
