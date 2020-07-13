@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cs598ga.shull</groupId>
-  <artifactId>truffle-prolog</artifactId>
+  <artifactId>prolog-interpreter</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
 
-  <name>truffle-prolog</name>
+  <name>prolog-interpreter</name>
   <url>http://maven.apache.org</url>
 
   <properties>
