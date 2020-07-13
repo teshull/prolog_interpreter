@@ -4,6 +4,7 @@ import cs598ga.shull.prolog.execution.ExecutionEnvironment;
 import cs598ga.shull.prolog.execution.LocalEnvironment;
 import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
+import cs598ga.shull.prolog.runtime.Log;
 import cs598ga.shull.prolog.runtime.PrologRuntime;
 
 public abstract class BaseNode {
@@ -28,8 +29,7 @@ public abstract class BaseNode {
 	}
 
 	public BaseNodeState generateExecutionState(){
-	    System.out.println(" Base execution state node for this..."+ this.getClass());
-		//PrologRuntime.programError("shouldn't be able to invoke the base class");
+		Log.logMessage(Log.Phase.STATE, " Base execution state node for this..." + this.getClass());
 		return new BaseNodeState();
 		
 	}

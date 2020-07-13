@@ -63,16 +63,16 @@ public class VariableNode extends FactNode implements ComputeNode {
 	@Override
 	public NumberNode computeValue(LocalEnvironment env) {
         PredicateNode scopedNode = this.getScopedName(env);
-        PredicateNode bindedNode = null;
+        PredicateNode boundNode = null;
         VariableEnvironment varInfo = env.getVariableEnvironment();
         String key = scopedNode.base.getName();
         if(varInfo.hasMatch(key)){
-        	bindedNode = varInfo.getMatch(key);
+        	boundNode = varInfo.getMatch(key);
 		}
-		if(bindedNode == null || !(bindedNode instanceof ComputeNode)){
+		if(boundNode == null || !(boundNode instanceof ComputeNode)){
 			throw new InvalidArithmeticOperationError();
 		}
-		ComputeNode compute = (ComputeNode) bindedNode;
+		ComputeNode compute = (ComputeNode) boundNode;
 		return compute.computeValue(env);
 	}
 

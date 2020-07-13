@@ -13,6 +13,7 @@ public class Log {
         FACT,
         RULE,
         PARSING,
+        STATE,
         CUT,
     }
 

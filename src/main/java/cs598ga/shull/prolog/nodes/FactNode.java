@@ -26,7 +26,13 @@ public abstract class FactNode extends PredicateNode {
 	public boolean isQuery(){
 		return false;
 	}
-	
+
+	@Override
+	public BaseNodeState generateExecutionState(){
+		return new FactNodeState();
+	}
+
+
 	@Override
 	public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState baseState){
 		FactNodeState state = (FactNodeState) baseState;

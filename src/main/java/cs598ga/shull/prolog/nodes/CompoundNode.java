@@ -17,6 +17,8 @@ public class CompoundNode extends FactNode {
 		this.children = children;
 	}
 
+	protected CompoundNode(){}
+
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -28,23 +30,23 @@ public class CompoundNode extends FactNode {
 		if(!(source instanceof PredicateNode)){
 			return false;
 		}
-		PredicateNode bindedSource = ((PredicateNode) source).getNodeBinding(env);
+		PredicateNode boundSource = ((PredicateNode) source).getNodeBinding(env);
 
-		if(bindedSource instanceof VariableNode){
+		if(boundSource instanceof VariableNode){
 			//source variable, target not variable
-			env.setMatch(bindedSource.base.getName(), this);
+			env.setMatch(boundSource.base.getName(), this);
 			return true;
 		}
 
 		// making sure base name matches
-		if(bindedSource instanceof CompoundNode && this.base.nameMatches(bindedSource.base.getName())){
+		if(boundSource instanceof CompoundNode && this.base.nameMatches(boundSource.base.getName())){
 			//now making sure all children match
-			if(this.getNumChildren() != bindedSource.getNumChildren()){
+			if(this.getNumChildren() != boundSource.getNumChildren()){
 				return false;
 			}
 			// validating all children
 			for(int i = 0; i < this.children.size(); i++){
-				if(!(this.children.get(i)).matchNode(bindedSource.children.get(i), env)){
+				if(!(this.children.get(i)).matchNode(boundSource.children.get(i), env)){
 					return false;
 				}
 			}

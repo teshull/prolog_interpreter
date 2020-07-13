@@ -6,15 +6,15 @@ import cs598ga.shull.prolog.execution.VariableEnvironment;
 import cs598ga.shull.prolog.nodes.NameNode;
 import cs598ga.shull.prolog.nodes.PredicateNode;
 import cs598ga.shull.prolog.nodes.SpecialNode;
+import cs598ga.shull.prolog.nodes.executionState.BaseNodeState;
 
 public class FailNode extends BuiltinNode {
     public FailNode(){
-        super(0);
-        this.base = new NameNode("fail", false);
+        setParameters("fail", 0);
     }
 
     @Override
-    public SpecialNode executeBuiltin(ExecutionEnvironment env, LocalEnvironment localEnv) {
+    public SpecialNode executeNode(ExecutionEnvironment env, BaseNodeState state) {
         return SpecialNode.DEADEND;
     }
 
